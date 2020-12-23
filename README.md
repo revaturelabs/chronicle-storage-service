@@ -1,8 +1,5 @@
 # chronicle-storage-service
 
-
-
-
 Ronald Martz
 
-Andre was here
+Andre was here!!!
