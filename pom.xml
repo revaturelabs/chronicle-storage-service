@@ -49,6 +49,14 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- S3 mocking -->
+		<dependency>
+			<groupId>io.findify</groupId>
+			<artifactId>s3mock_2.13</artifactId>
+			<version>0.2.6</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
