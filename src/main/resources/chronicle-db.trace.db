@@ -1,0 +1,54 @@
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "NOTE" not found; SQL statement:
+
+    alter table note 
+        drop constraint if exists FK_7strs0d8haoaf5fswi40yh5j7 [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "NOTE_TAG" not found; SQL statement:
+
+    alter table note_tag 
+        drop constraint if exists FK_1m23ffc9vj5c3oefem67ppwym [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "NOTE_TAG" not found; SQL statement:
+
+    alter table note_tag 
+        drop constraint if exists FK_pariyetuo70pqcixjye7euc5x [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VIDEO" not found; SQL statement:
+
+    alter table video 
+        drop constraint if exists FK_f5qpdts1jq2imtgm1yr10wyu7 [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VIDEO_TAG" not found; SQL statement:
+
+    alter table video_tag 
+        drop constraint if exists FK_rjkk6qw9hawu9dl2pue834sqk [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VIDEO_TAG" not found; SQL statement:
+
+    alter table video_tag 
+        drop constraint if exists FK_1crp6pys7ahais9yjlidkupqu [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "NOTE" not found; SQL statement:
+
+    drop table note cascade [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "NOTE_TAG" not found; SQL statement:
+
+    drop table note_tag cascade [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TAG" not found; SQL statement:
+
+    drop table tag cascade [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+
+    drop table user cascade [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VIDEO" not found; SQL statement:
+
+    drop table video cascade [42102-200]
+2020-12-23 22:40:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VIDEO_TAG" not found; SQL statement:
+
+    drop table video_tag cascade [42102-200]
