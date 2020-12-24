@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 public class Video {
     @Id
-    @Column(name = "video_id",columnDefinition = "serial primary key")
+    @Column(name = "video_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int videoID;
 
@@ -27,7 +27,7 @@ public class Video {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "INT")
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "video_tag",
             joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))

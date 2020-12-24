@@ -1,6 +1,6 @@
 package com.revature.chronicle;
 
-import com.revature.chronicle.daos.NoteDAO;
+import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
@@ -12,7 +12,8 @@ import java.util.List;
 
 @SpringBootTest
 public class NotesDaoTests {
-    private NoteDAO dao;
+    /*
+    private NoteRepo dao;
 
     @Test
     void shouldGetNoteById() {
@@ -245,5 +246,5 @@ public class NotesDaoTests {
             Assert.isTrue(!note.equals(noteToBeModified), "");
         }
     }
-
+*/
 }

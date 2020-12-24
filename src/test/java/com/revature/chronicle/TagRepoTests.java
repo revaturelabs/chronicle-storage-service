@@ -1,23 +1,24 @@
 package com.revature.chronicle;
 
 
-import com.revature.chronicle.daos.TagDAO;
-import com.revature.chronicle.daos.TagDAOImpl;
+import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TagDAOTests {
-    TagDAO tDAO = new TagDAOImpl();
-
+public class TagRepoTests {
     /*
+    TagRepo tagRepo;
+
+
     Notes
     -Use @Rollback?
     -Use @BeforeClass and @AfterClass to add t1 and t2 to the database
         -How is this any different in principle from using @FixedMethodOrder?
-     */
+
 
     @Test
     public void getTagsTest() {
@@ -145,4 +146,6 @@ public class TagDAOTests {
 
         // Compare the expected and actual values
     }
+
+     */
 }

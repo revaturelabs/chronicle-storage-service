@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 public class Note {
     @Id
-    @Column(name="note_id", columnDefinition = "serial primary key")
+    @Column(name="note_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int noteID;
 

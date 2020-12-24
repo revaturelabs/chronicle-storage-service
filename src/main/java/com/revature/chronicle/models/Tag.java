@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Data
 public class Tag {
     @Id
-    @Column(name="tag_id", columnDefinition = "serial primary key")
+    @Column(name="tag_id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int tagID;
 
