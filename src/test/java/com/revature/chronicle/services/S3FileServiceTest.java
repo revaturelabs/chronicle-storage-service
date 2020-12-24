@@ -60,5 +60,13 @@ public class S3FileServiceTest {
         Assert.assertTrue(url.contains("test-bucket"));
     }
 
+    @Test
+    public void getExistingObjectURL() {
+        doReturn(String.class).when(s3FileService.getObjetUrl(file.getName()));
+        String url = s3FileService.getObjectUrl(file.getName());
+        Assert.assertNotEquals(url, "");
+        Assert.assertTrue(url.contains("test-bucket"));
+        Assert.assertTrue(url.contains(file.getName()));
+    }
 
 }
