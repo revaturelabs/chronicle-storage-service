@@ -5,20 +5,35 @@ import com.amazonaws.auth.AnonymousAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.Assert;
 import org.mockito.Mock;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
-public class S3UploadServiceTest {
+public class S3FileServiceTest {
 
     private S3Mock s3Mock;
 
     @Mock
+    S3FileService s3FileService;
+
     private AmazonS3 s3Client;
+
+    @Mock
+    private File file;
 
     @BeforeEach
     public void initEnv() {
@@ -33,17 +48,17 @@ public class S3UploadServiceTest {
                 .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
                 .build();
 
-        s3Client.createBucket("testbucket");
+        s3FileService.setAwsClient(s3Client);
+        s3Client.createBucket("test-bucket");
     }
 
     @Test
-    public void uploadMultipartVideoFileShouldReturn() {
-
+    public void uploadFileSuccessfullyAndReturnObjectURL() {
+        doReturn(String.class).when(s3FileService).uploadFile(any(File.class));
+        String url = s3FileService.uploadFile(file);
+        Assert.assertNotEquals(url, "");
+        Assert.assertTrue(url.contains("test-bucket"));
     }
 
-    @Test
-    public void uploadMultipartNotesFile() {
-        s3Mock.shutdown();
-    }
 
 }
