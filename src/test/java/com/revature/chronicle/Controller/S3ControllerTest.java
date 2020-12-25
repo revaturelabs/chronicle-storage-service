@@ -1,130 +1,130 @@
 package com.revature.chronicle.Controller;
 
 
-import akka.http.javadsl.model.Multipart;
-import com.amazonaws.services.workdocs.model.ActivateUserRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.revature.chronicle.Service.S3Service;
+
+import com.google.common.collect.Multimap;
+import netscape.javascript.JSObject;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import scala.reflect.internal.util.NoFile;
-import scala.util.parsing.json.JSON;
 
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebAppConfiguration
+@ContextConfiguration(classes ={S3ControllerTest.class})
 @RunWith(SpringRunner.class)
-@ContextConfiguration(locations = {"classpath:test_application.properties"})
-@WebMvcTest(S3Controller.class)
 public class S3ControllerTest {
 
 	//Mocker object
-	@Autowired
 	private MockMvc mvc;
 
+	private MockMultipartFile file;
+	private MockMultipartFile file2;
 
-	private JSONObject json;
-	private MultipartFile multi;
+	private JSONObject json = new JSONObject();
+
+	final MultiValueMap<String, String> params  = new LinkedMultiValueMap<>();
+
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
 
-	//Mock services
-	@MockBean
-	private S3Service service;
 
 
-	//setup methods
 	@Before
-	public void setup() {
+	public void setup() throws JSONException, IOException {
 
-//	multi = new MockMultipartFile("request","request", MediaType.APPLICATION_JSON_VALUE, "hello".getBytes());
-//
-//
-//	json =  { "expiration": "2015-12-30T12:00:00.000Z",
-//				"conditions": [
-//		{"bucket": "sigv4examplebucket"},
-//		["starts-with", "$key", "user/user1/"],
-//		{"acl": "public-read"},
-//		{"success_action_redirect": "http://sigv4examplebucket.s3.amazonaws.com/successful_upload.html"},
-//		["starts-with", "$Content-Type", "image/"],
-//		{"x-amz-meta-uuid": "14365123651274"},
-//		{"x-amz-server-side-encryption": "AES256"},
-//	    ["starts-with", "$x-amz-meta-tag", ""],
-//
-//		{"x-amz-credential": "AKIAIOSFODNN7EXAMPLE/20151229/us-east-1/s3/aws4_request"},
-//		{"x-amz-algorithm": "AWS4-HMAC-SHA256"},
-//		{"x-amz-date": "20151229T000000Z" }
-//		]
-//		}
+		//given a mock MultipartFile an existing file to pass into the controller
+		file = file = new MockMultipartFile(
+				"file",
+				"test.txt",
+				MediaType.TEXT_PLAIN_VALUE,
+				"Hello, World!".getBytes()
+		);
 
-	}
+		//given a mock MultipartFile with a non existent file to pass into the controller
+		file2 = new MockMultipartFile(
+				"file",
+				"falsefilename",
+				MediaType.TEXT_PLAIN_VALUE,
+				"Hello, World!".getBytes()
+		);
+
+		//mocking the json description from front end
+		 json.put("testing", "123");
+		 json.put("test2","here we go");
 
 
+		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
+		params.add("file", file.getBytes().toString());
+		params.add("json", json.toString());
 
-	@Test
-	public void givenFormData_whenFileUpload_theReturnOK() throws Exception {
-		when(service.uploadFileS3(MediaType.MULTIPART_FORM_DATA_VALUE))
-				.thenReturn(anyString());
 
-		mvc.perform(post("/s3/upload")
-				.contentType(MediaType.MULTIPART_FORM_DATA)
-				.content(anyString()))
-				.andExpect(status().isOk());
 
+		mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 
 
 	@Test
-	public void givenFormData_WhenFileUpload_shouldReturnError() throws Exception {
+	public void givenFormData_whenFileUpload_theReturnOKString() throws Exception {
 
-		when(service.uploadFileS3(MediaType.MULTIPART_FORM_DATA_VALUE))
-			.thenReturn(anyString());
+		//this is mocking the servlet being called and being passed the needed parameters for desired services
+		//when
+		final ResultActions result = mvc.perform(multipart("/s3/upload")
+				.params(params)
+				.accept(MediaType.MULTIPART_FORM_DATA_VALUE)
+				.characterEncoding("utf-8")
+				.content(params.toString()));
 
-		mvc.perform(post("/s3/upload")
-				.contentType(MediaType.MULTIPART_FORM_DATA)
-				.content(anyString()))
-				.andExpect(status().isInternalServerError());
+
+		//then stating what is expected as a response from the servlet
+		result.andDo(print());
+		result.andExpect(status().isOk());
+
+
+
 	}
 
-	@Test
-	public void givenFileToUpload_WhenFileUpload_shouldReturnOk() throws Exception{
 
+	@Test
+	public void givenBadFilePath_WhenFileUpload_shouldReturnError() throws Exception {
+
+	//this is mocking the servlet being called and being passed the needed parameters for desired services
+	//when
+	final ResultActions result = mvc.perform(multipart("/s3/upload")
+			.params(params)
+			.accept(MediaType.MULTIPART_FORM_DATA_VALUE)
+			.characterEncoding("utf-8")
+			.content(params.toString()));
+
+	//then stating what is expected as a response from the servlet
+	result.andDo(print());
+	result.andExpect(status().is4xxClientError());
 	}
 
 }
