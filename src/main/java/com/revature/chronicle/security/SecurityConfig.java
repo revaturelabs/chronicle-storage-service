@@ -13,15 +13,22 @@ import java.util.Arrays;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final CorsConfigurationProperties corsConfigurationProperties;
+
+    public SecurityConfig(CorsConfigurationProperties corsConfigurationProperties) {
+        this.corsConfigurationProperties = corsConfigurationProperties;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        /* Might need to compare to William's as this configuration is different
+        then his */
         http
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeRequests()
                 .antMatchers("/*")
                         .authenticated()
-                .anyRequest().permitAll()
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
@@ -34,13 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","UPDATE","DELETE"));
-        configuration.setAllowCredentials(true);
-        //the below three lines will add the relevant CORS response headers
-        configuration.addAllowedOriginPattern("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
+        configuration.setAllowedOriginPatterns(corsConfigurationProperties.getAllowedOrigins());
+        configuration.setAllowedMethods(corsConfigurationProperties.getAllowedMethods());
+        configuration.setAllowedHeaders(corsConfigurationProperties.getAllowedHeaders());
+        configuration.setExposedHeaders(corsConfigurationProperties.getExposedHeaders());
+        configuration.setAllowCredentials(corsConfigurationProperties.isAllowCredentials());
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
