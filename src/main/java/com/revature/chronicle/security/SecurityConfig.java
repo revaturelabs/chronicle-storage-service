@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         /* Might need to compare to William's as this configuration is different
         then his */
-        http
+        http.csrf().disable()
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeRequests()
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(corsConfigurationProperties.getAllowedOrigins());
+        configuration.setAllowedOrigins(corsConfigurationProperties.getAllowedOrigins());
         configuration.setAllowedMethods(corsConfigurationProperties.getAllowedMethods());
         configuration.setAllowedHeaders(corsConfigurationProperties.getAllowedHeaders());
         configuration.setExposedHeaders(corsConfigurationProperties.getExposedHeaders());
