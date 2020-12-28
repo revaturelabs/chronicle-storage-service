@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -49,7 +50,7 @@ public class S3ControllerTest {
 
 
 	@Test
-	public void givenFormData_whenFileUpload_theReturnOKString() throws Exception {
+	public void givenFormData_whenFileUpload_theReturnOKStatus() throws Exception {
 
 		//given a mock MultipartFile to pass into the controller
 		file = new MockMultipartFile(
@@ -82,30 +83,27 @@ public class S3ControllerTest {
 		//then stating what is expected as a response from the servlet
 		result.andDo(print());
 		result.andExpect(status().isOk());
-
-
-
+		result.andExpect(mvcResult -> Assert.assertTrue("The file did contain content",file.getSize() > 0));
 	}
 
 
 	@Test
-	public void givenBadFilePath_WhenFileUpload_shouldReturnError() throws Exception {
+	public void givenEmpty_GivenNoSuchFile_WhenFileUpload_shouldReturnError() throws Exception {
 
 	//given a mock MultipartFile to pass into the controller
 	file = new MockMultipartFile(
 				"file",
-				"falsefilename",
+				"test.txt",
 				MediaType.TEXT_PLAIN_VALUE,
-				"Hello, World!".getBytes()
+				"".getBytes()
 		);
+
 
 	//mocking the json discription from front end
 	JSONObject json = new JSONObject();
 	json.put("testing", "123");
 	json.put("test2","here we go");
 
-	HttpServletResponse httpServletResponse = new MockHttpServletResponse();
-	httpServletResponse.setStatus(404);
 
 	//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
 	final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -124,6 +122,6 @@ public class S3ControllerTest {
 	//then stating what is expected as a response from the servlet
 	result.andDo(print());
 	result.andExpect(status().is4xxClientError());
+	result.andExpect(mvcResult -> Assert.assertTrue("The file given was empty or doesnt exist",file.isEmpty()));
 	}
-
 }
