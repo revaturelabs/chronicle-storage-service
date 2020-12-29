@@ -1,7 +1,5 @@
 # chronicle-storage-service
 
-
-this is an edit made by Andre
-
 Ronald Martz
 
+Andre was here!!!
