@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Repository
 public interface NoteRepo extends JpaRepository<Note, Integer> {
-//    // Needs to be implemented
+//    // Needs to be implemented, does not work
 //    @Query(value = "SELECT * FROM note n INNER JOIN note_tag nt INNER JOIN tag t " +
 //            "WHERE note.note_id = note_tag.note_id AND note_tag.tag_id = tag.tag_id " +
 //            "AND tag.name = :tag_name AND tag.value = :tag_value")

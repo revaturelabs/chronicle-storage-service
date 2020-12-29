@@ -14,11 +14,7 @@ public class NoteService {
     @Autowired
     NoteRepo noteRepo;
 
-    NoteService (NoteRepo noteRepo) {
-        this.noteRepo = noteRepo;
-    }
-
-    boolean addNote(Note note) {
+    boolean save(Note note) {
         try {
             noteRepo.save(note);
             return true;
@@ -29,18 +25,7 @@ public class NoteService {
         }
     }
 
-    boolean updateNote(Note note) {
-        try {
-            noteRepo.save(note);
-            return true;
-        }
-        catch(Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
-
-    List<Note> getNotes() {
+    List<Note> findAll() {
         try {
             return noteRepo.findAll();
         }
@@ -50,7 +35,7 @@ public class NoteService {
         }
     }
 
-    Note getNoteById(int id) {
+    Note findById(int id) {
         try {
             Optional<Note> n = noteRepo.findById(id);
             if (n.isPresent()) {
