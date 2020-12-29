@@ -9,9 +9,21 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.revature.chronicle.security.CorsConfigurationProps;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	
+	private final CorsConfigurationProps corsConfigurationProps;
+	
+	
+
+    public SecurityConfig(CorsConfigurationProps corsConfigurationProps) {
+		this.corsConfigurationProps = corsConfigurationProps;
+	}
 
     private final CorsConfigurationProperties corsConfigurationProperties;
 
@@ -50,4 +62,72 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+      
+      
+      
+      /*
+ 
+
+	@Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+        	.cors(spec -> {
+	            CorsConfiguration config = new CorsConfiguration();
+        		config.setAllowCredentials(true);
+	            config.addAllowedOriginPattern("*");
+	            config.addAllowedHeader("*");
+	    		config.addAllowedMethod("*");
+	            
+
+//	            config.setAllowedMethods(corsConfigurationProps.getAllowedMethods());
+//	            config.setAllowedHeaders(corsConfigurationProps.getAllowedHeaders());
+//	            config.setExposedHeaders(corsConfigurationProps.getExposedHeaders());
+//	            config.setAllowCredentials(corsConfigurationProps.isAllowCredentials());
+	            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	            source.registerCorsConfiguration("/**", config);
+	            spec.configurationSource(source);
+        		})
+        		.csrf().disable()
+
+                .authorizeRequests()
+                .antMatchers("/*")
+                        .authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt();
+    }
+
+      
+      
+      
+      
+      
+      
+      */
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 }
