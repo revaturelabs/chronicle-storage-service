@@ -38,9 +38,10 @@ public class S3ControllerTest {
 	private static JSONObject json;
 
 
+
 	@BeforeClass
 	public static void setup() throws JSONException {
-		mvc = MockMvcBuilders.standaloneSetup(new S3ControllerTest()).build();
+		mvc = MockMvcBuilders.standaloneSetup(new FileUploadController()).build();
 
 	 	json = new JSONObject();
 	 	json.put("testing", "123");
@@ -79,7 +80,6 @@ public class S3ControllerTest {
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE)
 				.characterEncoding("utf-8")
 				.content(params.toString()));
-
 
 		//then stating what is expected as a response from the servlet
 		result.andDo(print());
