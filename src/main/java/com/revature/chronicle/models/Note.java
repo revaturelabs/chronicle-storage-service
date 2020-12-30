@@ -31,5 +31,5 @@ public class Note {
     @JoinTable(name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
-    private Set<Tag> note_tags;
+    private Set<Tag> noteTags;
 }
