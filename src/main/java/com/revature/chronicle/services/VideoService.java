@@ -1,28 +1,28 @@
-package com.revature.chronicle.daos;
+package com.revature.chronicle.services;
 
-import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Video;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-//@Component
+/**
+ * Service to handle business logic surrounding data access layer for videos
+ */
+
 @Service
 public class VideoService {
     @Autowired
-    VideoRepo videoRepo;
+    private VideoRepo videoRepo;
 
-    //wait so we don't this constructor injection from the videoRepo for the videoService anymore?
-    VideoService (VideoRepo videoRepo) {
+    public VideoService(VideoRepo videoRepo) {
         this.videoRepo = videoRepo;
     }
 
-    List<Video> getVideos() {
+    public List<Video> getVideos() {
         try{
             return videoRepo.findAll();
         }
@@ -32,7 +32,7 @@ public class VideoService {
         }
     }
 
-    Video getVideoById(int id) {
+    public Video getVideoById(int id) {
         try{
             Optional<Video> v = videoRepo.findById(id);
             if (v.isPresent()) {
@@ -48,7 +48,7 @@ public class VideoService {
         }
     }
 
-    boolean addVideo(Video video) {
+    public boolean addVideo(Video video) {
         try{
             videoRepo.save(video);
             return true;
@@ -59,7 +59,7 @@ public class VideoService {
         }
     }
 
-    boolean updateVideo(Video video) {
+    public boolean updateVideo(Video video) {
         try{
             videoRepo.save(video); //update uses the jpa repo method as save
             return true;
@@ -70,7 +70,7 @@ public class VideoService {
         }
     }
 
-    boolean deleteVideo(Video video) {
+    public boolean deleteVideo(Video video) {
         try{
             videoRepo.delete(video);
             return true;

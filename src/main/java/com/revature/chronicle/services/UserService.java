@@ -1,21 +1,19 @@
-package com.revature.chronicle.daos;
+package com.revature.chronicle.services;
 
+import com.revature.chronicle.daos.UserRepo;
 import com.revature.chronicle.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 /**
- * Service to handle user related any business logic needed prior to data access layer
+ * Service to handle user related any business logic needed prior to data access layer for Users
  */
+@Service
 public class UserService {
 
     @Autowired
-    public UserRepo userRepo;
-
-    public UserService(UserRepo userRepo){
-        this.userRepo = userRepo;
-    }
+    private UserRepo userRepo;
 
     public User findByUsername(String username){
         return userRepo.findByUsername(username);

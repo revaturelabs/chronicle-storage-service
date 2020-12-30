@@ -1,5 +1,6 @@
-package com.revature.chronicle.daos;
+package com.revature.chronicle.services;
 
+import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,10 +8,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service to handle business logic surrounding data access layer for tags
+ */
 @Service
 public class TagService {
     @Autowired
-    TagRepo tagRepo;
+    private TagRepo tagRepo;
+
+    public TagService(TagRepo tagRepo) {
+        this.tagRepo = tagRepo;
+    }
 
     public List<Tag> findAll() {
         return tagRepo.findAll();
