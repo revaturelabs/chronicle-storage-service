@@ -1,6 +1,9 @@
 package com.revature.chronicle.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -10,7 +13,10 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "video")
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Video {
     @Id
     @Column(name = "video_id")
