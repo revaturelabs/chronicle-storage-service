@@ -30,7 +30,7 @@ public class SecurityConfigTest {
 
     // Creating mock objects -- refactor to only instantiate when needed
     private HttpSecurity httpSecurityMock;
-    private SecurityConfig securityConfigMock;
+    private SecurityConfig securityConfig;
     private CorsConfiguration corsConfigurationMock;
     private CorsConfigurationSource corsConfigurationSourceMock;
     private CorsConfigurationProperties corsConfigurationPropertiesMock;
@@ -39,7 +39,8 @@ public class SecurityConfigTest {
 
     @Before
     public void init() {
-        securityConfigMock = mock(SecurityConfig.class);
+        corsConfigurationPropertiesMock = mock(CorsConfigurationProperties.class);
+        securityConfig = new SecurityConfig(corsConfigurationPropertiesMock);
     }
 
 
@@ -50,19 +51,18 @@ public class SecurityConfigTest {
         corsConfigurationSourceMock = mock(CorsConfigurationSource.class);
 
         // return a mock CorsConfigurationSource when method called
-        when(securityConfigMock.corsConfigurationSource())
+        when(securityConfig.corsConfigurationSource())
                 .thenReturn(corsConfigurationSourceMock);
 
         // Verifies that methods was run once
-        securityConfigMock.configure(httpSecurityMock);
-        verify(securityConfigMock, times(1)).configure(httpSecurityMock);
+        securityConfig.configure(httpSecurityMock);
+        verify(securityConfig, times(1)).configure(httpSecurityMock);
     }
 
     @Test
     public void testCorsConfigurationSource() {
         // Instantiating Mock Objects
         corsConfigurationMock = mock(CorsConfiguration.class);
-        corsConfigurationPropertiesMock = mock(CorsConfigurationProperties.class);
         urlBasedCorsConfigurationSourceMock = mock(UrlBasedCorsConfigurationSource.class);
 
         // return empty list or boolean when corsConfigurationPropertiesMock methods called
@@ -74,14 +74,14 @@ public class SecurityConfigTest {
 
         // do nothing when registerCorsConfiguration is called
         doNothing().when(urlBasedCorsConfigurationSourceMock).registerCorsConfiguration(
-                "/**", any(CorsConfiguration.class));
+                anyString(), any(CorsConfiguration.class));
 
         // run corsConfigurationSource() method
-        CorsConfigurationSource result = securityConfigMock.corsConfigurationSource();
+        CorsConfigurationSource result = securityConfig.corsConfigurationSource();
 
         // verify that registerCorsConfiguration was called and method returns correct object
         verify(urlBasedCorsConfigurationSourceMock, times(1)).
-                registerCorsConfiguration("/**", any(CorsConfiguration.class));
+                registerCorsConfiguration(anyString(), any(CorsConfiguration.class));
         assertTrue(result instanceof CorsConfigurationSource && result != null);
     }
 

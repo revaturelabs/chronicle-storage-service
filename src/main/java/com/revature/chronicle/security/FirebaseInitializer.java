@@ -32,7 +32,7 @@ public class FirebaseInitializer {
     private void initializeFirebaseApp() throws IOException {
 
         if (FirebaseApp.getApps() == null || FirebaseApp.getApps().isEmpty()) {
-            InputStream serviceAccount = FirebaseInitializer.class.getResourceAsStream("/firebase-service-credentials.json");
+            InputStream serviceAccount = returnResourceAsStream("/firebase-service-credentials.json");
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(credentials)
@@ -41,6 +41,10 @@ public class FirebaseInitializer {
             FirebaseApp.initializeApp(options);
         }
 
+    }
+
+    public InputStream returnResourceAsStream(String resource) {
+        return FirebaseInitializer.class.getResourceAsStream(resource);
     }
 
 }

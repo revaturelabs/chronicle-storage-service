@@ -4,6 +4,7 @@ import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,40 +24,39 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(fullyQualifiedNames = {
-        "com.revature.chronicle.security.FirebaseInitializer"})
+        "com.revature.chronicle.security.FirebaseInitializer",
+        "com.google.auth.oauth2.GoogleCredentials",
+        "com.google.firebase.FirebaseApp"
+        })
 public class FirebaseInitializerTest {
 
     // Creating mock objects -- refactor to only instantiate when needed
     private FirebaseApp firebaseAppMock;
-    private FirebaseInitializer firebaseInitializerMock;
-
+    private FirebaseInitializer firebaseInitializer;
+    private GoogleCredentials googleCredentialsMock;
 
     @Before
     public void init() {
-        firebaseInitializerMock = mock(FirebaseInitializer.class);
+        firebaseInitializer = new FirebaseInitializer();
     }
 
     @Test
     public void testInitializeFirebaseApp() throws Exception {
         // Initializing FirebaseApp mock
         firebaseAppMock = mock(FirebaseApp.class);
+        googleCredentialsMock = mock(GoogleCredentials.class);
         // Making when statements for 3rd party API classes that call their own methods
-        when(FirebaseInitializer.class.getResourceAsStream(anyString()))
-                .thenReturn(new InputStream() {
-                                @Override
-                                public int read() throws IOException {
-                                    return 0;
-                                }
-                            });
-        when(GoogleCredentials.fromStream(any(InputStream.class)))
+        when(firebaseInitializer.returnResourceAsStream("/firebase-service-credentials.json"))
+                .thenReturn(IOUtils.toInputStream("{}","UTF-8"));
+        when(googleCredentialsMock.fromStream(any(InputStream.class)))
                 .thenReturn(new GoogleCredentials(new AccessToken("1",
                         new Date())));
         /* Omitting FirebaseOptions from mocking because it relies on builder method,
         so the method calls are needed just to instantiate object */
-        when(FirebaseApp.initializeApp(any(FirebaseOptions.class)))
-                .thenReturn(FirebaseApp.getInstance());
+        when(firebaseAppMock.initializeApp(any(FirebaseOptions.class)))
+                .thenReturn(firebaseAppMock.getInstance());
 
-        firebaseInitializerMock.onStart();
+        firebaseInitializer.onStart();
         verify(firebaseAppMock, times(1)).initializeApp(any(FirebaseOptions.class));
     }
 }
