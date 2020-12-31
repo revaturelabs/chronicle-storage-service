@@ -3,9 +3,11 @@ package com.revature.chronicle;
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.UserRepo;
 import com.revature.chronicle.daos.VideoRepo;
+import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.UserService;
 import com.revature.chronicle.services.VideoService;
@@ -32,6 +34,8 @@ public class ChronicleApplication {
 	public TagService tagService;
 	@Autowired
 	public VideoService videoService;
+	@Autowired
+	public NoteService noteService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ChronicleApplication.class, args);
@@ -80,6 +84,29 @@ public class ChronicleApplication {
 			video2.setVideoTags(tags2);
 			videoService.save(video2);
 
+			Set<Tag> tags3 = new HashSet<>();
+			tags3.add(tag1);
+			tags3.add(tag3);
+			Note note1 = new Note();
+			note1.setUrl("http://video1.com");
+			note1.setUser(user);
+			note1.setDescription("A description");
+			note1.setNoteTags(tags3);
+			System.out.println(note1.toString());
+			noteService.save(note1);
+
+			Set<Tag> tags4 = new HashSet<>();
+			tags4.add(tag1);
+			tags4.add(tag2);
+			Note note2 = new Note();
+			note2.setUrl("http://video1.com");
+			note2.setUser(user);
+			note2.setDescription("A description");
+			note2.setNoteTags(tags4);
+			System.out.println(note2.toString());
+			noteService.save(note2);
+
+
 			List<Tag> input = new ArrayList<>();
 			input.add(tag1);
 			input.add(tag2);
@@ -87,6 +114,11 @@ public class ChronicleApplication {
 			List<Video> result = videoService.findAllVideosByTags(input);
 			for(Video r:result){
 				System.out.println(r.toString());
+			}
+
+			List<Note> result2 = noteService.findAllNotesByTags(input);
+			for(Note n:result2){
+				System.out.println(n.toString());
 			}
 		};
 	}

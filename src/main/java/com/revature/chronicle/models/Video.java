@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -31,7 +32,7 @@ public class Video {
     private String description;
 
     @Column(name = "date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)

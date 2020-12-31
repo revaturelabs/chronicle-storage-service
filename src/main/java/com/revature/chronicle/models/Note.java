@@ -1,8 +1,10 @@
 package com.revature.chronicle.models;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -22,6 +24,10 @@ public class Note {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "date")
+    @CreationTimestamp
+    private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",referencedColumnName = "user_id", columnDefinition = "INT")
