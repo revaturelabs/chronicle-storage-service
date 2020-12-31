@@ -30,11 +30,12 @@ public class VideoService {
     public List<Video> findAllVideosByTags(List<Tag> tags){
         System.out.println("Entered service method");
         List<Video> desiredVideos = new ArrayList<>();
-        int lastNumber;
+        int offset = 0;
+        final int LIMIT = 50;
         do{
             //Query database for first 50 most recent results
             //Since date is a timestamp it should account for hours, mins, secs as well ensuring the order of the list
-            List<Video> videos = videoRepo.findAll(Sort.by(Sort.Direction.DESC, "date"));
+            List<Video> videos = videoRepo.findVideosWithOffsetAndLimit(offset,LIMIT);
             System.out.println(videos.size());
 
             //Check if videos is empty as no more records exist
@@ -52,8 +53,9 @@ public class VideoService {
                 }
             }
             else{
-                lastNumber = -1;
+                break;
             }
+            offset+= videos.size();
         }
         while(desiredVideos.size() < 50 && desiredVideos.size()>0);
 
@@ -101,7 +103,7 @@ public class VideoService {
         System.out.println("Saving video");
         try{
             videoRepo.save(video);
-            System.out.println("Saving video");
+            System.out.println("Saved");
             return true;
         }
         catch(Exception e) {

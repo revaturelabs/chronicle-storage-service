@@ -6,6 +6,9 @@ import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.TagService;
+import com.revature.chronicle.services.UserService;
+import com.revature.chronicle.services.VideoService;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +20,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.sql.RowSet;
+import java.util.*;
 
 @SpringBootApplication
 @RestController
 public class ChronicleApplication {
-
 	@Autowired
-	UserRepo userRepo;
+	public UserService userService;
 	@Autowired
-	TagRepo tagRepo;
+	public TagService tagService;
 	@Autowired
-	VideoRepo videoRepo;
+	public VideoService videoService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ChronicleApplication.class, args);
@@ -40,50 +40,57 @@ public class ChronicleApplication {
 	@Bean
 	public CommandLineRunner runner() {
 		return args -> {
-			User u = new User();
-			u.setUsername("bob");
-			userRepo.save(u);
+			User user = new User();
+			user.setUsername("TESTUSER");
+			userService.save(user);
 
-			User u2 = new User();
-			u2.setUsername("notbob");
-			userRepo.save(u2);
+			Tag tag1 = new Tag();
+			tag1.setName("Technology");
+			tag1.setValue("Angular");
+			tagService.save(tag1);
 
-			Tag t = new Tag();
-			t.setName("Topic");
-			t.setValue("Angular");
+			Tag tag2 = new Tag();
+			tag2.setName("Technology");
+			tag2.setValue("Java");
+			tagService.save(tag2);
 
+			Tag tag3 = new Tag();
+			tag3.setName("Batch");
+			tag3.setValue("1120-August");
+			tagService.save(tag3);
 
-			Video v = new Video();
-			v.setDescription("TEST");
-			v.setUser(u);
-			v.setUrl("http://blah.com");
-			Set<Tag> tags = new HashSet<>();
-			tags.add(t);
-			v.setVideo_tags(tags);
+			Set<Tag> tags1 = new HashSet<>();
+			tags1.add(tag1);
+			tags1.add(tag3);
+			Video video1 = new Video();
+			video1.setUrl("http://video1.com");
+			video1.setUser(user);
+			video1.setDescription("A description");
+			video1.setVideoTags(tags1);
+			System.out.println(video1.toString());
+			videoService.save(video1);
 
-			videoRepo.save(v);
+			Set<Tag> tags2 = new HashSet<>();
+			tags2.add(tag1);
+			tags2.add(tag2);
+			Video video2 = new Video();
+			video2.setUrl("http://video2.com");
+			video2.setUser(user);
+			video2.setDescription("A description");
+			video2.setVideoTags(tags2);
+			videoService.save(video2);
 
-			Optional<Video> video = videoRepo.findById(1);
-			if(video.isPresent()){
-				System.out.println(video.toString());
-			}
+			List<Tag> input = new ArrayList<>();
+			input.add(tag1);
+			input.add(tag2);
 
-			Optional<User> user = userRepo.findById(2);
-			if(user.isPresent()){
-				System.out.println("Here");
-			}
-			System.out.println(user.toString());
-			List<User> users = userRepo.findAll();
-			for(User us : users) {
-				System.out.println(us.toString());
+			List<Video> result = videoService.findAllVideosByTags(input);
+			for(Video r:result){
+				System.out.println(r.toString());
 			}
 		};
 	}
 
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return String.format("Hello %s!", name);
-	}
 
 	/*
 	private void configure() {

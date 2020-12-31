@@ -18,6 +18,9 @@ public interface VideoRepo extends JpaRepository<Video, Integer> {
       @Query(value = "SELECT * FROM video WHERE tag = ?", nativeQuery = true) //@Query annotation is used to perform complex/custom queries, nativeQuery means plain SQL
       List<Video> findVideosByTag(Tag tag); //TODO: GOAL! of this method is to find videos containing a specific tag
 
+      @Query(value = "select * from video v order by v.date asc offset ?1 fetch next ?2 rows only",nativeQuery = true)
+      List<Video> findVideosWithOffsetAndLimit(int offset,int limit);
+
       //@Query(value = "SELECT * FROM videos", nativeQuery = true)
       //List<Video> findVideoByTags(Tag tag); //TODO: GOAL! of this method is to find videos containing multiple specific tags
 
