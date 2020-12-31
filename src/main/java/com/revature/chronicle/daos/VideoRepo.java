@@ -14,16 +14,13 @@ import java.util.Optional;
  */
 @Repository
 public interface VideoRepo extends JpaRepository<Video, Integer> {
-//    Needs custom implementation
-      @Query(value = "SELECT * FROM video WHERE tag = ?", nativeQuery = true) //@Query annotation is used to perform complex/custom queries, nativeQuery means plain SQL
-      List<Video> findVideosByTag(Tag tag); //TODO: GOAL! of this method is to find videos containing a specific tag
 
-      //@Query(value = "SELECT * FROM videos", nativeQuery = true)
-      //List<Video> findVideoByTags(Tag tag); //TODO: GOAL! of this method is to find videos containing multiple specific tags
-
-//    JPA Implementations
-//    Optional<Video> findById(Integer id);   --> public Video getVideoById(int id);
-//    List<Video> findAll();                  --> public List<Video> getVideos();
-//    void save();                            --> public boolean addVideo(Video video);/public boolean updateVideo(Video video);
-//    void delete();                          --> public boolean deleteVideo(Video video);
+      /**
+       * Finds videos with an offset and limit used for paging
+       * @param offset where to begin
+       * @param limit how many records should be returned
+       * @return the videos
+       */
+      @Query(value = "select * from video v order by v.date asc offset ?1 fetch next ?2 rows only",nativeQuery = true)
+      List<Video> findVideosWithOffsetAndLimit(int offset,int limit);
 }
