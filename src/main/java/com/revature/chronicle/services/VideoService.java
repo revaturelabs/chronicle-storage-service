@@ -1,13 +1,13 @@
 package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.VideoRepo;
+import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service to handle business logic surrounding data access layer for videos
@@ -22,13 +22,62 @@ public class VideoService {
         this.videoRepo = videoRepo;
     }
 
-    public List<Video> getVideos() {
+    /**
+     * Finds all Videos that have the all of provided tags.
+     * @param tags the tags provided by the user
+     * @return a list of videos that have all tags
+     */
+    public List<Video> findAllVideosByTags(List<Tag> tags){
+        System.out.println("Entered service method");
+        List<Video> desiredVideos = new ArrayList<>();
+        int lastNumber;
+        do{
+            //Query database for first 50 most recent results
+            //Since date is a timestamp it should account for hours, mins, secs as well ensuring the order of the list
+            List<Video> videos = videoRepo.findAll(Sort.by(Sort.Direction.DESC, "date"));
+            System.out.println(videos.size());
+
+            //Check if videos is empty as no more records exist
+            if(videos.size()>0){
+                //Iterate through 50 results
+                for(Video video:videos){
+                    //Check to see if result has all passed in tags,if so add to desiredVideos
+                    if(video.getVideoTags().containsAll(tags)){
+                        System.out.println("Adding video");
+                        desiredVideos.add(video);
+                    }
+                    else{
+                        System.out.println("Video not found");
+                    }
+                }
+            }
+            else{
+                lastNumber = -1;
+            }
+        }
+        while(desiredVideos.size() < 50 && desiredVideos.size()>0);
+
+        //Find way to sort by return if it doesn't keep by recent order
+        return desiredVideos;
+    }
+
+    public List<Video> findAll() {
         try{
             return videoRepo.findAll();
         }
         catch(Exception e) {
             System.out.println(e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    public Optional<Video> findById(int id){
+        try{
+            return videoRepo.findById(id);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return Optional.empty();
         }
     }
 
@@ -48,9 +97,11 @@ public class VideoService {
         }
     }
 
-    public boolean addVideo(Video video) {
+    public boolean save(Video video) {
+        System.out.println("Saving video");
         try{
             videoRepo.save(video);
+            System.out.println("Saving video");
             return true;
         }
         catch(Exception e) {

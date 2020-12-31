@@ -1,9 +1,11 @@
 package com.revature.chronicle;
 
 import com.revature.chronicle.daos.UserRepo;
-import com.revature.chronicle.daos.UserService;
+import com.revature.chronicle.services.UserService;
 import com.revature.chronicle.models.User;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.mockito.MockitoAnnotations;
 
