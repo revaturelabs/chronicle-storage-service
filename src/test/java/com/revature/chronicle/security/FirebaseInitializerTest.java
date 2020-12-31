@@ -8,55 +8,70 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(fullyQualifiedNames = {
-        "com.revature.chronicle.security.FirebaseInitializer",
         "com.google.auth.oauth2.GoogleCredentials",
-        "com.google.firebase.FirebaseApp"
+        "com.google.firebase.FirebaseApp",
         })
-public class FirebaseInitializerTest {
+public class FirebaseInitializerTest extends FirebaseInitializer {
 
     // Creating mock objects -- refactor to only instantiate when needed
-    private FirebaseApp firebaseAppMock;
-    private FirebaseInitializer firebaseInitializer;
-    private GoogleCredentials googleCredentialsMock;
+    private FirebaseInitializer firebaseInitializerMock;
+    private FirebaseOptions firebaseOptionsMock;
 
     @Before
     public void init() {
-        firebaseInitializer = new FirebaseInitializer();
+        firebaseInitializerMock = mock(FirebaseInitializer.class);
     }
 
     @Test
     public void testInitializeFirebaseApp() throws Exception {
-        // Initializing FirebaseApp mock
-        firebaseAppMock = mock(FirebaseApp.class);
-        googleCredentialsMock = mock(GoogleCredentials.class);
-        // Making when statements for 3rd party API classes that call their own methods
-        when(firebaseInitializer.returnResourceAsStream("/firebase-service-credentials.json"))
-                .thenReturn(IOUtils.toInputStream("{}","UTF-8"));
-        when(googleCredentialsMock.fromStream(any(InputStream.class)))
+        // Initializing mocks
+        mockStatic(FirebaseApp.class);
+        mockStatic(GoogleCredentials.class);
+        //firebaseOptionsMock = Mockito.mock(FirebaseOptions.class);
+        InputStream streamToTest = IOUtils.toInputStream("{\"type\":\"authorized_user\"," +
+                "\"client_id\":\"1\",\"client_secret\":\"1\",\"refresh_token\":\"1\"}","UTF-8");
+
+        // When statements in mockito/powermockito
+        when(firebaseInitializerMock.returnResourceAsStream(anyString()))
+                .thenReturn(streamToTest);
+        when(GoogleCredentials.fromStream(any(InputStream.class)))
                 .thenReturn(new GoogleCredentials(new AccessToken("1",
                         new Date())));
-        /* Omitting FirebaseOptions from mocking because it relies on builder method,
-        so the method calls are needed just to instantiate object */
-        when(firebaseAppMock.initializeApp(any(FirebaseOptions.class)))
-                .thenReturn(firebaseAppMock.getInstance());
+        //when(firebaseOptionsMock.toBuilder().setCredentials(any(GoogleCredentials.class)).build())
+                //.thenReturn(firebaseOptionsMock);
+        FirebaseApp returnValue = FirebaseApp.getInstance();
+        when(FirebaseApp.initializeApp(any(FirebaseOptions.class)))
+                .thenReturn(returnValue);
 
-        firebaseInitializer.onStart();
-        verify(firebaseAppMock, times(1)).initializeApp(any(FirebaseOptions.class));
+        // Calling methods and verifying they've been called
+        InputStream is = firebaseInitializerMock.returnResourceAsStream("/firebase-service-credentials.json");
+        verify(firebaseInitializerMock,times(1));
+
+        GoogleCredentials gc = GoogleCredentials.fromStream(streamToTest);
+        assertTrue(gc instanceof GoogleCredentials);
+
+        //FirebaseOptions options = firebaseOptionsMock.toBuilder().setCredentials(gc).build();
+        //verify(firebaseOptionsMock,times(1));
+
+        FirebaseApp fa = FirebaseApp.initializeApp(new FirebaseOptions.Builder()
+                .setCredentials(gc)
+                .build());
+        assertTrue(fa instanceof FirebaseApp);
     }
 }

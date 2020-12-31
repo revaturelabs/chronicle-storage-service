@@ -43,7 +43,7 @@ public class FirebaseInitializer {
 
     }
 
-    public InputStream returnResourceAsStream(String resource) {
+    protected InputStream returnResourceAsStream(String resource) {
         return FirebaseInitializer.class.getResourceAsStream(resource);
     }
 

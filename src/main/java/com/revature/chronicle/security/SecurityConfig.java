@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         /* Might need to compare to William's as this configuration is different
         then his */
         http.csrf().disable()
-                .cors().configurationSource(corsConfigurationSource())
+                .cors().configurationSource(getCorsConfigurationSource())
                 .and()
                 .authorizeRequests()
                 .antMatchers("/*")
@@ -32,21 +32,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .jwt();
     }
 
-    /* NEEDS TO BE CHANGED, FROM
-   https://stackoverflow.com/questions/51719889/spring-boot-cors-issue
-    */
-
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource getCorsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(corsConfigurationProperties.getAllowedOrigins());
         configuration.setAllowedMethods(corsConfigurationProperties.getAllowedMethods());
         configuration.setAllowedHeaders(corsConfigurationProperties.getAllowedHeaders());
         configuration.setExposedHeaders(corsConfigurationProperties.getExposedHeaders());
         configuration.setAllowCredentials(corsConfigurationProperties.isAllowCredentials());
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
+        configurationSource.registerCorsConfiguration("/**", configuration);
+        return configurationSource;
     }
       
       

@@ -3,6 +3,8 @@ package com.revature.chronicle.security;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,20 +13,19 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.verifyNew;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(fullyQualifiedNames = {
-        "org.springframework.security.config.annotation.web.builders.HttpSecurity",
-        "com.revature.chronicle.security.SecurityConfig",
         "org.springframework.web.cors.CorsConfiguration",
-        "org.springframework.web.cors.CorsConfigurationSource",
-        "org.springframework.web.cors.UrlBasedCorsConfigurationSource"
+        "org.springframework.web.cors.UrlBasedCorsConfigurationSource",
+        "org.springframework.security.config.annotation.web.builders.HttpSecurity"
 })
 public class SecurityConfigTest {
 
@@ -47,42 +48,89 @@ public class SecurityConfigTest {
     @Test
     public void testConfigureMethod() throws Exception {
         // Instantiating Mock Objects
-        httpSecurityMock = mock(HttpSecurity.class);
+        httpSecurityMock = PowerMockito.mock(HttpSecurity.class);
         corsConfigurationSourceMock = mock(CorsConfigurationSource.class);
 
-        // return a mock CorsConfigurationSource when method called
-        when(securityConfig.corsConfigurationSource())
-                .thenReturn(corsConfigurationSourceMock);
+        // when statement
+        doNothing().when(httpSecurityMock.csrf().disable()
+                .cors().configurationSource(any(CorsConfigurationSource.class))
+                .and()
+                .authorizeRequests()
+                .antMatchers(anyString())
+                .authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt());
 
-        // Verifies that methods was run once
-        securityConfig.configure(httpSecurityMock);
-        verify(securityConfig, times(1)).configure(httpSecurityMock);
+        // Verifies that methods run once
+        httpSecurityMock.csrf().disable()
+                .cors().configurationSource(corsConfigurationSourceMock)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/**")
+                .authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt();
+        verify(httpSecurityMock,times(1));
     }
 
     @Test
-    public void testCorsConfigurationSource() {
+    public void testCorsConfigurationSource() throws Exception {
         // Instantiating Mock Objects
-        corsConfigurationMock = mock(CorsConfiguration.class);
-        urlBasedCorsConfigurationSourceMock = mock(UrlBasedCorsConfigurationSource.class);
+        corsConfigurationMock = PowerMockito.mock(CorsConfiguration.class);
+        urlBasedCorsConfigurationSourceMock = PowerMockito.mock(UrlBasedCorsConfigurationSource.class);
 
-        // return empty list or boolean when corsConfigurationPropertiesMock methods called
+        // when statements
+        whenNew(CorsConfiguration.class).withNoArguments().thenReturn(corsConfigurationMock);
         when(corsConfigurationPropertiesMock.getAllowedOrigins()).thenReturn(new ArrayList<>());
         when(corsConfigurationPropertiesMock.getAllowedMethods()).thenReturn(new ArrayList<>());
         when(corsConfigurationPropertiesMock.getAllowedHeaders()).thenReturn(new ArrayList<>());
         when(corsConfigurationPropertiesMock.getExposedHeaders()).thenReturn(new ArrayList<>());
         when(corsConfigurationPropertiesMock.isAllowCredentials()).thenReturn(true);
-
-        // do nothing when registerCorsConfiguration is called
+        whenNew(UrlBasedCorsConfigurationSource.class).withNoArguments().thenReturn(urlBasedCorsConfigurationSourceMock);
         doNothing().when(urlBasedCorsConfigurationSourceMock).registerCorsConfiguration(
                 anyString(), any(CorsConfiguration.class));
 
-        // run corsConfigurationSource() method
-        CorsConfigurationSource result = securityConfig.corsConfigurationSource();
+        // running methods and verifying they ran
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        verifyNew(CorsConfiguration.class).withNoArguments();
 
-        // verify that registerCorsConfiguration was called and method returns correct object
-        verify(urlBasedCorsConfigurationSourceMock, times(1)).
-                registerCorsConfiguration(anyString(), any(CorsConfiguration.class));
-        assertTrue(result instanceof CorsConfigurationSource && result != null);
+        corsConfigurationMock.setAllowedOrigins(anyList());
+        verify(corsConfigurationMock,times(1));
+
+        corsConfigurationMock.setAllowedMethods(anyList());
+        verify(corsConfigurationMock,times(1));
+
+        corsConfigurationMock.setAllowedHeaders(anyList());
+        verify(corsConfigurationMock,times(1));
+
+        corsConfigurationMock.setExposedHeaders(anyList());
+        verify(corsConfigurationMock,times(1));
+
+        corsConfigurationMock.setAllowCredentials(anyBoolean());
+        verify(corsConfigurationMock,times(1));
+
+        corsConfigurationPropertiesMock.getAllowedOrigins();
+        verify(corsConfigurationPropertiesMock,times(1));
+
+        corsConfigurationPropertiesMock.getAllowedMethods();
+        verify(corsConfigurationPropertiesMock,times(1));
+
+        corsConfigurationPropertiesMock.getAllowedHeaders();
+        verify(corsConfigurationPropertiesMock,times(1));
+
+        corsConfigurationPropertiesMock.getExposedHeaders();
+        verify(corsConfigurationPropertiesMock,times(1));
+
+        corsConfigurationPropertiesMock.isAllowCredentials();
+        verify(corsConfigurationPropertiesMock,times(1));
+
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        verifyNew(UrlBasedCorsConfigurationSource.class).withNoArguments();
+
+        urlBasedCorsConfigurationSourceMock.registerCorsConfiguration("/**", corsConfigurationMock);
+        verify(urlBasedCorsConfigurationSourceMock, times(1));
     }
 
 
