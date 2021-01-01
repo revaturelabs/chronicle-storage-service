@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.Date;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -32,6 +33,7 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 public class FirebaseInitializerTest extends FirebaseInitializer {
 
     // Creating mock objects -- refactor to only instantiate when needed
+    private FirebaseInitializer firebaseInitializer;
     private FirebaseInitializer firebaseInitializerMock;
     private FirebaseOptions.Builder firebaseBuilderOptionsMock;
     private FirebaseOptions firebaseOptionsMock;
@@ -40,6 +42,7 @@ public class FirebaseInitializerTest extends FirebaseInitializer {
     @Before
     public void init() {
         firebaseInitializerMock = mock(FirebaseInitializer.class);
+        firebaseInitializer = new FirebaseInitializer();
     }
 
     @Test
@@ -78,5 +81,8 @@ public class FirebaseInitializerTest extends FirebaseInitializer {
                 .setCredentials(gc)
                 .build());
         assertTrue(fa != null);
+
+        // run method successfully
+        assertDoesNotThrow(() -> firebaseInitializer.onStart());
     }
 }
