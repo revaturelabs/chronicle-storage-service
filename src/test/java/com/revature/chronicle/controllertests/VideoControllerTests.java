@@ -1,36 +1,85 @@
-package com.revature.chronicle;
+package com.revature.chronicle.controllertests;
 
+import com.revature.chronicle.controllers.VideoController;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import java.util.HashSet;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
-import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-class ChronicleApplicationTests {
+class VideoControllerTests {
 
-	private vidoeDao vd;
 	private MockMvc mockMvc;
+	private static List<Video> mockVideos;
+	private static List<Tag> mockTags;
 
-	@Before
-	public void setup()
-	{
-		vd = mock(videoDao.class);
+	@Mock
+	private VideoService videoService;
+
+	@InjectMocks
+	private VideoController videoController;
+
+	@BeforeClass
+	public static void setup() {
+		MockitoAnnotations.openMocks(this);
+		User user = new User();
+		user.setUsername("TESTUSER");
+
+		Tag tag1 = new Tag();
+		tag1.setName("Technology");
+		tag1.setValue("Angular");
+
+		Tag tag2 = new Tag();
+		tag2.setName("Technology");
+		tag2.setValue("Java");
+
+		Tag tag3 = new Tag();
+		tag3.setName("Batch");
+		tag3.setValue("1120-August");
+
+		Set<Tag> tags1 = new HashSet<>();
+		tags1.add(tag1);
+		tags1.add(tag3);
+
+		Video video1 = new Video();
+		video1.setUrl("http://video1.com/%22");
+		video1.setUser(user);
+		video1.setDescription("A description");
+		video1.setVideoTags(tags1);
+
+		Set<Tag> tags2 = new HashSet<>();
+		tags2.add(tag1);
+		tags2.add(tag2);
+
+		Video video2 = new Video();
+		video2.setUrl("http://video2.com/%22");
+		video2.setUser(user);
+		video2.setDescription("A description");
+		video2.setVideoTags(tags2);
+
+		mockVideos.add(video1);
+		mockVideos.add(video2);
+		mockTags.add(tag1);
+		mockTags.add(tag2);
 	}
 
 	@Test
 	public void shouldGetAllVideos() throws Exception {
+
+		when(videoService.findAll()).thenReturn(mockVideos);
 		MvcResult result = mockMvc.perform(get("/videos/all"))
 				.andDo(print())
 				.andExpect(status().isOk())
@@ -51,7 +100,8 @@ class ChronicleApplicationTests {
 
 	@Test
 	public void shouldGetVideosByTag() throws Exception {
-		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","Java+JDBC"))//Assuming words separated by '+'
+		when(videoService.findAllVideosByTags(mockTags)).thenReturn(mockVideos);
+		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","Technology:Angular+Technology:Java"))//Assuming words separated by '+'
 				.andExpect(status().isOk())
 				.andReturn();
 
