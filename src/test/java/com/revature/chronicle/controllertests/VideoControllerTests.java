@@ -2,6 +2,7 @@ package com.revature.chronicle.controllertests;
 
 import com.revature.chronicle.controllers.VideoController;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -23,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VideoControllerTests {
 
 	private MockMvc mockMvc;
-	private static List<Video> mockVideos;
-	private static List<Tag> mockTags;
+	private List<Video> mockVideos;
+	private List<Tag> mockTags;
 
 	@Mock
 	private VideoService videoService;
@@ -32,8 +33,11 @@ class VideoControllerTests {
 	@InjectMocks
 	private VideoController videoController;
 
-	@BeforeClass
-	public static void setup() {
+	@Before
+	public void setup() {
+		mockVideos = null;
+		mockTags = null;
+
 		MockitoAnnotations.openMocks(this);
 		User user = new User();
 		user.setUsername("TESTUSER");

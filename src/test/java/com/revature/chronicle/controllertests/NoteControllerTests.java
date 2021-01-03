@@ -1,6 +1,7 @@
 package com.revature.chronicle.controllertests;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -22,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NoteControllerTests {
 
     private MockMvc mockMvc;
-    private static List<Note> mockNotes;
-    private static List<Tag> mockTags;
+    private List<Note> mockNotes;
+    private List<Tag> mockTags;
 
     @Mock
     private NoteService noteService;
@@ -31,8 +32,12 @@ public class NoteControllerTests {
     @InjectMocks
     private NoteController noteController;
 
-    @BeforeClass
-    public static void setup() {
+    @Before
+    public void setup() {
+
+        mockNotes = null;
+        mockTags = null;
+
         MockitoAnnotations.openMocks(this);
         User user = new User();
         user.setUsername("TESTUSER");
