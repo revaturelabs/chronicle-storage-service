@@ -1,5 +1,6 @@
 package com.revature.chronicle.controllertests;
 
+import com.revature.chronicle.controllers.NoteController;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
