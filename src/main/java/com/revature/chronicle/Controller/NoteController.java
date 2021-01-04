@@ -1,4 +1,4 @@
-package com.revature.chronicle.controllers;
+package com.revature.chronicle.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

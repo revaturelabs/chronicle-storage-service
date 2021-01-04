@@ -1,9 +1,7 @@
-package com.revature.chronicle.controllertests;
+package com.revature.chronicle.Controller;
 
-import com.revature.chronicle.controllers.VideoController;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
