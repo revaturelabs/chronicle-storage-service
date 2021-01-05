@@ -1,5 +1,9 @@
 package com.revature.chronicle.Controller;
 
+import com.revature.chronicle.models.Note;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.services.NoteService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

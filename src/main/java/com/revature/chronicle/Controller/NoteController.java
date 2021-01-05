@@ -1,5 +1,9 @@
 package com.revature.chronicle.Controller;
 
+import com.revature.chronicle.daos.NoteRepo;
+import com.revature.chronicle.models.Note;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,11 +33,11 @@ public class NoteController {
     public ResponseEntity<List<Note>> getNotesByTag(@PathVariable(name="noteTags") String crudeTags){
         System.out.println(crudeTags);
         String[] arrTags = crudeTags.split("\\+");
-        List<Tag> targetTags = new List<>();
+        List<Tag> targetTags = new ArrayList<>();
         for (String tag: arrTags) {
             Tag tempTag = new Tag();
             String[] tagComponents = tag.split(":");
-            tempTag.setKey(tagComponents[0]);
+            tempTag.setName(tagComponents[0]);
             tempTag.setValue(tagComponents[1]);
             targetTags.add(tempTag);
         }
