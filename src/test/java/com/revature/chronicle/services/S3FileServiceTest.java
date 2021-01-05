@@ -62,10 +62,11 @@ public class S3FileServiceTest {
 
         s3FileService.setAwsClient(s3ClientMock);
         s3ClientMock.createBucket("test-bucket");
+        s3FileService.setAwsBucket("test-bucket");
 
-        s3ClientMock.putObject("test-bucket", "temp", file);
+        s3ClientMock.putObject("test-bucket", file.getName(), file);
 
-        String actual = s3FileService.getObjectUrl("temp");
+        String actual = s3FileService.getObjectUrl(file.getName());
         String expected = s3ClientMock.getUrl("test-bucket", file.getName()).toString();
 
         Assert.assertEquals(expected, actual);
