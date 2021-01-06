@@ -1,5 +1,6 @@
 package com.revature.chronicle.services;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -56,14 +57,19 @@ public class S3FileService {
     }
 
     public String uploadFile(File file) throws InterruptedException {
+        try {
+            TransferManager tm = TransferManagerBuilder
+                    .standard()
+                    .withS3Client(this.s3Client)
+                    .build();
 
-        TransferManager tm = TransferManagerBuilder
-                .standard()
-                .withS3Client(this.s3Client)
-                .build();
-
-        Upload upload = tm.upload(new PutObjectRequest(this.awsBucket, file.getName(), file.getAbsolutePath()));
-        upload.waitForCompletion();
+            Upload upload = tm.upload(new PutObjectRequest(this.awsBucket, file.getName(), file.getAbsolutePath()));
+            upload.waitForCompletion();
+        } catch (AmazonClientException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         URL s3Url = s3Client.getUrl(this.awsBucket, file.getName());
         return s3Url.toString();
