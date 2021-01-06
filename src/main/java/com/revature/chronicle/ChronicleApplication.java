@@ -41,7 +41,7 @@ public class ChronicleApplication {
 	public NoteService noteService;
 
 	public static void main(String[] args) {
-		SpringApplication.run(ChronicleApplication.class, args);
+		//SpringApplication.run(ChronicleApplication.class, args);
 	}
 
 	@Bean
