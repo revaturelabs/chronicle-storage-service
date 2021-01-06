@@ -1,32 +1,23 @@
 package com.revature.chronicle;
 
-import com.revature.chronicle.daos.UserRepo;
 import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
-import com.revature.chronicle.services.TagService;
-import com.revature.chronicle.services.UserService;
 import com.revature.chronicle.services.VideoService;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Component;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 
 import java.util.*;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-@Component
 public class VideoServiceTests {
     @Mock
     private VideoRepo repo;
@@ -34,69 +25,133 @@ public class VideoServiceTests {
     @InjectMocks
     private VideoService service;
 
-    private Tag tag1 = new Tag();
-    private Tag tag2 = new Tag();
-    private Tag tag3 = new Tag();
-    private User user = new User();
-    private Video video1 = new Video();
-    private Video video2 = new Video();
 
-    @BeforeEach
-    public void setup(){
-        System.out.println("mocking");
-        MockitoAnnotations.openMocks(this);
+    @Test
+    public void shouldReturnAListOfAllVideos(){
+        Video video = new Video(1,"www.video.com","A test video",new Date(),new User(),new HashSet<Tag>());
+        when(repo.findAll()).thenReturn(
+                new ArrayList<Video>(Arrays.asList(video))
+        );
 
-        user.setUsername("TESTUSER");
+        List<Video> result = service.findAll();
+        Assert.assertTrue(result.contains(video));
+        verify(repo).findAll();
+    }
 
-        tag1.setName("Technology");
-        tag1.setValue("Angular");
+    @Test
+    public void shouldReturnAVideoById(){
+        Video video = new Video(6, "www.video.com", "A test video", new Date(), new User(), new HashSet<Tag>());
+        when(repo.findById(6)).thenReturn(
+                Optional.of(video)
+        );
+        Optional<Video> result = service.findById(6);
+        Assert.assertTrue(result.isPresent() && result.get().equals(video));
+        verify(repo).findById(6);
+    }
 
+    @Test
+    public void shouldReturnNullIfNoVideoFound(){
+        when(repo.findById(67)).thenReturn(Optional.empty());
+        Optional<Video> result = service.findById(67);
+        Assert.assertFalse(result.isPresent());
+        verify(repo).findById(67);
+    }
 
-        tag2.setName("Technology");
-        tag2.setValue("Java");
+    @Test
+    public void shouldSaveAVideoAndReturnTrue(){
+        Video video = new Video();
+        video.setUrl("www.video.com");
+        video.setUser(new User());
+        video.setDescription("A new test video");
+        video.setVideoTags(new HashSet<Tag>());
+        when(repo.save(video)).thenReturn(video);
+        boolean result = service.save(video);
+        Assert.assertTrue(result);
+        verify(repo).save(video);
+    }
 
-        tag3.setName("Batch");
-        tag3.setValue("1120-August");
+    @Test
+    public void shouldFailToAddVideoAndReturnFalse(){
+        Video video = new Video();
+        video.setUser(new User());
+        video.setDescription("A new test video");
+        video.setVideoTags(new HashSet<Tag>());
+        when(repo.save(video)).thenReturn(null);
+        boolean result = service.save(video);
+        Assert.assertFalse(result);
+        verify(repo).save(video);
+    }
+
+    @Test
+    public void shouldReturnOnlyVideosThatMatchAllGivenTags(){
+
+        Tag tag1 = new Tag(1,"Technology","Angular");
+        Tag tag2 = new Tag(2,"Technology","Java");
+        Tag tag3 = new Tag(3,"Batch","1120-August");
 
         Set<Tag> tags1 = new HashSet<>();
         tags1.add(tag1);
         tags1.add(tag3);
-        video1.setUrl("http://video1.com");
-        video1.setUser(user);
-        video1.setDescription("A description");
-        video1.setVideoTags(tags1);
-        System.out.println(video1.toString());
 
         Set<Tag> tags2 = new HashSet<>();
         tags2.add(tag1);
         tags2.add(tag2);
-        video2.setUrl("http://video2.com");
-        video2.setUser(user);
-        video2.setDescription("A description");
-        video2.setVideoTags(tags2);
 
+        Video video1 = new Video(1,"http://video1.com","A description",new Date(),new User(),tags1);
+        Video video2 = new Video(2,"http://video2.com","A description",new Date(),new User(),tags2);
+
+        when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
+        List<Video> result = service.findAllVideosByTags(Arrays.asList(tag1,tag3));
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertTrue(result.contains(video1) && !result.contains(video2));
+        verify(repo).findVideosWithOffsetAndLimit(0,50);
     }
 
     @Test
-    public void getAllVideos(){
-        when(service.findAll()).thenReturn(
-                new ArrayList<Video>(Arrays.asList(video1,video2))
-        );
+    public void shouldReturnAnEmptyListIfNoTagsAreFound(){
+        Tag tag1 = new Tag(1,"Technology","Angular");
+        Tag tag2 = new Tag(2,"Technology","Java");
+        Tag tag3 = new Tag(3,"Batch","1120-August");
 
-        List<Video> result = service.findAll();
-        for(Video v:result){
-            System.out.println(v.toString());
-        }
-        Assert.assertTrue(result.size()>0);
+        Set<Tag> tags1 = new HashSet<>();
+        tags1.add(tag1);
+        tags1.add(tag3);
+
+        Set<Tag> tags2 = new HashSet<>();
+        tags2.add(tag1);
+        tags2.add(tag2);
+
+        Video video1 = new Video(1,"http://video1.com","A description",new Date(),new User(),tags1);
+        Video video2 = new Video(2,"http://video2.com","A description",new Date(),new User(),tags2);
+
+        when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
+        List<Video> result = service.findAllVideosByTags(Arrays.asList(tag2,tag3));
+        Assert.assertTrue(result.isEmpty());
+        verify(repo).findVideosWithOffsetAndLimit(0,50);
     }
+
     @Test
-    public void shouldReturnAllVideoWithTag(){
-        List<Tag> findTags = new ArrayList();
-        findTags.add(tag1);
-        findTags.add(tag2);
-        List<Video> result = service.findAllVideosByTags(findTags);
-        for(Video v:result){
-            System.out.println(v.toString());
-        }
+    public void shouldReturnAnEmptyListIfTagsAreEmpty(){
+        Tag tag1 = new Tag(1,"Technology","Angular");
+        Tag tag2 = new Tag(2,"Technology","Java");
+        Tag tag3 = new Tag(3,"Batch","1120-August");
+
+        Set<Tag> tags1 = new HashSet<>();
+        tags1.add(tag1);
+        tags1.add(tag3);
+
+        Set<Tag> tags2 = new HashSet<>();
+        tags2.add(tag1);
+        tags2.add(tag2);
+
+        Video video1 = new Video(1,"http://video1.com","A description",new Date(),new User(),tags1);
+        Video video2 = new Video(2,"http://video2.com","A description",new Date(),new User(),tags2);
+
+        when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
+        List<Video> result = service.findAllVideosByTags(new ArrayList<>());
+        Assert.assertTrue(result.isEmpty());
+        verify(repo).findVideosWithOffsetAndLimit(0,50);
     }
+
+
 }
