@@ -50,7 +50,6 @@ public class NoteControllerTests {
         mockNotes = new ArrayList<>();
         mockTags = new ArrayList<>();
 
-        MockitoAnnotations.openMocks(this);
         User user = new User();
         user.setUsername("TESTUSER");
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/notes")
@@ -66,7 +67,7 @@ public class NoteController {
 
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
-        Note targetNote = noteRepo.findByNoteID(id);
-        return new ResponseEntity<>(targetNote, HttpStatus.OK);
+        Optional<Note> targetNote = noteService.findById(id);
+        return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }

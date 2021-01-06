@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/videos")
@@ -65,7 +66,7 @@ public class VideoController {
 
     @GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Video> getVideoById(@PathVariable(name="videoId") int id) {
-        Video targetVideo = videoRepo.findByVideoID(id);
-        return new ResponseEntity<>(targetVideo, HttpStatus.OK);
+        Optional<Video> targetVideo = videoService.findById(id);
+        return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }
