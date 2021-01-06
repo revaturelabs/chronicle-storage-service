@@ -5,6 +5,7 @@ import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -76,16 +77,71 @@ public class NoteServiceTests {
 
     @Test
     public void shouldReturnOnlyNotesThatMatchAllGivenTags(){
+        Tag tag1 = new Tag(1,"Technology","Angular");
+        Tag tag2 = new Tag(2,"Technology","Java");
+        Tag tag3 = new Tag(3,"Batch","1120-August");
 
+        Set<Tag> tags1 = new HashSet<>();
+        tags1.add(tag1);
+        tags1.add(tag3);
+
+        Set<Tag> tags2 = new HashSet<>();
+        tags2.add(tag1);
+        tags2.add(tag2);
+
+        Note note1 = new Note(1,"http://note.com","A description",new Date(),new User(),tags1);
+        Note note2 = new Note(2,"http://note.com","A description",new Date(),new User(),tags2);
+
+        when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>(Arrays.asList(note1,note2)));
+        List<Note> result = service.findAllNotesByTags(Arrays.asList(tag1,tag3));
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertTrue(result.contains(note1) && !result.contains(note2));
+        verify(repo).findNotesWithOffsetAndLimit(0,50);
     }
 
     @Test
     public void shouldReturnAnEmptyListIfNoNotesAreFound(){
+        Tag tag1 = new Tag(1,"Technology","Angular");
+        Tag tag2 = new Tag(2,"Technology","Java");
+        Tag tag3 = new Tag(3,"Batch","1120-August");
 
+        Set<Tag> tags1 = new HashSet<>();
+        tags1.add(tag1);
+        tags1.add(tag3);
+
+        Set<Tag> tags2 = new HashSet<>();
+        tags2.add(tag1);
+        tags2.add(tag2);
+
+        Note note1 = new Note(1,"http://note.com","A description",new Date(),new User(),tags1);
+        Note note2 = new Note(2,"http://note.com","A description",new Date(),new User(),tags2);
+
+        when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>(Arrays.asList(note1,note2)));
+        List<Note> result = service.findAllNotesByTags(Arrays.asList(tag2,tag3));
+        Assert.assertTrue(result.isEmpty());
+        verify(repo).findNotesWithOffsetAndLimit(0,50);
     }
 
     @Test
     public void shouldReturnAnEmptyListIfTagsAreEmpty(){
+        Tag tag1 = new Tag(1,"Technology","Angular");
+        Tag tag2 = new Tag(2,"Technology","Java");
+        Tag tag3 = new Tag(3,"Batch","1120-August");
 
+        Set<Tag> tags1 = new HashSet<>();
+        tags1.add(tag1);
+        tags1.add(tag3);
+
+        Set<Tag> tags2 = new HashSet<>();
+        tags2.add(tag1);
+        tags2.add(tag2);
+
+        Note note1 = new Note(1,"http://note.com","A description",new Date(),new User(),tags1);
+        Note note2 = new Note(2,"http://note.com","A description",new Date(),new User(),tags2);
+
+        when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>());
+        List<Note> result = service.findAllNotesByTags(new ArrayList<Tag>());
+        Assert.assertTrue(result.isEmpty());
+        verify(repo).findNotesWithOffsetAndLimit(0,50);
     }
 }
