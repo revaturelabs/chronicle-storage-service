@@ -18,15 +18,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import com.revature.chronicle.security.CorsConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.sql.RowSet;
 import java.util.*;
 
+
 @SpringBootApplication
-@RestController
 public class ChronicleApplication {
 	@Autowired
 	public UserService userService;
@@ -122,16 +125,5 @@ public class ChronicleApplication {
 			}
 		};
 	}
-
-
-	/*
-	private void configure() {
-		Configuration config = new Configuration().configure();
-
-		if(config != null) {
-			StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(config.getProperties());
-			this.sessionFactory = config.buildSessionFactory(builder.build());
-		}
-	}*/
 
 }
