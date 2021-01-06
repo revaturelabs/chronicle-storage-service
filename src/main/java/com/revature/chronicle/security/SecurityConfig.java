@@ -19,8 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /* Might need to compare to William's as this configuration is different
-        then his */
         http.csrf().disable()
                 .cors().configurationSource(getCorsConfigurationSource())
                 .and()
@@ -44,72 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configurationSource.registerCorsConfiguration("/**", configuration);
         return configurationSource;
     }
-      
-      
-      
-      /*
- 
-
-	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-        	.cors(spec -> {
-	            CorsConfiguration config = new CorsConfiguration();
-        		config.setAllowCredentials(true);
-	            config.addAllowedOriginPattern("*");
-	            config.addAllowedHeader("*");
-	    		config.addAllowedMethod("*");
-	            
-
-//	            config.setAllowedMethods(corsConfigurationProps.getAllowedMethods());
-//	            config.setAllowedHeaders(corsConfigurationProps.getAllowedHeaders());
-//	            config.setExposedHeaders(corsConfigurationProps.getExposedHeaders());
-//	            config.setAllowCredentials(corsConfigurationProps.isAllowCredentials());
-	            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	            source.registerCorsConfiguration("/**", config);
-	            spec.configurationSource(source);
-        		})
-        		.csrf().disable()
-
-                .authorizeRequests()
-                .antMatchers("/*")
-                        .authenticated()
-                .and()
-                .oauth2ResourceServer()
-                .jwt();
-    }
-
-      
-      
-      
-      
-      
-      
-      */
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
       
 }
