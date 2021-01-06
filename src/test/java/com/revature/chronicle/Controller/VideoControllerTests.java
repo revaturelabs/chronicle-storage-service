@@ -14,10 +14,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,9 +35,12 @@ import java.util.List;
 import java.util.Set;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,10 +51,18 @@ public class VideoControllerTests {
 	private List<Tag> mockTags;
 
 	@Autowired
+	private WebApplicationContext wac;
+
 	private MockMvc mockMvc;
 
 	@MockBean
 	private VideoService videoService;
+
+	@Before
+	public void security(){
+		this.mockMvc = webAppContextSetup(wac)
+				.build();
+	}
 
 	@BeforeEach
 	public void setup() {
@@ -102,7 +115,7 @@ public class VideoControllerTests {
 	public void shouldGetAllVideos() throws Exception {
 
 		Mockito.when(videoService.findAll()).thenReturn(mockVideos);
-		MvcResult result = this.mockMvc.perform(get("/videos/all"))
+		MvcResult result = this.mockMvc.perform(get("/videos/all").with(httpBasic("user","user")))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andReturn();
@@ -123,7 +136,8 @@ public class VideoControllerTests {
 	@Test
 	public void shouldGetVideosByTag() throws Exception {
 		when(videoService.findAllVideosByTags(mockTags)).thenReturn(mockVideos);
-		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","Technology:Angular+Technology:Java"))//Assuming words separated by '+'
+		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","Technology:Angular+Technology:Java")
+				.with(httpBasic("user","user")))//Assuming words separated by '+'
 				.andExpect(status().isOk())
 				.andReturn();
 
