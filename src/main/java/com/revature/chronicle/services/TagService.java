@@ -21,20 +21,45 @@ public class TagService {
     }
 
     public List<Tag> findAll() {
-        return tagRepo.findAll();
+        try {
+            return tagRepo.findAll();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<Tag>;
+        }
+
     }
 
     public Optional<Tag> findById(int tagID) {
-        return tagRepo.findById(tagID);
+        try{
+            return tagRepo.findById(id);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return Optional.empty();
+        }
     }
 
     public boolean save(Tag tag) {
-        tagRepo.save(tag);
-        return true;
+        try {
+            tagRepo.save(tag);
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     public boolean deleteByID(int tagID) {
-        tagRepo.deleteById(tagID);
-        return true;
+        try {
+            tagRepo.deleteById(tagID);
+            return true;
+        }
+        catch {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

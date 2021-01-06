@@ -69,7 +69,7 @@ public class VideoService {
         }
         catch(Exception e) {
             System.out.println(e.getMessage());
-            return new ArrayList<>();
+            return new ArrayList<Video>();
         }
     }
 
@@ -92,17 +92,6 @@ public class VideoService {
         }
         catch(Exception e) {
             System.out.println(e.getMessage()); //replace with logging
-            return false;
-        }
-    }
-
-    public boolean updateVideo(Video video) {
-        try{
-            videoRepo.save(video); //update uses the jpa repo method as save
-            return true;
-        }
-        catch(Exception e) {
-            System.out.println(e.getMessage());
             return false;
         }
     }
