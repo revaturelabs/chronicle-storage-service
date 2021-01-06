@@ -85,19 +85,18 @@ public class NoteService {
         }
     }
 
-    public Note findById(int id) {
-        try {
-            Optional<Note> n = noteRepo.findById(id);
-            if (n.isPresent()) {
-                return n.get();
-            }
-            else {
-                return new Note();
-            }
+    public Optional<Note> findById(int id) {
+        // Changing method to return an Optional<Note> for consistency with the video service.
+        //
+        // Returning an Optional object instead of a Note object has been deemed the better option, since it reduces the
+        // chance of null pointer exceptions and forces the programmer to actually check if the Note exists before
+        // acting upon it.
+        try{
+            return noteRepo.findById(id);
         }
-        catch (Exception e) {
+        catch (Exception e){
             System.out.println(e.getMessage());
-            return new Note();
+            return Optional.empty();
         }
     }
 

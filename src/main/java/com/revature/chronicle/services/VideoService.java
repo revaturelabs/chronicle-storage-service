@@ -83,22 +83,6 @@ public class VideoService {
         }
     }
 
-    public Video getVideoById(int id) {
-        try{
-            Optional<Video> v = videoRepo.findById(id);
-            if (v.isPresent()) {
-                return v.get();
-            }
-            else {
-                return new Video();
-            }
-        }
-        catch(Exception e) {
-            System.out.println(e.getMessage());
-            return new Video();
-        }
-    }
-
     public boolean save(Video video) {
         System.out.println("Saving video");
         try{
