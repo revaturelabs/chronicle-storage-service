@@ -3,6 +3,9 @@ package com.revature.chronicle.services;
 import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.security.FirebaseInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import java.util.*;
 
 @Service
 public class VideoService {
+    private static final Logger logger = LoggerFactory.getLogger(FirebaseInitializer.class);
     @Autowired
     private VideoRepo videoRepo;
 
@@ -44,11 +48,11 @@ public class VideoService {
                 for(Video video:videos){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(video.getVideoTags().containsAll(tags)){
-                        System.out.println("Adding video");
+                        logger.info("Adding video");
                         desiredVideos.add(video);
                     }
                     else{
-                        System.out.println("Video not found");
+                        logger.warn("Video not found");
                     }
                 }
             }
@@ -68,7 +72,7 @@ public class VideoService {
             return videoRepo.findAll();
         }
         catch(Exception e) {
-            System.out.println(e.getMessage());
+            logger.warn(e.getMessage());
             return new ArrayList<Video>();
         }
     }
@@ -78,7 +82,7 @@ public class VideoService {
             return videoRepo.findById(id);
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.warn(e.getMessage());
             return Optional.empty();
         }
     }
@@ -87,11 +91,11 @@ public class VideoService {
         System.out.println("Saving video");
         try{
             videoRepo.save(video);
-            System.out.println("Saved");
+            logger.info("Saved");
             return true;
         }
         catch(Exception e) {
-            System.out.println(e.getMessage()); //replace with logging
+            logger.warn(e.getMessage()); //replace with logging
             return false;
         }
     }
@@ -102,7 +106,7 @@ public class VideoService {
             return true;
         }
         catch(Exception e) {
-            System.out.println(e.getMessage());
+            logger.warn(e.getMessage());
             return false;
         }
     }
