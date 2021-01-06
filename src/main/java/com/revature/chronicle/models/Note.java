@@ -1,6 +1,8 @@
 package com.revature.chronicle.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import java.util.Set;
 @Entity
 @Table(name="note")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Note {
     @Id
     @Column(name="note_id")
