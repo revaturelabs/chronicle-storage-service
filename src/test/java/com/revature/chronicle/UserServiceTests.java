@@ -27,7 +27,7 @@ public class UserServiceTests {
     @Before
     public void setup() {
         System.out.println("mocking");
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test

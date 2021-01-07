@@ -45,7 +45,7 @@ public class NoteServiceTests {
     public void shouldReturnANoteById(){
         Note note = new Note(1,"www.note.com","a description",new Date(),new User(), new HashSet<Tag>());
         when(repo.findById(1)).thenReturn(Optional.of(note));
-        Note result = service.findById(1);
+        Optional<Note> result = service.findById(1);
         Assert.assertTrue(note.equals(result));
         verify(repo).findById(1);
     }
@@ -53,7 +53,7 @@ public class NoteServiceTests {
     @Test
     public void shouldReturnNullIfNoNoteFound(){
         when(repo.findById(2)).thenReturn(Optional.empty());
-        Note result = service.findById(2);
+        Optional<Note> result = service.findById(2);
         Assert.assertFalse(result==null);
         verify(repo).findById(2);
     }
