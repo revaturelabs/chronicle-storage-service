@@ -1,9 +1,9 @@
-package com.revature.chronicle;
+package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.VideoRepo;
+import com.revature.chronicle.models.Video;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.VideoService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,10 @@ public class VideoServiceTests {
                 Optional.of(video)
         );
         Optional<Video> result = service.findById(6);
-        Assert.assertTrue(result.isPresent() && result.get().equals(video));
+        Assert.assertTrue(result.isPresent());
+        if (result.isPresent()) {
+            Assert.assertEquals(video, result.get());
+        }
         verify(repo).findById(6);
     }
 
@@ -76,7 +79,7 @@ public class VideoServiceTests {
         video.setUser(new User());
         video.setDescription("A new test video");
         video.setVideoTags(new HashSet<Tag>());
-        when(repo.save(video)).thenReturn(null);
+        when(repo.save(video)).thenThrow(IllegalArgumentException.class);
         boolean result = service.save(video);
         Assert.assertFalse(result);
         verify(repo).save(video);
@@ -144,14 +147,12 @@ public class VideoServiceTests {
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video1.com","A description",new Date(),new User(),tags1);
-        Video video2 = new Video(2,"http://video2.com","A description",new Date(),new User(),tags2);
+        Video video1 = new Video(1,"http://video.com","A description",new Date(),new User(),tags1);
+        Video video2 = new Video(2,"http://video.com","A description",new Date(),new User(),tags2);
 
-        when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
-        List<Video> result = service.findAllVideosByTags(new ArrayList<>());
+        when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>());
+        List<Video> result = service.findAllVideosByTags(new ArrayList<Tag>());
         Assert.assertTrue(result.isEmpty());
         verify(repo).findVideosWithOffsetAndLimit(0,50);
     }
-
-
 }

@@ -1,11 +1,9 @@
-package com.revature.chronicle;
+package com.revature.chronicle.services;
 
-import com.amazonaws.services.dynamodbv2.xspec.N;
 import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -28,14 +26,14 @@ public class NoteServiceTests {
 
     @Test
     public void shouldReturnAListOfAllNotes(){
-        List<Note> notes = new ArrayList();
+        List<Note> notes = new ArrayList<Note>();
         notes.add(new Note(1,"www.note.com","A description",new Date(), new User(), new HashSet<Tag>()));
 
         when(repo.findAll()).thenReturn(notes);
 
         List<Note> result = service.findAll();
 
-        Assert.assertTrue(notes.equals(result));
+        Assert.assertEquals(notes, result);
 
         verify(repo).findAll();
 
@@ -46,15 +44,18 @@ public class NoteServiceTests {
         Note note = new Note(1,"www.note.com","a description",new Date(),new User(), new HashSet<Tag>());
         when(repo.findById(1)).thenReturn(Optional.of(note));
         Optional<Note> result = service.findById(1);
-        Assert.assertTrue(note.equals(result));
+        Assert.assertTrue(result.isPresent());
+        if (result.isPresent()) {
+            Assert.assertEquals(note, result.get());
+        }
         verify(repo).findById(1);
     }
 
     @Test
-    public void shouldReturnNullIfNoNoteFound(){
+    public void shouldNotReturnNoteById(){
         when(repo.findById(2)).thenReturn(Optional.empty());
         Optional<Note> result = service.findById(2);
-        Assert.assertFalse(result==null);
+        Assert.assertFalse(result.isPresent());
         verify(repo).findById(2);
     }
 
@@ -69,7 +70,7 @@ public class NoteServiceTests {
 
     @Test
     public void shouldFailToAddNoteAndReturnFalse(){
-        when(repo.save(null)).thenReturn(null);
+        when(repo.save(null)).thenThrow(IllegalArgumentException.class);
         boolean result = service.save(null);
         Assert.assertFalse(result);
         verify(repo).save(null);

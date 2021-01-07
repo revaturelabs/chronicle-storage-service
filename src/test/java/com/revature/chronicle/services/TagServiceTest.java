@@ -1,4 +1,4 @@
-package com.revature.chronicle;
+package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Tag;
@@ -58,7 +58,7 @@ public class TagServiceTest {
 
     @Test
     public void shouldFailToAddTagAndReturnFalse(){
-        when(repo.save(null)).thenReturn(null);
+        when(repo.save(null)).thenThrow(IllegalArgumentException.class);
         boolean result = service.save(null);
         Assertions.assertFalse(result);
         verify(repo).save(null);
