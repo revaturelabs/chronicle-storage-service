@@ -6,6 +6,8 @@ import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +25,8 @@ import java.util.Optional;
 @RequestMapping(path = "/notes")
 public class NoteController {
 
+    private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
+
     private final NoteService noteService;
     private final NoteRepo noteRepo;
     private final TagRepo tagRepo;
@@ -36,7 +40,7 @@ public class NoteController {
 
     @GetMapping(path = "tags/{noteTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getNotesByTag(@PathVariable(name="noteTags") String crudeTags){
-        System.out.println(crudeTags);
+        logger.info(crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
         for (String tag: arrTags) {
@@ -67,7 +71,11 @@ public class NoteController {
 
 //    @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
+<<<<<<< HEAD
 //        Optional<Note> targetNote = noteService.findById(id);
+=======
+//        //Optional<Note> targetNote = noteService.findById(id);
+>>>>>>> a4299938d927c167c1a30408b1add44697ec06ba
 //        return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
 //    }
 }

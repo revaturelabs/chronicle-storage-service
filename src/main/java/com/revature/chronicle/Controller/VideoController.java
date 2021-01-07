@@ -6,7 +6,10 @@ import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.security.FirebaseInitializer;
 import com.revature.chronicle.services.VideoService;
+<<<<<<< HEAD
 import org.apache.logging.log4j.LogManager;
+=======
+>>>>>>> a4299938d927c167c1a30408b1add44697ec06ba
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,7 +28,12 @@ import java.util.Optional;
 @RequestMapping(path = "/videos")
 public class VideoController {
 
+<<<<<<< HEAD
     private static final Logger vcLog = LoggerFactory.getLogger(VideoController.class);
+=======
+    private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
+
+>>>>>>> a4299938d927c167c1a30408b1add44697ec06ba
     private final VideoService videoService;
     private final TagRepo tagRepo;
     private final VideoRepo videoRepo;
@@ -39,7 +47,7 @@ public class VideoController {
 
     @GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name="videoTags") String crudeTags){
-        System.out.println(crudeTags);
+        logger.info(crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
         for (String tag: arrTags) {

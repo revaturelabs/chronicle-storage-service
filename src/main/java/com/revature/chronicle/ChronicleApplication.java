@@ -1,5 +1,6 @@
 package com.revature.chronicle;
 
+import com.revature.chronicle.Controller.VideoController;
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.UserRepo;
 import com.revature.chronicle.daos.VideoRepo;
