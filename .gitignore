@@ -18,6 +18,9 @@ target/
 *.iws
 *.iml
 *.ipr
+firebase-service-credentials.json
+!**/src/main/**/TestController/
+TestController/
 
 ### NetBeans ###
 /nbproject/private/
