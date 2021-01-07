@@ -69,9 +69,9 @@ public class NoteController {
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
 
-//    @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
-//        Optional<Note> targetNote = noteService.findById(id);
-//        return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
-//    }
+    @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
+        Optional<Note> targetNote = noteService.findById(id);
+        return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
 }
