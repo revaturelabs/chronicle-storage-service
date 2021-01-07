@@ -1,4 +1,4 @@
-package com.revature.chronicle;
+package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Tag;
@@ -34,7 +34,7 @@ public class TagServiceTest {
     public void shouldReturnATagById(){
         Tag tag = new Tag(1,"Technology","Java");
         when(repo.findById(1)).thenReturn(Optional.of(tag));
-        Tag result = service.findById(1);
+        Optional<Tag> result = service.findById(1);
         Assertions.assertEquals(result, tag);
         verify(repo).findById(1);
     }
@@ -42,7 +42,7 @@ public class TagServiceTest {
     @Test
     public void shouldReturnNullIfNoTagFound(){
         when(repo.findById(2)).thenReturn(Optional.empty());
-        Tag result = service.findById(2);
+        Optional<Tag> result = service.findById(2);
         Assertions.assertNotNull(result);
         verify(repo).findById(2);
     }
@@ -58,7 +58,7 @@ public class TagServiceTest {
 
     @Test
     public void shouldFailToAddTagAndReturnFalse(){
-        when(repo.save(null)).thenReturn(null);
+        when(repo.save(null)).thenThrow(IllegalArgumentException.class);
         boolean result = service.save(null);
         Assertions.assertFalse(result);
         verify(repo).save(null);
