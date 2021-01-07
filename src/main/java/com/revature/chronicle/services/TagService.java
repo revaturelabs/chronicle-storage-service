@@ -31,7 +31,7 @@ public class TagService {
         }
         catch (Exception e) {
             logger.warn(e.getMessage());
-            return new ArrayList<Tag>;
+            return new ArrayList<Tag>();
         }
 
     }

@@ -4,7 +4,11 @@ import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.security.FirebaseInitializer;
 import com.revature.chronicle.services.VideoService;
+import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,7 @@ import java.util.Optional;
 @RequestMapping(path = "/videos")
 public class VideoController {
 
+    private static final Logger vcLog = LoggerFactory.getLogger(VideoController.class);
     private final VideoService videoService;
     private final TagRepo tagRepo;
     private final VideoRepo videoRepo;
@@ -52,6 +57,7 @@ public class VideoController {
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getAllVideos() {
         List<Video> targetVideos = videoService.findAll();
+        vcLog.info("Retrieving all videos");
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
