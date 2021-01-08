@@ -17,11 +17,11 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Note {
+public class Note extends Media{
     @Id
     @Column(name="note_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int noteID;
+    private int id;
 
     @Column(name="url")
     private String url;
@@ -41,5 +41,5 @@ public class Note {
     @JoinTable(name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
-    private Set<Tag> noteTags;
+    private Set<Tag> tags;
 }

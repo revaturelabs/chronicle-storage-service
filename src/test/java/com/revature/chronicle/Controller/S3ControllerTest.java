@@ -3,6 +3,10 @@ package com.revature.chronicle.Controller;
 
 
 
+import com.revature.chronicle.services.InsertFileService;
+import com.revature.chronicle.services.NoteService;
+import com.revature.chronicle.services.S3FileService;
+import com.revature.chronicle.services.VideoService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
@@ -17,6 +21,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,19 +35,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class S3ControllerTest {
 
 	//Mocker object
-	private static MockMvc mvc;
+	private static MockMvc mock;
 
 	private static MockMultipartFile file1;
-
 	private static MockMultipartFile file2;
-
 	private static JSONObject json;
 
+	private static S3FileService s3FileMock;
 
+	private static VideoService videoMock;
+	private static NoteService noteMock;
 
 	@BeforeClass
 	public static void setup() throws JSONException {
-		mvc = MockMvcBuilders.standaloneSetup(new FileUploadController()).build();
+		s3FileMock = mock(S3FileService.class);
+		videoMock = mock(VideoService.class);
+		noteMock = mock(NoteService.class);
+
+		mock = MockMvcBuilders.standaloneSetup(new FileUploadController(s3FileMock, videoMock, noteMock)).build();
 
 	 	json = new JSONObject();
 	 	json.put("testing", "123");
@@ -75,7 +86,7 @@ public class S3ControllerTest {
 
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mvc.perform(multipart("/s3/upload")
+		final ResultActions result = mock.perform(multipart("/s3/upload")
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE)
 				.characterEncoding("utf-8")
@@ -97,7 +108,7 @@ public class S3ControllerTest {
 		params.add("json", json.toString());
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mvc.perform(multipart("/s3/upload")
+		final ResultActions result = mock.perform(multipart("/s3/upload")
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE)
 				.characterEncoding("utf-8")
