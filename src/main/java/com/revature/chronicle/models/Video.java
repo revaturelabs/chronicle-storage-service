@@ -19,11 +19,11 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Video {
+public class Video extends Media{
     @Id
     @Column(name = "video_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int videoID;
+    private int id;
 
     @Column(name = "url")
     private String url;
@@ -43,5 +43,5 @@ public class Video {
     @JoinTable(name = "video_tag",
             joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
-    private Set<Tag> videoTags;
+    private Set<Tag> tags;
 }

@@ -43,7 +43,7 @@ public class VideoService {
                 //Iterate through 50 results
                 for(Video video:videos){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
-                    if(video.getVideoTags().containsAll(tags)){
+                    if(video.getTags().containsAll(tags)){
                         System.out.println("Adding video");
                         desiredVideos.add(video);
                     }
