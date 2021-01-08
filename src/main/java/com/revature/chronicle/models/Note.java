@@ -1,6 +1,8 @@
 package com.revature.chronicle.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,11 +15,13 @@ import java.util.Set;
 @Entity
 @Table(name="note")
 @Data
-public class Note {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Note extends Media{
     @Id
     @Column(name="note_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int noteID;
+    private int id;
 
     @Column(name="url")
     private String url;
@@ -37,5 +41,5 @@ public class Note {
     @JoinTable(name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
-    private Set<Tag> noteTags;
+    private Set<Tag> tags;
 }
