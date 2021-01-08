@@ -46,8 +46,9 @@ public class NoteController {
         for (String tag: arrTags) {
             Tag tempTag = new Tag();
             String[] tagComponents = tag.split(":");
-            tempTag.setName(tagComponents[0]);
-            tempTag.setValue(tagComponents[1]);
+            tempTag.setTagID(Integer.parseInt(tagComponents[0]));
+            tempTag.setName(tagComponents[1]);
+            tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
         List <Note> targetNotes = noteService.findAllNotesByTags(targetTags);
