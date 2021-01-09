@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,17 +16,16 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
 @Service
+@Slf4j
 public class FirebaseInitializer {
-
-    private static final Logger logger = LoggerFactory.getLogger(FirebaseInitializer.class);
 
     @PostConstruct
     public void onStart() {
-        logger.info("Initializing Firebase App...");
+        log.info("Initializing Firebase Application");
         try {
             this.initializeFirebaseApp();
         } catch (IOException e) {
-            logger.error("Initializing Firebase App {}", e);
+            log.error("Initializing Firebase App {}", e);
         }
     }
 
