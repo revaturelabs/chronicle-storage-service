@@ -32,10 +32,12 @@ public class FirebaseInitializer {
     private void initializeFirebaseApp() throws IOException {
 
         if (FirebaseApp.getApps() == null || FirebaseApp.getApps().isEmpty()) {
-            InputStream serviceAccount = returnResourceAsStream("/firebase-service-credentials.json");
-            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(credentials)
+                    .setCredentials(
+                            GoogleCredentials.fromStream(
+                                    returnResourceAsStream("/firebase-service-credentials.json")
+                            )
+                    )
                     .build();
 
             FirebaseApp.initializeApp(options);
