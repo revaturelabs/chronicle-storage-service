@@ -23,6 +23,4 @@ public interface NoteRepo extends JpaRepository<Note, Integer> {
      */
     @Query(value = "select * from note n order by n.date asc offset ?1 fetch next ?2 rows only",nativeQuery = true)
     List<Note> findNotesWithOffsetAndLimit(int offset, int limit);
-
-    Note findByNoteID(int id);
 }

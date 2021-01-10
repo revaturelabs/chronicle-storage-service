@@ -4,7 +4,10 @@ import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.security.FirebaseInitializer;
 import com.revature.chronicle.services.VideoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/videos")
 public class VideoController {
+
+    private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
     private final VideoService videoService;
     private final TagRepo tagRepo;
@@ -33,7 +39,7 @@ public class VideoController {
 
     @GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name="videoTags") String crudeTags){
-        System.out.println(crudeTags);
+        logger.info(crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
         for (String tag: arrTags) {
@@ -51,6 +57,7 @@ public class VideoController {
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getAllVideos() {
         List<Video> targetVideos = videoService.findAll();
+        logger.info("Retrieving all videos");
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
@@ -65,7 +72,7 @@ public class VideoController {
 
     @GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Video> getVideoById(@PathVariable(name="videoId") int id) {
-        Video targetVideo = videoRepo.findByVideoID(id);
-        return new ResponseEntity<>(targetVideo, HttpStatus.OK);
+        Optional<Video> targetVideo = videoService.findById(id);
+        return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }

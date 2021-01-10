@@ -6,6 +6,8 @@ import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/notes")
 public class NoteController {
+
+    private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
     private final NoteService noteService;
     private final NoteRepo noteRepo;
@@ -35,14 +40,15 @@ public class NoteController {
 
     @GetMapping(path = "tags/{noteTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getNotesByTag(@PathVariable(name="noteTags") String crudeTags){
-        System.out.println(crudeTags);
+        logger.info(crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
         for (String tag: arrTags) {
             Tag tempTag = new Tag();
             String[] tagComponents = tag.split(":");
-            tempTag.setName(tagComponents[0]);
-            tempTag.setValue(tagComponents[1]);
+            tempTag.setTagID(Integer.parseInt(tagComponents[0]));
+            tempTag.setName(tagComponents[1]);
+            tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
         List <Note> targetNotes = noteService.findAllNotesByTags(targetTags);
@@ -66,7 +72,7 @@ public class NoteController {
 
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
-        Note targetNote = noteRepo.findByNoteID(id);
-        return new ResponseEntity<>(targetNote, HttpStatus.OK);
+        Optional<Note> targetNote = noteService.findById(id);
+        return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }
