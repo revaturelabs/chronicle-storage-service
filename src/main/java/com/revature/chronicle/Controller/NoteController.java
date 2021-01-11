@@ -38,6 +38,17 @@ public class NoteController {
         this.tagRepo = tr;
     }
 
+    /**
+     * returns a list of <code>Note</code> objects in the response body, determined by the tags specified in the URI
+     * path in the form 'TagID:TagKey:TagValue', separating multiple tags by the '+' character. The handler method is
+     * mapped to the path '/notes/tags/{noteTags}' and produces media of type application-json. The method formats the
+     * passed path variables into <code>Tag</code> objects and passes this formatted list into the <code>NoteService</code>
+     * <code>findAllNotesByTags</code> method. The returned list of <code>Note</code> objects is returned int the
+     * response body with an HTTP status code of 200.
+     *
+     * @param crudeTags URI path variable in the form 'TagID:TagKey:TagValue'
+     * @return list of <code>Note</code> objects
+     */
     @GetMapping(path = "tags/{noteTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getNotesByTag(@PathVariable(name="noteTags") String crudeTags){
         logger.info(crudeTags);
@@ -55,12 +66,25 @@ public class NoteController {
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
+    /**
+     * returns a list of all <code>Note</code> objects in the database in the response body. The handler method is
+     * mapped to the URI '/notes/all/' and produces media type of application-json. The handler retrieves the list through
+     * the <code>NoteService</code> <code>findAll</code> method.
+     * @return list of all <code>Note</code> objects
+     */
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getAllNotes() {
         List<Note> targetNotes = noteService.findAll();
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
+    /**
+     * returns a list of all <code>Tag</code> objects in the database linked to a <code>Note</code> in the response
+     * body. The handler method is mapped to the URI '/notes/available-tags/' and produces media type of application-json.
+     * The handler retrieves the list through the <code>TagRepo</code> <code>findByNameIn</code> method. The tag keys are
+     * determined by a list tagNames which cn be updated based on what keys exist in the database.
+     * @return list of all <code>Note</code> objects
+     */
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tag>> getAllNoteTags() {
         List<String> tagNames = new ArrayList<>();
@@ -70,6 +94,14 @@ public class NoteController {
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
 
+    /**
+     * returns a <code>Note</code> object in the response body, determined by the specified noteID in the URI path.
+     * The handler method is mapped to the URI 'notes/id/{noteId}' and returns media type of application-json. The
+     * target video is retrieved via the <code>NoteService</code> <code>findById</code> method, passing in the URI
+     * path variable.
+     * @param id target <code>Note</code>'s ID
+     * @return target <code>Note</code> object
+     */
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
         Optional<Note> targetNote = noteService.findById(id);
