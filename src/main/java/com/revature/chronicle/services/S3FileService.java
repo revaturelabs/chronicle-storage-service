@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.*;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.amazonaws.services.s3.transfer.model.UploadResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,8 +69,13 @@ public class S3FileService {
                     .withS3Client(this.s3Client)
                     .build();
 
-            Upload upload = tm.upload(new PutObjectRequest(this.awsBucket, file.getName(), file.getAbsolutePath()));
-            upload.waitForCompletion();
+
+            Path path = Paths.get(file.getAbsolutePath());
+            PutObjectRequest req = new PutObjectRequest(this.awsBucket, file.getName(), path.toFile()).withCannedAcl(CannedAccessControlList.PublicRead);
+
+            Upload upload = tm.upload(req);
+            UploadResult result = upload.waitForUploadResult();
+
         } catch (AmazonClientException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

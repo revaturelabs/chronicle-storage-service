@@ -124,7 +124,18 @@ public class ChronicleApplication {
 			for(Note n:result2){
 				System.out.println(n.toString());
 			}
+
+//			File file = new File("/Users/ratulahmed/Desktop/chronicle-storage-service/src/main/resources/dog2.jpg");
+//			System.out.println(s3FileService.uploadFile(file));
+//
+			File file = new File("/Users/ratulahmed/Desktop/chronicle-storage-service/src/main/resources/test-img.jpg");
+			s3FileService.uploadFile(file);
+
+
+//			File video = new File("/Users/ratulahmed/Desktop/chronicle-storage-service/src/main/resources/sample-mp4-file.mp4");
+//			System.out.println(s3FileService.uploadFile(video));
 		};
+
 	}
 
 }
