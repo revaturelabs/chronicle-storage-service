@@ -49,9 +49,10 @@ public class NoteController {
      * @param crudeTags URI path variable in the form 'TagID:TagKey:TagValue'
      * @return list of <code>Note</code> objects
      */
+    // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
     @GetMapping(path = "tags/{noteTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getNotesByTag(@PathVariable(name="noteTags") String crudeTags){
-        logger.info(crudeTags);
+        logger.info("Received request for notes with tags: " + crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
         for (String tag: arrTags) {
@@ -62,6 +63,7 @@ public class NoteController {
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
+        logger.info("Retrieving target notes...");
         List <Note> targetNotes = noteService.findAllNotesByTags(targetTags);
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
@@ -74,6 +76,7 @@ public class NoteController {
      */
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getAllNotes() {
+        logger.info("Retrieving all notes...");
         List<Note> targetNotes = noteService.findAll();
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
@@ -90,6 +93,7 @@ public class NoteController {
         List<String> tagNames = new ArrayList<>();
         tagNames.add("Technology");
         tagNames.add("Batch");
+        logger.info("Retrieving all note tags with keys: " + tagNames +" ...");
         List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
@@ -104,6 +108,7 @@ public class NoteController {
      */
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
+        logger.info("Retrieving target note with ID: " + id + " ...");
         Optional<Note> targetNote = noteService.findById(id);
         return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }

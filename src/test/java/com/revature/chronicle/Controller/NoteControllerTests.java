@@ -9,11 +9,8 @@ import com.revature.chronicle.services.NoteService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -48,7 +44,7 @@ public class NoteControllerTests {
     @Autowired
     private WebApplicationContext wac;
 
-    @Autowired
+    @MockBean
     private TagRepo tagRepo;
 
     private MockMvc mockMvc;
@@ -98,7 +94,7 @@ public class NoteControllerTests {
         note1.setUser(user);
         note1.setDescription("A description");
         note1.setNoteTags(tags1);
-        mockNote=note1;
+        mockNote = note1;
 
         Set<Tag> tags2 = new HashSet<>();
         tags2.add(tag1);
@@ -123,7 +119,7 @@ public class NoteControllerTests {
     public void shouldGetAllNotes() throws Exception {
         ObjectMapper om = new ObjectMapper();
 
-        when(noteService.findAll()).thenReturn(mockNotes);
+        Mockito.when(noteService.findAll()).thenReturn(mockNotes);
         MvcResult result = mockMvc.perform(get("/notes/all").with(httpBasic("user","user")))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -139,7 +135,7 @@ public class NoteControllerTests {
     public void shouldGetNotesByTag() throws Exception {
         ObjectMapper om = new ObjectMapper();
 
-        when(noteService.findAllNotesByTags(mockSingleTag)).thenReturn(mockNotes);
+        Mockito.when(noteService.findAllNotesByTags(mockSingleTag)).thenReturn(mockNotes);
         MvcResult result = mockMvc.perform(get("/notes/tags/{noteTags}","1:Technology:Angular")
                 .with(httpBasic("user","user")))//Assuming words separated by '+'
                 .andExpect(status().isOk())
@@ -152,13 +148,29 @@ public class NoteControllerTests {
     }
 
     @Test
+    public void shouldGetVideosByID() throws Exception {
+        ObjectMapper om = new ObjectMapper();
+
+        Mockito.when(noteService.findById(1)).thenReturn(java.util.Optional.ofNullable(mockNote));
+        MvcResult result = mockMvc.perform(get("/notes/id/{noteId}","1")
+                .with(httpBasic("user","user")))//Assuming words separated by '+'
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //Testing to ensure something is being returned
+        Assert.assertNotNull(result.getResponse());
+
+        Assert.assertEquals(result.getResponse().getContentAsString(),om.writeValueAsString(mockNote));
+    }
+
+    @Test
     public void shouldGetAllTags() throws Exception {
         ObjectMapper om = new ObjectMapper();
         List<String> tagNames = new ArrayList<>();
         tagNames.add("Technology");
         tagNames.add("Batch");
 
-        when(tagRepo.findByNameIn(tagNames)).thenReturn(mockTags);
+        Mockito.when(tagRepo.findByNameIn(tagNames)).thenReturn(mockTags);
         MvcResult result = mockMvc.perform(get("/notes/available-tags")
                 .with(httpBasic("user","user")))//Assuming words separated by '+'
                 .andExpect(status().isOk())

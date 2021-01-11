@@ -9,17 +9,12 @@ import com.revature.chronicle.services.VideoService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,9 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,7 +44,7 @@ public class VideoControllerTests {
 	@Autowired
 	private WebApplicationContext wac;
 
-	@Autowired
+	@MockBean
 	private TagRepo tagRepo;
 
 	private MockMvc mockMvc;
@@ -101,7 +94,7 @@ public class VideoControllerTests {
 		video1.setDescription("A description");
 		video1.setVideoTags(tags1);
 		video1.setVideoID(1);
-		mockVideo=video1;
+		mockVideo = video1;
 
 		Set<Tag> tags2 = new HashSet<>();
 		tags2.add(tag1);
@@ -142,7 +135,7 @@ public class VideoControllerTests {
 	public void shouldGetVideosByTag() throws Exception {
 		ObjectMapper om = new ObjectMapper();
 
-		when(videoService.findAllVideosByTags(mockSingleTag)).thenReturn(mockVideos);
+		Mockito.when(videoService.findAllVideosByTags(mockSingleTag)).thenReturn(mockVideos);
 		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","1:Technology:Angular")
 				.with(httpBasic("user","user")))//Assuming words separated by '+'
 				.andExpect(status().isOk())
@@ -158,7 +151,7 @@ public class VideoControllerTests {
 	public void shouldGetVideosByID() throws Exception {
 		ObjectMapper om = new ObjectMapper();
 
-		when(videoService.findById(1)).thenReturn(java.util.Optional.ofNullable(mockVideo));
+		Mockito.when(videoService.findById(1)).thenReturn(java.util.Optional.ofNullable(mockVideo));
 		MvcResult result = mockMvc.perform(get("/videos/id/{videoId}","1")
 				.with(httpBasic("user","user")))//Assuming words separated by '+'
 				.andExpect(status().isOk())
@@ -177,7 +170,7 @@ public class VideoControllerTests {
 		tagNames.add("Technology");
 		tagNames.add("Batch");
 
-		when(tagRepo.findByNameIn(tagNames)).thenReturn(mockTags);
+		Mockito.when(tagRepo.findByNameIn(tagNames)).thenReturn(mockTags);
 		MvcResult result = mockMvc.perform(get("/videos/available-tags")
 				.with(httpBasic("user","user")))//Assuming words separated by '+'
 				.andExpect(status().isOk())

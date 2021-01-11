@@ -49,9 +49,10 @@ public class VideoController {
      * @param crudeTags URI path variable in the form 'TagID:TagKey:TagValue'
      * @return list of <code>Video</code> objects
      */
+    // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
     @GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name="videoTags") String crudeTags){
-        logger.info(crudeTags);
+        logger.info("Received request for videos with tags: " + crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
         for (String tag: arrTags) {
@@ -62,6 +63,7 @@ public class VideoController {
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
+        logger.info("Retrieving target videos...");
         List <Video> targetVideos = videoService.findAllVideosByTags(targetTags);
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
@@ -74,8 +76,8 @@ public class VideoController {
      */
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getAllVideos() {
+        logger.info("Retrieving all videos...");
         List<Video> targetVideos = videoService.findAll();
-        logger.info("Retrieving all videos");
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
@@ -91,7 +93,8 @@ public class VideoController {
         List<String> tagNames = new ArrayList<>();
         tagNames.add("Technology");
         tagNames.add("Batch");
-        List<Tag> availableTags = tagRepo.findByNameIn(tagNames); 
+        logger.info("Retrieving all video tags with keys: " + tagNames +" ...");
+        List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
 
@@ -105,6 +108,7 @@ public class VideoController {
      */
     @GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Video> getVideoById(@PathVariable(name="videoId") int id) {
+        logger.info("Retrieving target video with ID: " + id + " ...");
         Optional<Video> targetVideo = videoService.findById(id);
         return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
