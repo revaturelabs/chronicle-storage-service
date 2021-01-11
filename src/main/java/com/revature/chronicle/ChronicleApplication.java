@@ -1,5 +1,6 @@
 package com.revature.chronicle;
 
+import com.revature.chronicle.Controller.VideoController;
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.UserRepo;
 import com.revature.chronicle.daos.VideoRepo;
@@ -41,7 +42,7 @@ public class ChronicleApplication {
 	public NoteService noteService;
 
 	public static void main(String[] args) {
-		//SpringApplication.run(ChronicleApplication.class, args);
+		SpringApplication.run(ChronicleApplication.class, args);
 	}
 
 	@Bean
