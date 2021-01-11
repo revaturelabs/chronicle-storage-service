@@ -40,6 +40,7 @@ public class S3FileServiceTest {
 
         s3FileService.setAwsClient(s3ClientMock);
         s3ClientMock.createBucket("test-bucket");
+        s3FileService.setAwsBucket("test-bucket");
 
         s3ClientMock.putObject("test-bucket", "temp", file);
 

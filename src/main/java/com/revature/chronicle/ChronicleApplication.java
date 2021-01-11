@@ -8,10 +8,7 @@ import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
-import com.revature.chronicle.services.NoteService;
-import com.revature.chronicle.services.TagService;
-import com.revature.chronicle.services.UserService;
-import com.revature.chronicle.services.VideoService;
+import com.revature.chronicle.services.*;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.sql.RowSet;
+import java.io.File;
 import java.util.*;
 
 
@@ -40,6 +38,8 @@ public class ChronicleApplication {
 	public VideoService videoService;
 	@Autowired
 	public NoteService noteService;
+	@Autowired
+	S3FileService s3FileService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ChronicleApplication.class, args);
