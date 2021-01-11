@@ -1,4 +1,4 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
@@ -11,13 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -87,7 +83,7 @@ public class VideoControllerTests {
 		video1.setUrl("http://video1.com/%22");
 		video1.setUser(user);
 		video1.setDescription("A description");
-		video1.setVideoTags(tags1);
+		video1.setTags(tags1);
 
 		Set<Tag> tags2 = new HashSet<>();
 		tags2.add(tag1);
@@ -97,7 +93,7 @@ public class VideoControllerTests {
 		video2.setUrl("http://video2.com/%22");
 		video2.setUser(user);
 		video2.setDescription("A description");
-		video2.setVideoTags(tags2);
+		video2.setTags(tags2);
 
 		mockVideos.add(video1);
 		mockVideos.add(video2);

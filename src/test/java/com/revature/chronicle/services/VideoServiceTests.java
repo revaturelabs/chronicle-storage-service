@@ -66,7 +66,7 @@ public class VideoServiceTests {
         video.setUrl("www.video.com");
         video.setUser(new User());
         video.setDescription("A new test video");
-        video.setVideoTags(new HashSet<Tag>());
+        video.setTags(new HashSet<Tag>());
         when(repo.save(video)).thenReturn(video);
         boolean result = service.save(video);
         Assert.assertTrue(result);
@@ -78,7 +78,7 @@ public class VideoServiceTests {
         Video video = new Video();
         video.setUser(new User());
         video.setDescription("A new test video");
-        video.setVideoTags(new HashSet<Tag>());
+        video.setTags(new HashSet<Tag>());
         when(repo.save(video)).thenThrow(IllegalArgumentException.class);
         boolean result = service.save(video);
         Assert.assertFalse(result);

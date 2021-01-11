@@ -1,17 +1,13 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.services.NoteService;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -73,7 +69,7 @@ public class NoteControllerTests {
         note1.setUrl("http://note1.com/%22");
         note1.setUser(user);
         note1.setDescription("A description");
-        note1.setNoteTags(tags1);
+        note1.setTags(tags1);
 
         Set<Tag> tags2 = new HashSet<>();
         tags2.add(tag1);
@@ -83,7 +79,7 @@ public class NoteControllerTests {
         note2.setUrl("http://note2.com/%22");
         note2.setUser(user);
         note2.setDescription("A description");
-        note2.setNoteTags(tags2);
+        note2.setTags(tags2);
 
         mockNotes.add(note1);
         mockNotes.add(note2);

@@ -1,10 +1,9 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

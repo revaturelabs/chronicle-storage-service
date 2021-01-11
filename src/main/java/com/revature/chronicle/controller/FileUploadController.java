@@ -1,13 +1,14 @@
-package com.revature.chronicle.Controller;
+
+package com.revature.chronicle.controller;
 
 import com.revature.chronicle.models.Media;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Video;
-import com.revature.chronicle.services.InsertFileService;
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
 import com.revature.chronicle.services.VideoService;
 import lombok.extern.log4j.Log4j2;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Log4j2
 @RestController
 @RequestMapping(path="/file", method = {RequestMethod.GET, RequestMethod.POST})
 public class FileUploadController {
 
-    private S3FileService s3FileService;
+    private final S3FileService s3FileService;
 
     private final VideoService videoService;
-    private NoteService noteService;
+    private final NoteService noteService;
 
     @Autowired
     public FileUploadController(S3FileService service, VideoService videoService, NoteService noteService){
@@ -37,17 +42,27 @@ public class FileUploadController {
     @PostMapping(path="/submit")
     @ResponseBody
     public ResponseEntity<String> uploadFile(@RequestParam("name") String json,
-                                             @RequestParam ("file") MultipartFile file) {
+                                             @RequestParam ("file") MultipartFile file) throws IOException {
         log.debug("Processing the following file data:" + json);
         Media newFile;
         String fileType;
 
-        //Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
+//        Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
         if(file.getContentType().equalsIgnoreCase("text")) {
             newFile = new Note();
+//            newFile.setUrl("");
+//            newFile.setDescription("");
+//            newFile.setDate(Date.valueOf(LocalDate.now()));
+//            newFile.setUser();
+//            newFile.setTags();
             fileType = "note";
         } else if (file.getContentType().equalsIgnoreCase("video")) {
             newFile = new Video();
+//            newFile.setUrl("");
+//            newFile.setDescription("");
+//            newFile.setDate(Date.valueOf(LocalDate.now()));
+//            newFile.setUser();
+//            newFile.setTags();
             fileType = "video";
         } else {
             return new ResponseEntity<>("Unsupported file type. Please upload either a video or a text file.",HttpStatus.UNSUPPORTED_MEDIA_TYPE);
@@ -72,9 +87,10 @@ public class FileUploadController {
             e.printStackTrace();
             log.error("Service was interrupted!");
         } finally {
-            compiledFile.delete();
+            Files.delete(Paths.get(compiledFile.getPath()));
+//            compiledFile.delete();
         }
-        return null;
+        return new ResponseEntity<>("Upload Successful",HttpStatus.OK);
     }
 
     private void saveToDatabase(Media media, String mediaType) {
