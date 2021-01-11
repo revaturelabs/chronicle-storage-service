@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -38,6 +39,7 @@ public class FirebaseInitializerTest extends FirebaseInitializer {
     private FirebaseOptions.Builder firebaseBuilderOptionsMock;
     private FirebaseOptions firebaseOptionsMock;
     private FirebaseApp fireBaseAppMock;
+    private GoogleCredentials googleCredentialsMock;
 
     @Before
     public void init() {
@@ -53,6 +55,7 @@ public class FirebaseInitializerTest extends FirebaseInitializer {
         fireBaseAppMock = mock(FirebaseApp.class);
         firebaseBuilderOptionsMock = Mockito.mock(FirebaseOptions.Builder.class);
         firebaseOptionsMock = mock(FirebaseOptions.class);
+        googleCredentialsMock = mock(GoogleCredentials.class);
         InputStream streamToTest = IOUtils.toInputStream("{\"type\":\"authorized_user\"," +
                 "\"client_id\":\"1\",\"client_secret\":\"1\",\"refresh_token\":\"1\"}","UTF-8");
 
@@ -60,12 +63,11 @@ public class FirebaseInitializerTest extends FirebaseInitializer {
         when(firebaseInitializerMock.returnResourceAsStream(anyString()))
                 .thenReturn(streamToTest);
         when(GoogleCredentials.fromStream(any(InputStream.class)))
-                .thenReturn(new GoogleCredentials(new AccessToken("1",
-                        new Date())));
+                .thenAnswer((Answer<GoogleCredentials>) invocation -> googleCredentialsMock);
         when(firebaseBuilderOptionsMock.build())
                 .thenReturn(firebaseOptionsMock);
         when(FirebaseApp.initializeApp(any(FirebaseOptions.class)))
-                .thenReturn(fireBaseAppMock);
+                .thenAnswer((Answer<FirebaseApp>) invocation -> fireBaseAppMock);
 
         // Calling methods and verifying they've been called
         InputStream is = firebaseInitializerMock.returnResourceAsStream("");
