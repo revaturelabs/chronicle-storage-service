@@ -48,7 +48,7 @@ public class NoteService {
                 for(Note note:notes){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(note.getTags().containsAll(tags)){
-                        System.out.println("Adding note");
+                        logger.info("Adding note");
                         desiredNotes.add(note);
                     }
                     else{
