@@ -1,4 +1,4 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
@@ -60,7 +60,7 @@ public class S3ControllerTest {
 		videoMock = mock(VideoService.class);
 		noteMock = mock(NoteService.class);
 
-		mock = MockMvcBuilders.standaloneSetup(new FileUploadController(s3FileMock, videoMock, noteMock)).build();
+		mock = MockMvcBuilders.standaloneSetup(new com.revature.chronicle.controller.FileUploadController(s3FileMock, videoMock, noteMock)).build();
 
 		//given a mock text MultipartFile to pass into the controller
 		file1 = new MockMultipartFile(
@@ -87,7 +87,7 @@ public class S3ControllerTest {
 		file4 = new MockMultipartFile(
 				"file",
 				"test.txt",
-				"text/plain",
+				"txt",
 				"Hello, World!".getBytes()
 		);
 
@@ -102,12 +102,13 @@ public class S3ControllerTest {
 	public void givenFormData_whenFileUpload_theReturnOKStatus() throws Exception {
 
 		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
+		params.add("json", json.toString());
 		params.add("file", file1.getBytes().toString());
-		params.add("name", json.toString());
+
 
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mock.perform(multipart("/file/submit").file(file1)
+		final ResultActions result = mock.perform(multipart("/file/upload").file(file1)
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
 				.andDo(print());
@@ -123,11 +124,11 @@ public class S3ControllerTest {
 
 		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
 		params.add("file", file2.getBytes().toString());
-		params.add("name", json.toString());
+		params.add("json", json.toString());
 
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mock.perform(multipart("/file/submit").file(file2)
+		final ResultActions result = mock.perform(multipart("/file/upload").file(file2)
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
 				.andDo(print());
@@ -144,10 +145,10 @@ public class S3ControllerTest {
 
 			//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
 			params.add("file", file3.getBytes().toString());
-			params.add("name", json.toString());
+			params.add("json", json.toString());
 
 			//this is mocking the servlet being called and being passed the needed parameters for desired services
-			final ResultActions result = mock.perform(multipart("/file/submit").file(file3)
+			final ResultActions result = mock.perform(multipart("/file/upload").file(file3)
 					.params(params)
 					.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
 					.andDo(print());
@@ -160,10 +161,10 @@ public class S3ControllerTest {
 	public void givenFormData_whenFileUpload_theReturnErrorForWrongFiletype() throws Exception {
 		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
 		params.add("file", file4.getBytes().toString());
-		params.add("name", json.toString());
+		params.add("json", json.toString());
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mock.perform(multipart("/file/submit").file(file4)
+		final ResultActions result = mock.perform(multipart("/file/upload").file(file4)
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
 				.andExpect(content().string("Unsupported file type. Please upload either a video or a text file."))
