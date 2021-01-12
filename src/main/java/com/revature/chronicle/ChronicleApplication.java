@@ -49,7 +49,7 @@ public class ChronicleApplication {
 	public CommandLineRunner runner() {
 		return args -> {
 			User user = new User();
-			user.setUsername("TESTUSER");
+			user.setUsername("August Duet");
 			userService.save(user);
 
 			Tag tag1 = new Tag();
@@ -59,7 +59,7 @@ public class ChronicleApplication {
 
 			Tag tag2 = new Tag();
 			tag2.setName("Technology");
-			tag2.setValue("Java");
+			tag2.setValue("Spring");
 			tagService.save(tag2);
 
 			Tag tag3 = new Tag();
@@ -67,47 +67,62 @@ public class ChronicleApplication {
 			tag3.setValue("1120-August");
 			tagService.save(tag3);
 
+			Tag tag4 = new Tag();
+			tag4.setName("Title");
+			tag4.setValue("Angular and TypeScript Overview");
+			tagService.save(tag4);
+
+			Tag tag5 = new Tag();
+			tag5.setName("Title");
+			tag5.setValue("Spring Boot Overview and Setup");
+			tagService.save(tag5);
+
+			Tag tag6 = new Tag();
+			tag6.setName("Date");
+			tag6.setValue("11/21/2020");
+			tagService.save(tag6);
+
+			Tag tag7 = new Tag();
+			tag7.setName("Date");
+			tag7.setValue("11/25/2020");
+			tagService.save(tag7);
+
 			Set<Tag> tags1 = new HashSet<>();
 			tags1.add(tag1);
 			tags1.add(tag3);
+			tags1.add(tag4);
+			tags1.add(tag6);
 			Video video1 = new Video();
-			video1.setUrl("http://video1.com");
+			video1.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
 			video1.setUser(user);
-			video1.setDescription("A description");
+			video1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
 			video1.setVideoTags(tags1);
-			System.out.println(video1.toString());
 			videoService.save(video1);
 
 			Set<Tag> tags2 = new HashSet<>();
-			tags2.add(tag1);
 			tags2.add(tag2);
+			tags2.add(tag3);
+			tags2.add(tag5);
+			tags2.add(tag7);
 			Video video2 = new Video();
-			video2.setUrl("http://video2.com");
+			video2.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
 			video2.setUser(user);
-			video2.setDescription("A description");
+			video2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
 			video2.setVideoTags(tags2);
 			videoService.save(video2);
 
-			Set<Tag> tags3 = new HashSet<>();
-			tags3.add(tag1);
-			tags3.add(tag3);
 			Note note1 = new Note();
-			note1.setUrl("http://video1.com");
+			note1.setUrl("http://www.africau.edu/images/default/sample.pdf");
 			note1.setUser(user);
-			note1.setDescription("A description");
-			note1.setNoteTags(tags3);
-			System.out.println(note1.toString());
+			note1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
+			note1.setNoteTags(tags1);
 			noteService.save(note1);
 
-			Set<Tag> tags4 = new HashSet<>();
-			tags4.add(tag1);
-			tags4.add(tag2);
 			Note note2 = new Note();
-			note2.setUrl("http://video1.com");
+			note2.setUrl("https://www.w3.org/TR/PNG/iso_8859-1.txt");
 			note2.setUser(user);
-			note2.setDescription("A description");
-			note2.setNoteTags(tags4);
-			System.out.println(note2.toString());
+			note2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
+			note2.setNoteTags(tags2);
 			noteService.save(note2);
 
 
