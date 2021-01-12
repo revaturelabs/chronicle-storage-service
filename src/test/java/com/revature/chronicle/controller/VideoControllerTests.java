@@ -1,5 +1,7 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
@@ -7,36 +9,21 @@ import com.revature.chronicle.services.VideoService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,9 +36,14 @@ public class VideoControllerTests {
 
 	private List<Video> mockVideos;
 	private List<Tag> mockTags;
+	private Video mockVideo;
+	private List<Tag> mockSingleTag;
 
 	@Autowired
 	private WebApplicationContext wac;
+
+	@MockBean
+	private TagRepo tagRepo;
 
 	private MockMvc mockMvc;
 
@@ -64,55 +56,72 @@ public class VideoControllerTests {
 				.build();
 	}
 
-	@BeforeEach
+	@Before
 	public void setup() {
 
 		mockVideos = new ArrayList<>();
 		mockTags = new ArrayList<>();
+		mockVideo = new Video();
+		mockSingleTag = new ArrayList<>();
 
 		User user = new User();
 		user.setUsername("TESTUSER");
 
 		Tag tag1 = new Tag();
+		tag1.setTagID(1);
 		tag1.setName("Technology");
 		tag1.setValue("Angular");
 
 		Tag tag2 = new Tag();
+		tag2.setTagID(2);
 		tag2.setName("Technology");
 		tag2.setValue("Java");
 
 		Tag tag3 = new Tag();
+		tag3.setTagID(3);
 		tag3.setName("Batch");
 		tag3.setValue("1120-August");
 
-		Set<Tag> tags1 = new HashSet<>();
+		List<Tag> tags1 = new ArrayList<>();
 		tags1.add(tag1);
 		tags1.add(tag3);
 
 		Video video1 = new Video();
 		video1.setUrl("http://video1.com/%22");
-		video1.setUser(user);
+		video1.setUser(user.getUsername());
 		video1.setDescription("A description");
-		video1.setVideoTags(tags1);
+		video1.setTags(tags1);
+<<<<<<< HEAD:src/test/java/com/revature/chronicle/Controller/VideoControllerTests.java
+		video1.setId(1);
+		mockVideo = video1;
+=======
+>>>>>>> 1fb116600ac5b08c6f36a8c175f3cddd09dc4135:src/test/java/com/revature/chronicle/controller/VideoControllerTests.java
 
-		Set<Tag> tags2 = new HashSet<>();
+		List<Tag> tags2 = new ArrayList<>();
 		tags2.add(tag1);
 		tags2.add(tag2);
 
 		Video video2 = new Video();
 		video2.setUrl("http://video2.com/%22");
-		video2.setUser(user);
+		video2.setUser(user.getUsername());
 		video2.setDescription("A description");
-		video2.setVideoTags(tags2);
+		video2.setTags(tags2);
+<<<<<<< HEAD:src/test/java/com/revature/chronicle/Controller/VideoControllerTests.java
+		video2.setId(2);
+=======
+>>>>>>> 1fb116600ac5b08c6f36a8c175f3cddd09dc4135:src/test/java/com/revature/chronicle/controller/VideoControllerTests.java
 
 		mockVideos.add(video1);
 		mockVideos.add(video2);
 		mockTags.add(tag1);
 		mockTags.add(tag2);
+		mockTags.add(tag3);
+		mockSingleTag.add(tag1);
 	}
 
 	@Test
 	public void shouldGetAllVideos() throws Exception {
+		ObjectMapper om = new ObjectMapper();
 
 		Mockito.when(videoService.findAll()).thenReturn(mockVideos);
 		MvcResult result = this.mockMvc.perform(get("/videos/all").with(httpBasic("user","user")))
@@ -120,38 +129,61 @@ public class VideoControllerTests {
 				.andExpect(status().isOk())
 				.andReturn();
 
-		int actual = result.getResponse().getStatus();
-
-		int expected = 200;
-
-		Assert.assertEquals(actual, expected); //Testing to ensure the get request was successful
-
 		//Testing to ensure something is being returned
-		Assert.assertTrue(result.getResponse().getContentAsString().length() > 0);
+		Assert.assertNotNull(result.getResponse());
 
-		//Testing to ensure the response is formatted properly
-		Assert.assertNotNull(result.getResponse().getHeader("Content-Type").equals("application/json;charset=UTF-8"));
+		Assert.assertEquals(result.getResponse().getContentAsString(),om.writeValueAsString(mockVideos));
 	}
 
 	@Test
 	public void shouldGetVideosByTag() throws Exception {
-		when(videoService.findAllVideosByTags(mockTags)).thenReturn(mockVideos);
-		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","Technology:Angular+Technology:Java")
+		ObjectMapper om = new ObjectMapper();
+
+		Mockito.when(videoService.findAllVideosByTags(mockSingleTag)).thenReturn(mockVideos);
+		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","1:Technology:Angular")
 				.with(httpBasic("user","user")))//Assuming words separated by '+'
 				.andExpect(status().isOk())
 				.andReturn();
 
-		int actual = result.getResponse().getStatus();
+		//Testing to ensure something is being returned
+		Assert.assertNotNull(result.getResponse());
 
-		int expected = 200;
+		Assert.assertEquals(result.getResponse().getContentAsString(),om.writeValueAsString(mockVideos));
+	}
 
-		Assert.assertEquals(actual, expected); //Testing to ensure the get request was successful
+	@Test
+	public void shouldGetVideosByID() throws Exception {
+		ObjectMapper om = new ObjectMapper();
+
+		Mockito.when(videoService.findById(1)).thenReturn(java.util.Optional.ofNullable(mockVideo));
+		MvcResult result = mockMvc.perform(get("/videos/id/{videoId}","1")
+				.with(httpBasic("user","user")))//Assuming words separated by '+'
+				.andExpect(status().isOk())
+				.andReturn();
 
 		//Testing to ensure something is being returned
-		Assert.assertTrue(result.getResponse().getContentAsString().length() > 0);
+		Assert.assertNotNull(result.getResponse());
 
-		//Testing to ensure the response is formatted properly
-		Assert.assertNotNull(result.getResponse().getHeader("Content-Type").equals("application/json;charset=UTF-8"));
+		Assert.assertEquals(result.getResponse().getContentAsString(),om.writeValueAsString(mockVideo));
+	}
+
+	@Test
+	public void shouldGetAllTags() throws Exception {
+		ObjectMapper om = new ObjectMapper();
+		List<String> tagNames = new ArrayList<>();
+		tagNames.add("Technology");
+		tagNames.add("Batch");
+
+		Mockito.when(tagRepo.findByNameIn(tagNames)).thenReturn(mockTags);
+		MvcResult result = mockMvc.perform(get("/videos/available-tags")
+				.with(httpBasic("user","user")))//Assuming words separated by '+'
+				.andExpect(status().isOk())
+				.andReturn();
+
+		//Testing to ensure something is being returned
+		Assert.assertNotNull(result.getResponse());
+
+		Assert.assertEquals(result.getResponse().getContentAsString(),om.writeValueAsString(mockTags));
 	}
 
 }

@@ -79,4 +79,8 @@ public class S3FileService {
         URL s3Url = this.s3Client.getUrl(this.awsBucket, name);
         return s3Url.toString();
     }
+
+    public String uploadVideo(File file) {
+        return "";
+    }
 }
