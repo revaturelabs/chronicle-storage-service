@@ -1,9 +1,5 @@
 package com.revature.chronicle;
 
-import com.revature.chronicle.Controller.VideoController;
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.daos.UserRepo;
-import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
@@ -12,21 +8,12 @@ import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.UserService;
 import com.revature.chronicle.services.VideoService;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import com.revature.chronicle.security.CorsConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import javax.sql.RowSet;
+
 import java.util.*;
 
 

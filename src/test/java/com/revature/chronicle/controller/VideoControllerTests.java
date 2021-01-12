@@ -1,4 +1,4 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.chronicle.daos.TagRepo;
@@ -91,8 +91,11 @@ public class VideoControllerTests {
 		video1.setUser(user.getUsername());
 		video1.setDescription("A description");
 		video1.setTags(tags1);
+<<<<<<< HEAD:src/test/java/com/revature/chronicle/Controller/VideoControllerTests.java
 		video1.setId(1);
 		mockVideo = video1;
+=======
+>>>>>>> 1fb116600ac5b08c6f36a8c175f3cddd09dc4135:src/test/java/com/revature/chronicle/controller/VideoControllerTests.java
 
 		List<Tag> tags2 = new ArrayList<>();
 		tags2.add(tag1);
@@ -103,7 +106,10 @@ public class VideoControllerTests {
 		video2.setUser(user.getUsername());
 		video2.setDescription("A description");
 		video2.setTags(tags2);
+<<<<<<< HEAD:src/test/java/com/revature/chronicle/Controller/VideoControllerTests.java
 		video2.setId(2);
+=======
+>>>>>>> 1fb116600ac5b08c6f36a8c175f3cddd09dc4135:src/test/java/com/revature/chronicle/controller/VideoControllerTests.java
 
 		mockVideos.add(video1);
 		mockVideos.add(video2);

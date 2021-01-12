@@ -1,4 +1,4 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.chronicle.daos.TagRepo;
@@ -7,10 +7,12 @@ import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.services.NoteService;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+<<<<<<< HEAD:src/test/java/com/revature/chronicle/Controller/NoteControllerTests.java
 import org.mockito.Mockito;
+=======
+>>>>>>> 1fb116600ac5b08c6f36a8c175f3cddd09dc4135:src/test/java/com/revature/chronicle/controller/NoteControllerTests.java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -92,7 +94,10 @@ public class NoteControllerTests {
         note1.setUser(user.getUsername());
         note1.setDescription("A description");
         note1.setTags(tags1);
+<<<<<<< HEAD:src/test/java/com/revature/chronicle/Controller/NoteControllerTests.java
         mockNote = note1;
+=======
+>>>>>>> 1fb116600ac5b08c6f36a8c175f3cddd09dc4135:src/test/java/com/revature/chronicle/controller/NoteControllerTests.java
 
         List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
