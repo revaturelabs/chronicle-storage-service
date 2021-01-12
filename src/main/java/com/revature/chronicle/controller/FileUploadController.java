@@ -50,7 +50,7 @@ public class FileUploadController {
 
         //Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
         try {
-            if (file.getContentType().contains("text")) {
+            if (file.getContentType().contains("text") || file.getContentType().contains("pdf")) {
                 newFile = new ObjectMapper().readValue(json, Note.class);
                 fileType = "note";
             } else if (file.getContentType().contains("video")) {
