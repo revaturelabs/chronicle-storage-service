@@ -1,7 +1,4 @@
-package com.revature.chronicle.controller;
-
-
-
+package com.revature.chronicle.Controller;
 
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
@@ -10,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +22,6 @@ import org.springframework.util.MultiValueMap;
 
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.head;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
