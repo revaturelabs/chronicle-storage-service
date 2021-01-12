@@ -1,4 +1,4 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.chronicle.daos.TagRepo;
@@ -21,9 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -84,28 +82,28 @@ public class VideoControllerTests {
 		tag3.setName("Batch");
 		tag3.setValue("1120-August");
 
-		Set<Tag> tags1 = new HashSet<>();
+		List<Tag> tags1 = new ArrayList<>();
 		tags1.add(tag1);
 		tags1.add(tag3);
 
 		Video video1 = new Video();
 		video1.setUrl("http://video1.com/%22");
-		video1.setUser(user);
+		video1.setUser(user.getUsername());
 		video1.setDescription("A description");
-		video1.setVideoTags(tags1);
-		video1.setVideoID(1);
+		video1.setTags(tags1);
+		video1.setId(1);
 		mockVideo = video1;
 
-		Set<Tag> tags2 = new HashSet<>();
+		List<Tag> tags2 = new ArrayList<>();
 		tags2.add(tag1);
 		tags2.add(tag2);
 
 		Video video2 = new Video();
 		video2.setUrl("http://video2.com/%22");
-		video2.setUser(user);
+		video2.setUser(user.getUsername());
 		video2.setDescription("A description");
-		video2.setVideoTags(tags2);
-		video2.setVideoID(2);
+		video2.setTags(tags2);
+		video2.setId(2);
 
 		mockVideos.add(video1);
 		mockVideos.add(video2);

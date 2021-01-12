@@ -112,13 +112,6 @@
 			<version>3.6.0</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk-s3</artifactId>
-			<version>1.11.294</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- Powermock, mockito and apache commons io for testing -->
 		<dependency>
 			<groupId>org.powermock</groupId>

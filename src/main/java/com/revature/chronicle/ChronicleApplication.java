@@ -1,9 +1,5 @@
 package com.revature.chronicle;
 
-import com.revature.chronicle.Controller.VideoController;
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.daos.UserRepo;
-import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
@@ -12,21 +8,12 @@ import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.UserService;
 import com.revature.chronicle.services.VideoService;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import com.revature.chronicle.security.CorsConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import javax.sql.RowSet;
+
 import java.util.*;
 
 
@@ -48,9 +35,7 @@ public class ChronicleApplication {
 	@Bean
 	public CommandLineRunner runner() {
 		return args -> {
-			User user = new User();
-			user.setUsername("August Duet");
-			userService.save(user);
+			String user = "August Duet";
 
 			Tag tag1 = new Tag();
 			tag1.setName("Technology");
@@ -87,7 +72,7 @@ public class ChronicleApplication {
 			tag7.setValue("11/25/2020");
 			tagService.save(tag7);
 
-			Set<Tag> tags1 = new HashSet<>();
+			List<Tag> tags1 = new ArrayList<>();
 			tags1.add(tag1);
 			tags1.add(tag3);
 			tags1.add(tag4);
@@ -96,10 +81,10 @@ public class ChronicleApplication {
 			video1.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
 			video1.setUser(user);
 			video1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
-			video1.setVideoTags(tags1);
+			video1.setTags(tags1);
 			videoService.save(video1);
 
-			Set<Tag> tags2 = new HashSet<>();
+			List<Tag> tags2 = new ArrayList<>();
 			tags2.add(tag2);
 			tags2.add(tag3);
 			tags2.add(tag5);
@@ -108,21 +93,21 @@ public class ChronicleApplication {
 			video2.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
 			video2.setUser(user);
 			video2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
-			video2.setVideoTags(tags2);
+			video2.setTags(tags2);
 			videoService.save(video2);
 
 			Note note1 = new Note();
 			note1.setUrl("http://www.africau.edu/images/default/sample.pdf");
 			note1.setUser(user);
 			note1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
-			note1.setNoteTags(tags1);
+			note1.setTags(tags1);
 			noteService.save(note1);
 
 			Note note2 = new Note();
 			note2.setUrl("https://www.w3.org/TR/PNG/iso_8859-1.txt");
 			note2.setUser(user);
 			note2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
-			note2.setNoteTags(tags2);
+			note2.setTags(tags2);
 			noteService.save(note2);
 
 
