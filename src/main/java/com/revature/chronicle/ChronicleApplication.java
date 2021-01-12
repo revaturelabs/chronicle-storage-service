@@ -1,30 +1,17 @@
 package com.revature.chronicle;
 
-import com.revature.chronicle.Controller.VideoController;
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.daos.UserRepo;
-import com.revature.chronicle.daos.VideoRepo;
+
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.*;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import com.revature.chronicle.security.CorsConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import javax.sql.RowSet;
-import java.io.File;
+
 import java.util.*;
 
 
@@ -124,16 +111,6 @@ public class ChronicleApplication {
 			for(Note n:result2){
 				System.out.println(n.toString());
 			}
-
-//			File file = new File("/Users/ratulahmed/Desktop/chronicle-storage-service/src/main/resources/dog2.jpg");
-//			System.out.println(s3FileService.uploadFile(file));
-//
-			File file = new File("/Users/ratulahmed/Desktop/chronicle-storage-service/src/main/resources/test-img.jpg");
-			s3FileService.uploadFile(file);
-
-
-//			File video = new File("/Users/ratulahmed/Desktop/chronicle-storage-service/src/main/resources/sample-mp4-file.mp4");
-//			System.out.println(s3FileService.uploadFile(video));
 		};
 
 	}
