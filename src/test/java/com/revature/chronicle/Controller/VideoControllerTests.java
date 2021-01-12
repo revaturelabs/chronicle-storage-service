@@ -64,9 +64,6 @@ public class VideoControllerTests {
 		mockVideos = new ArrayList<>();
 		mockTags = new ArrayList<>();
 
-		User user = new User();
-		user.setUsername("TESTUSER");
-
 		Tag tag1 = new Tag();
 		tag1.setName("Technology");
 		tag1.setValue("Angular");
@@ -79,25 +76,25 @@ public class VideoControllerTests {
 		tag3.setName("Batch");
 		tag3.setValue("1120-August");
 
-		Set<Tag> tags1 = new HashSet<>();
+		List<Tag> tags1 = new ArrayList<>();
 		tags1.add(tag1);
 		tags1.add(tag3);
 
 		Video video1 = new Video();
 		video1.setUrl("http://video1.com/%22");
-		video1.setUser(user);
+		video1.setUser("TESTUSER");
 		video1.setDescription("A description");
-		video1.setVideoTags(tags1);
+		video1.setTags(tags1);
 
-		Set<Tag> tags2 = new HashSet<>();
+		List<Tag> tags2 = new ArrayList<>();
 		tags2.add(tag1);
 		tags2.add(tag2);
 
 		Video video2 = new Video();
 		video2.setUrl("http://video2.com/%22");
-		video2.setUser(user);
+		video2.setUser("TESTUSER");
 		video2.setDescription("A description");
-		video2.setVideoTags(tags2);
+		video2.setTags(tags2);
 
 		mockVideos.add(video1);
 		mockVideos.add(video2);

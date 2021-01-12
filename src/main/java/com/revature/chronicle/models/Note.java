@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Note extends Media{
+
     @Id
     @Column(name="note_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +35,18 @@ public class Note extends Media{
     @CreationTimestamp
     private Date date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id",referencedColumnName = "user_id", columnDefinition = "INT")
-    private User user;
+    @Column(name = "user_id")
+    private String user;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
-    private Set<Tag> tags;
+    private List<Tag> tags;
+
+    public Note(String description, Date date, String user, List<Tag> tags) {
+        this.description = description;
+        this.date = date;
+        this.user = user;
+    }
 }

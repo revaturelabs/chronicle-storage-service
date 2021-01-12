@@ -1,6 +1,7 @@
 package com.revature.chronicle.models;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Media {
@@ -17,9 +18,9 @@ public abstract class Media {
     public abstract Date getDate();
     public abstract void setDate(Date date);
 
-    public abstract User getUser();
-    public abstract void setUser(User user);
+    public abstract String getUser();
+    public abstract void setUser(String user);
 
-    public abstract Set<Tag> getTags();
-    public abstract void setTags(Set<Tag> tags);
+    public abstract List<Tag> getTags();
+    public abstract void setTags(List<Tag> tags);
 }
