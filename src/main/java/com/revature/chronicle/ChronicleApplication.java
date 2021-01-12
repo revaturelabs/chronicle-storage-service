@@ -87,6 +87,11 @@ public class ChronicleApplication {
 			tag7.setValue("11/25/2020");
 			tagService.save(tag7);
 
+			Tag tag8 = new Tag();
+			tag8.setName("Batch");
+			tag8.setValue("1020-Ben");
+			tagService.save(tag8);
+
 			Set<Tag> tags1 = new HashSet<>();
 			tags1.add(tag1);
 			tags1.add(tag3);
@@ -110,6 +115,19 @@ public class ChronicleApplication {
 			video2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
 			video2.setVideoTags(tags2);
 			videoService.save(video2);
+
+			Set<Tag> tags3 = new HashSet<>();
+			tags3.add(tag2);
+			tags3.add(tag8);
+			tags3.add(tag5);
+			tags3.add(tag7);
+			Video video3 = new Video();
+			video3.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
+			video3.setUser(user);
+			video3.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. " +
+					"Demonstrated Spring Data capabilities via api calls to controller methods");
+			video3.setVideoTags(tags3);
+			videoService.save(video3);
 
 			Note note1 = new Note();
 			note1.setUrl("http://www.africau.edu/images/default/sample.pdf");
