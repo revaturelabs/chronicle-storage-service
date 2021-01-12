@@ -94,7 +94,6 @@ public class VideoControllerTests {
 		video1.setId(1);
 		mockVideo = video1;
 
-
 		List<Tag> tags2 = new ArrayList<>();
 		tags2.add(tag1);
 		tags2.add(tag2);
@@ -105,7 +104,6 @@ public class VideoControllerTests {
 		video2.setDescription("A description");
 		video2.setTags(tags2);
 		video2.setId(2);
-
 
 		mockVideos.add(video1);
 		mockVideos.add(video2);

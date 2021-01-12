@@ -1,4 +1,4 @@
-package com.revature.chronicle.controller;
+package com.revature.chronicle.Controller;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,10 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-/**
- * This controller is being used to upload text or video files to the s3 bucket and save
- * the url location, of the newly uploaded content, to the application's database.
- */
 @Log4j2
 @RestController
 @RequestMapping(path="/file", method = {RequestMethod.GET, RequestMethod.POST})
@@ -35,13 +31,6 @@ public class FileUploadController {
     private final VideoService videoService;
     private final NoteService noteService;
 
-
-    /**
-     *
-     * @param service The S3 file upload service
-     * @param videoService The video service that saves the video s3 location to the database
-     * @param noteService The note service that saves the note s3 location to the database
-     */
     @Autowired
     public FileUploadController(S3FileService service, VideoService videoService, NoteService noteService) {
         this.s3FileService = service;
@@ -49,15 +38,6 @@ public class FileUploadController {
         this.noteService = noteService;
     }
 
-    /**
-     * This controller handles a request to upload a file and its metadata to the S3 bucket and save the file's S3
-     * bucket location to the database
-     * @param json This String param contains meta information about the file being uploaded to the S3 bucket
-     * @param file This MulitpartFile param is the file being uploaded to the S3 bucket
-     * @return The controller will return a status code and a message if the file has succeeded or failed to upload to
-     * to the S3 bucket
-     * @throws IOException
-     */
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<String> uploadFile(@RequestParam("json") String json,
@@ -70,7 +50,7 @@ public class FileUploadController {
 
         //Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
         try {
-            if (file.getContentType().contains("text")) {
+            if (file.getContentType().contains("text") || file.getContentType().contains("pdf")) {
                 newFile = new ObjectMapper().readValue(json, Note.class);
                 fileType = "note";
             } else if (file.getContentType().contains("video")) {
@@ -91,13 +71,15 @@ public class FileUploadController {
         try {
             file.transferTo(compiledFile.getAbsoluteFile());
             log.debug(compiledFile);
-          String s3URL = s3FileService.uploadFile(compiledFile);
+            String s3URL = s3FileService.uploadFile(compiledFile);
 
-          //Insert s3URL and json form data into the database
-          if (newFile != null) {
-              newFile.setUrl(s3URL);
-          }
-          saveToDatabase(newFile, fileType);
+            log.info("The generated S3 URL: " + s3URL);
+
+            //Insert s3URL and json form data into the database
+            if (newFile != null) {
+                newFile.setUrl(s3URL);
+            }
+            saveToDatabase(newFile, fileType);
 
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
@@ -113,17 +95,12 @@ public class FileUploadController {
         }
         return new ResponseEntity<>("Upload Successful", HttpStatus.OK);
     }
-
-    /**
-     * Depending on the media type, the appropriate service will be called to save the file and its meta information to the database
-     * @param media This parameter is a Media object that contains the file being uploaded and its associated meta
-     *              information
-     * @param mediaType This string parameter will either be "note" or "video"
-     */
     public void saveToDatabase (Media media, String mediaType){
         if (mediaType.equalsIgnoreCase("note")) {
+            log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
             noteService.save((Note) media);
         } else if (mediaType.equalsIgnoreCase("video")) {
+            log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
             videoService.save((Video) media);
         }
     }
