@@ -1,10 +1,9 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
-import com.revature.chronicle.security.FirebaseInitializer;
 import com.revature.chronicle.services.VideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
