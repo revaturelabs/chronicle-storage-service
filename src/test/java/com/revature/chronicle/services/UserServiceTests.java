@@ -1,4 +1,4 @@
-package com.revature.chronicle;
+package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.UserRepo;
 import com.revature.chronicle.services.UserService;
@@ -23,12 +23,6 @@ public class UserServiceTests {
 
     @InjectMocks
     private UserService service;
-
-    @Before
-    public void setup() {
-        System.out.println("mocking");
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void saveAUser(){
