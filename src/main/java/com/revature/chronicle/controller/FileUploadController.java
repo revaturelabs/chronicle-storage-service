@@ -71,23 +71,25 @@ public class FileUploadController {
         try {
             file.transferTo(compiledFile.getAbsoluteFile());
             log.debug(compiledFile);
-//          String s3URL = s3FileService.uploadFile(compiledFile);
-//
-//          //Insert s3URL and json form data into the database
-//          if (newFile != null) {
-//              newFile.setUrl(s3URL);
-//          }
-//          saveToDatabase(newFile, fileType);
-//
+            String s3URL = s3FileService.uploadFile(compiledFile);
+
+            log.info("The generated S3 URL: " + s3URL);
+
+            //Insert s3URL and json form data into the database
+            if (newFile != null) {
+                newFile.setUrl(s3URL);
+            }
+            saveToDatabase(newFile, fileType);
+
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
             log.error("Unable to access the AWS S3 bucket!");
         } catch (IOException e) {
             e.printStackTrace();
             log.error("Failed to write to file");
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            log.error("Service was interrupted!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            log.error("Service was interrupted!");
         } finally {
             compiledFile.delete();
         }
@@ -95,8 +97,10 @@ public class FileUploadController {
     }
     public void saveToDatabase (Media media, String mediaType){
         if (mediaType.equalsIgnoreCase("note")) {
+            log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
             noteService.save((Note) media);
         } else if (mediaType.equalsIgnoreCase("video")) {
+            log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
             videoService.save((Video) media);
         }
     }
