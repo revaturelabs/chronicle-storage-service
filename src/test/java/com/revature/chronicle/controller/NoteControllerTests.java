@@ -1,4 +1,4 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.chronicle.daos.TagRepo;
