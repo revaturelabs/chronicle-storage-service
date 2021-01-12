@@ -28,7 +28,7 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAListOfAllVideos(){
-        Video video = new Video(1,"www.video.com","A test video",new Date(),new User(),new HashSet<Tag>());
+        Video video = new Video(1,"www.video.com","A test video",new Date(),"",new ArrayList<Tag>());
         when(repo.findAll()).thenReturn(
                 new ArrayList<Video>(Arrays.asList(video))
         );
@@ -40,7 +40,7 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAVideoById(){
-        Video video = new Video(6, "www.video.com", "A test video", new Date(), new User(), new HashSet<Tag>());
+        Video video = new Video(6, "www.video.com", "A test video", new Date(), "", new ArrayList<Tag>());
         when(repo.findById(6)).thenReturn(
                 Optional.of(video)
         );
@@ -64,9 +64,9 @@ public class VideoServiceTests {
     public void shouldSaveAVideoAndReturnTrue(){
         Video video = new Video();
         video.setUrl("www.video.com");
-        video.setUser(new User());
+        video.setUser("");
         video.setDescription("A new test video");
-        video.setVideoTags(new HashSet<Tag>());
+        video.setTags(new ArrayList<Tag>());
         when(repo.save(video)).thenReturn(video);
         boolean result = service.save(video);
         Assert.assertTrue(result);
@@ -76,9 +76,9 @@ public class VideoServiceTests {
     @Test
     public void shouldFailToAddVideoAndReturnFalse(){
         Video video = new Video();
-        video.setUser(new User());
+        video.setUser("");
         video.setDescription("A new test video");
-        video.setVideoTags(new HashSet<Tag>());
+        video.setTags(new ArrayList<>());
         when(repo.save(video)).thenThrow(IllegalArgumentException.class);
         boolean result = service.save(video);
         Assert.assertFalse(result);
@@ -92,16 +92,16 @@ public class VideoServiceTests {
         Tag tag2 = new Tag(2,"Technology","Java");
         Tag tag3 = new Tag(3,"Batch","1120-August");
 
-        Set<Tag> tags1 = new HashSet<>();
+        List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag3);
 
-        Set<Tag> tags2 = new HashSet<>();
+        List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video1.com","A description",new Date(),new User(),tags1);
-        Video video2 = new Video(2,"http://video2.com","A description",new Date(),new User(),tags2);
+        Video video1 = new Video(1,"http://video1.com","A description",new Date(),"",tags1);
+        Video video2 = new Video(2,"http://video2.com","A description",new Date(),"",tags2);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag1,tag3));
@@ -116,16 +116,16 @@ public class VideoServiceTests {
         Tag tag2 = new Tag(2,"Technology","Java");
         Tag tag3 = new Tag(3,"Batch","1120-August");
 
-        Set<Tag> tags1 = new HashSet<>();
+        List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag3);
 
-        Set<Tag> tags2 = new HashSet<>();
+        List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video1.com","A description",new Date(),new User(),tags1);
-        Video video2 = new Video(2,"http://video2.com","A description",new Date(),new User(),tags2);
+        Video video1 = new Video(1,"http://video1.com","A description",new Date(),"",tags1);
+        Video video2 = new Video(2,"http://video2.com","A description",new Date(),"",tags2);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag2,tag3));
@@ -139,16 +139,16 @@ public class VideoServiceTests {
         Tag tag2 = new Tag(2,"Technology","Java");
         Tag tag3 = new Tag(3,"Batch","1120-August");
 
-        Set<Tag> tags1 = new HashSet<>();
+        List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag3);
 
-        Set<Tag> tags2 = new HashSet<>();
+        List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video.com","A description",new Date(),new User(),tags1);
-        Video video2 = new Video(2,"http://video.com","A description",new Date(),new User(),tags2);
+        Video video1 = new Video(1,"http://video.com","A description",new Date(),"",tags1);
+        Video video2 = new Video(2,"http://video.com","A description",new Date(),"",tags2);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>());
         List<Video> result = service.findAllVideosByTags(new ArrayList<Tag>());

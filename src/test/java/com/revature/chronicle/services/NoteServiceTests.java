@@ -27,7 +27,7 @@ public class NoteServiceTests {
     @Test
     public void shouldReturnAListOfAllNotes(){
         List<Note> notes = new ArrayList<Note>();
-        notes.add(new Note(1,"www.note.com","A description",new Date(), new User(), new HashSet<Tag>()));
+        notes.add(new Note(1,"www.note.com","A description",new Date(), "", new ArrayList<Tag>()));
 
         when(repo.findAll()).thenReturn(notes);
 
@@ -41,7 +41,7 @@ public class NoteServiceTests {
 
     @Test
     public void shouldReturnANoteById(){
-        Note note = new Note(1,"www.note.com","a description",new Date(),new User(), new HashSet<Tag>());
+        Note note = new Note(1,"www.note.com","a description",new Date(),"", new ArrayList<Tag>());
         when(repo.findById(1)).thenReturn(Optional.of(note));
         Optional<Note> result = service.findById(1);
         Assert.assertTrue(result.isPresent());
@@ -61,7 +61,7 @@ public class NoteServiceTests {
 
     @Test
     public void shouldSaveANoteAndReturnTrue(){
-        Note note = new Note(1,"www.note.com","a description",new Date(),new User(), new HashSet<Tag>());
+        Note note = new Note(1,"www.note.com","a description",new Date(),"", new ArrayList<Tag>());
         when(repo.save(note)).thenReturn(note);
         boolean result = service.save(note);
         Assert.assertTrue(result);
@@ -82,16 +82,16 @@ public class NoteServiceTests {
         Tag tag2 = new Tag(2,"Technology","Java");
         Tag tag3 = new Tag(3,"Batch","1120-August");
 
-        Set<Tag> tags1 = new HashSet<>();
+        List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag3);
 
-        Set<Tag> tags2 = new HashSet<>();
+        List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Note note1 = new Note(1,"http://note.com","A description",new Date(),new User(),tags1);
-        Note note2 = new Note(2,"http://note.com","A description",new Date(),new User(),tags2);
+        Note note1 = new Note(1,"http://note.com","A description",new Date(),"",tags1);
+        Note note2 = new Note(2,"http://note.com","A description",new Date(),"",tags2);
 
         when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>(Arrays.asList(note1,note2)));
         List<Note> result = service.findAllNotesByTags(Arrays.asList(tag1,tag3));
@@ -106,16 +106,16 @@ public class NoteServiceTests {
         Tag tag2 = new Tag(2,"Technology","Java");
         Tag tag3 = new Tag(3,"Batch","1120-August");
 
-        Set<Tag> tags1 = new HashSet<>();
+        List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag3);
 
-        Set<Tag> tags2 = new HashSet<>();
+        List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Note note1 = new Note(1,"http://note.com","A description",new Date(),new User(),tags1);
-        Note note2 = new Note(2,"http://note.com","A description",new Date(),new User(),tags2);
+        Note note1 = new Note(1,"http://note.com","A description",new Date(),"",tags1);
+        Note note2 = new Note(2,"http://note.com","A description",new Date(),"",tags2);
 
         when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>(Arrays.asList(note1,note2)));
         List<Note> result = service.findAllNotesByTags(Arrays.asList(tag2,tag3));
@@ -129,16 +129,16 @@ public class NoteServiceTests {
         Tag tag2 = new Tag(2,"Technology","Java");
         Tag tag3 = new Tag(3,"Batch","1120-August");
 
-        Set<Tag> tags1 = new HashSet<>();
+        List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag3);
 
-        Set<Tag> tags2 = new HashSet<>();
+        List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Note note1 = new Note(1,"http://note.com","A description",new Date(),new User(),tags1);
-        Note note2 = new Note(2,"http://note.com","A description",new Date(),new User(),tags2);
+        Note note1 = new Note(1,"http://note.com","A description",new Date(),"",tags1);
+        Note note2 = new Note(2,"http://note.com","A description",new Date(),"",tags2);
 
         when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>());
         List<Note> result = service.findAllNotesByTags(new ArrayList<Tag>());

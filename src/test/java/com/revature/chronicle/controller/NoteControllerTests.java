@@ -21,9 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -84,28 +82,28 @@ public class NoteControllerTests {
         tag3.setName("Batch");
         tag3.setValue("1120-August");
 
-        Set<Tag> tags1 = new HashSet<>();
+        List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag3);
 
         Note note1 = new Note();
-        note1.setNoteID(1);
+        note1.setId(1);
         note1.setUrl("http://note1.com/%22");
-        note1.setUser(user);
+        note1.setUser(user.getUsername());
         note1.setDescription("A description");
-        note1.setNoteTags(tags1);
+        note1.setTags(tags1);
         mockNote = note1;
 
-        Set<Tag> tags2 = new HashSet<>();
+        List<Tag> tags2 = new ArrayList<>();
         tags2.add(tag1);
         tags2.add(tag2);
 
         Note note2 = new Note();
-        note2.setNoteID(2);
+        note2.setId(2);
         note2.setUrl("http://note2.com/%22");
-        note2.setUser(user);
+        note2.setUser(user.getUsername());
         note2.setDescription("A description");
-        note2.setNoteTags(tags2);
+        note2.setTags(tags2);
 
         mockNotes.add(note1);
         mockNotes.add(note2);

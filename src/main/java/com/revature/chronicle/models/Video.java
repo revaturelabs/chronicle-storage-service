@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,11 +20,11 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Video {
+public class Video extends Media{
     @Id
     @Column(name = "video_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int videoID;
+    private int id;
 
     @Column(name = "url")
     private String url;
@@ -35,13 +36,18 @@ public class Video {
     @CreationTimestamp
     private Date date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "INT")
-    private User user;
+    @Column(name = "user_id")
+    private String user;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "video_tag",
             joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
-    private Set<Tag> videoTags;
+    private List<Tag> tags;
+
+    public Video(String description, Date date, String user, List<Tag> tags) {
+        this.description = description;
+        this.date = date;
+        this.user = user;
+    }
 }
