@@ -99,7 +99,7 @@ public class S3FileService {
 
         try {
             List<PartETag> partETags = new ArrayList<PartETag>();
-            InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(this.awsBucket, key);
+            InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(this.awsBucket, key).withCannedACL(CannedAccessControlList.PublicRead);
             InitiateMultipartUploadResult initResponse = s3Client.initiateMultipartUpload(initRequest);
 
             long filePosition = 0;
