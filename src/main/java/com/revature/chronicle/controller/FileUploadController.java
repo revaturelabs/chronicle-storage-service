@@ -21,6 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * This controller is being used to upload text or video files to the s3 bucket and save
+ * the url location, of the newly uploaded content, to the application's database.
+ */
 @Log4j2
 @RestController
 @RequestMapping(path="/file", method = {RequestMethod.GET, RequestMethod.POST})
@@ -31,6 +35,13 @@ public class FileUploadController {
     private final VideoService videoService;
     private final NoteService noteService;
 
+
+    /**
+     *
+     * @param service The S3 file upload service
+     * @param videoService The video service that saves the video s3 location to the database
+     * @param noteService The note service that saves the note s3 location to the database
+     */
     @Autowired
     public FileUploadController(S3FileService service, VideoService videoService, NoteService noteService) {
         this.s3FileService = service;
@@ -38,6 +49,15 @@ public class FileUploadController {
         this.noteService = noteService;
     }
 
+    /**
+     * This controller handles a request to upload a file and its metadata to the S3 bucket and save the file's S3
+     * bucket location to the database
+     * @param json This String param contains meta information about the file being uploaded to the S3 bucket
+     * @param file This MulitpartFile param is the file being uploaded to the S3 bucket
+     * @return The controller will return a status code and a message if the file has succeeded or failed to upload to
+     * to the S3 bucket
+     * @throws IOException
+     */
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<String> uploadFile(@RequestParam("json") String json,
@@ -71,28 +91,35 @@ public class FileUploadController {
         try {
             file.transferTo(compiledFile.getAbsoluteFile());
             log.debug(compiledFile);
-//          String s3URL = s3FileService.uploadFile(compiledFile);
-//
-//          //Insert s3URL and json form data into the database
-//          if (newFile != null) {
-//              newFile.setUrl(s3URL);
-//          }
-//          saveToDatabase(newFile, fileType);
-//
+          String s3URL = s3FileService.uploadFile(compiledFile);
+
+          //Insert s3URL and json form data into the database
+          if (newFile != null) {
+              newFile.setUrl(s3URL);
+          }
+          saveToDatabase(newFile, fileType);
+
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
             log.error("Unable to access the AWS S3 bucket!");
         } catch (IOException e) {
             e.printStackTrace();
             log.error("Failed to write to file");
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            log.error("Service was interrupted!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            log.error("Service was interrupted!");
         } finally {
             compiledFile.delete();
         }
         return new ResponseEntity<>("Upload Successful", HttpStatus.OK);
     }
+
+    /**
+     * Depending on the media type, the appropriate service will be called to save the file and its meta information to the database
+     * @param media This parameter is a Media object that contains the file being uploaded and its associated meta
+     *              information
+     * @param mediaType This string parameter will either be "note" or "video"
+     */
     public void saveToDatabase (Media media, String mediaType){
         if (mediaType.equalsIgnoreCase("note")) {
             noteService.save((Note) media);
