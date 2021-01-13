@@ -91,7 +91,7 @@ public class VideoController {
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tag>> getAllVideoTags() {
         List<String> tagNames = new ArrayList<>();
-        tagNames.add("Technology");
+        tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all video tags with keys: " + tagNames +" ...");
         List<Tag> availableTags = tagRepo.findByNameIn(tagNames);

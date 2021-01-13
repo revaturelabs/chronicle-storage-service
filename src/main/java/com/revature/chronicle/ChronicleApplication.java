@@ -38,12 +38,12 @@ public class ChronicleApplication {
 			String user = "August Duet";
 
 			Tag tag1 = new Tag();
-			tag1.setName("Technology");
+			tag1.setName("Topic");
 			tag1.setValue("Angular");
 			tagService.save(tag1);
 
 			Tag tag2 = new Tag();
-			tag2.setName("Technology");
+			tag2.setName("Topic");
 			tag2.setValue("Spring");
 			tagService.save(tag2);
 
@@ -53,32 +53,22 @@ public class ChronicleApplication {
 			tagService.save(tag3);
 
 			Tag tag4 = new Tag();
-			tag4.setName("Title");
-			tag4.setValue("Angular and TypeScript Overview");
+			tag4.setName("Batch");
+			tag4.setValue("1020-Ben");
 			tagService.save(tag4);
 
 			Tag tag5 = new Tag();
-			tag5.setName("Title");
-			tag5.setValue("Spring Boot Overview and Setup");
+			tag5.setName("Topic");
+			tag5.setValue("Typescript");
 			tagService.save(tag5);
-
-			Tag tag6 = new Tag();
-			tag6.setName("Date");
-			tag6.setValue("11/21/2020");
-			tagService.save(tag6);
-
-			Tag tag7 = new Tag();
-			tag7.setName("Date");
-			tag7.setValue("11/25/2020");
-			tagService.save(tag7);
 
 			List<Tag> tags1 = new ArrayList<>();
 			tags1.add(tag1);
 			tags1.add(tag3);
-			tags1.add(tag4);
-			tags1.add(tag6);
+			tags1.add(tag5);
 			Video video1 = new Video();
 			video1.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
+			video1.setTitle("Angular and TypeScript Overview");
 			video1.setUser(user);
 			video1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
 			video1.setTags(tags1);
@@ -86,12 +76,11 @@ public class ChronicleApplication {
 
 			List<Tag> tags2 = new ArrayList<>();
 			tags2.add(tag2);
-			tags2.add(tag3);
-			tags2.add(tag5);
-			tags2.add(tag7);
+			tags2.add(tag4);
 			Video video2 = new Video();
 			video2.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
 			video2.setUser(user);
+			video1.setTitle("Spring Boot Overview and Setup");
 			video2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
 			video2.setTags(tags2);
 			videoService.save(video2);
