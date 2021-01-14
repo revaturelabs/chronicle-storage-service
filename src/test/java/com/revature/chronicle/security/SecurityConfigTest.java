@@ -28,6 +28,9 @@ import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.verifyNew;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
+/**
+ * test class for SecurityConfig.class
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(fullyQualifiedNames = {
         "org.springframework.web.cors.CorsConfiguration",
@@ -45,12 +48,21 @@ public class SecurityConfigTest {
     private UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSourceMock;
 
 
+    /**
+     * setup method that runs before each SecurityConfig test. creates a new SecurityConfig object and a
+     * new mock of the SecurityConfig class.
+     */
     @Before
     public void init() {
         corsConfigurationPropertiesMock = mock(CorsConfigurationProperties.class);
         securityConfig = new SecurityConfig(corsConfigurationPropertiesMock);
     }
 
+    /**
+     * tests that the configure() method calls all of the correct methods of the HttpSecurity object to configure Spring
+     * Security for our purposes
+     * @throws Exception - thrown if configure() throws an exception.
+     */
     @Test
     public void testConfigureMethod() throws Exception {
         // Instantiating Mock Objects
