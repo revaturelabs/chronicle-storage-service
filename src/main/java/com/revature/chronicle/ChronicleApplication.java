@@ -85,22 +85,10 @@ public class ChronicleApplication {
 			video2.setTags(tags2);
 			videoService.save(video2);
 
-			List<Tag> tags3 = new ArrayList<>();
-			tags3.add(tag2);
-			tags3.add(tag8);
-			tags3.add(tag5);
-			tags3.add(tag7);
-			Video video3 = new Video();
-			video3.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
-			video3.setUser(user);
-			video3.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. " +
-					"Demonstrated Spring Data capabilities via api calls to controller methods");
-			video3.setTags(tags3);
-			videoService.save(video3);
-
 			Note note1 = new Note();
 			note1.setUrl("http://www.africau.edu/images/default/sample.pdf");
 			note1.setUser(user);
+			note1.setTitle("Angular and TypeScript Overview");
 			note1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
 			note1.setTags(tags1);
 			noteService.save(note1);
@@ -108,6 +96,7 @@ public class ChronicleApplication {
 			Note note2 = new Note();
 			note2.setUrl("https://www.w3.org/TR/PNG/iso_8859-1.txt");
 			note2.setUser(user);
+			note2.setTitle("Spring Boot Overview and Setup");
 			note2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
 			note2.setTags(tags2);
 			noteService.save(note2);
