@@ -28,6 +28,9 @@ public class Note extends Media{
     @Column(name="url")
     private String url;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "description")
     private String description;
 

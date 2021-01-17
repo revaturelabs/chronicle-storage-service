@@ -90,7 +90,7 @@ public class NoteController {
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tag>> getAllNoteTags() {
         List<String> tagNames = new ArrayList<>();
-        tagNames.add("Technology");
+        tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all note tags with keys: " + tagNames +" ...");
         List<Tag> availableTags = tagRepo.findByNameIn(tagNames);

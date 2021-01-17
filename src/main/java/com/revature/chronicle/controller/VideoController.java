@@ -73,6 +73,7 @@ public class VideoController {
      * the <code>VideoService</code> <code>findAll</code> method.
      * @return list of all <code>Video</code> objects
      */
+    //future iterations can add pagination to backend or front end
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getAllVideos() {
         logger.info("Retrieving all videos...");
@@ -90,7 +91,7 @@ public class VideoController {
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tag>> getAllVideoTags() {
         List<String> tagNames = new ArrayList<>();
-        tagNames.add("Technology");
+        tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all video tags with keys: " + tagNames +" ...");
         List<Tag> availableTags = tagRepo.findByNameIn(tagNames);

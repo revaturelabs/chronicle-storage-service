@@ -28,7 +28,7 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAListOfAllVideos(){
-        Video video = new Video(1,"www.video.com","A test video",new Date(),"",new ArrayList<Tag>());
+        Video video = new Video(1,"www.video.com","a title","A test video",new Date(),"",new ArrayList<Tag>());
         when(repo.findAll()).thenReturn(
                 new ArrayList<Video>(Arrays.asList(video))
         );
@@ -40,7 +40,7 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAVideoById(){
-        Video video = new Video(6, "www.video.com", "A test video", new Date(), "", new ArrayList<Tag>());
+        Video video = new Video(6, "www.video.com","a title", "A test video", new Date(), "", new ArrayList<Tag>());
         when(repo.findById(6)).thenReturn(
                 Optional.of(video)
         );
@@ -100,8 +100,8 @@ public class VideoServiceTests {
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video1.com","A description",new Date(),"",tags1);
-        Video video2 = new Video(2,"http://video2.com","A description",new Date(),"",tags2);
+        Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1);
+        Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag1,tag3));
@@ -124,8 +124,8 @@ public class VideoServiceTests {
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video1.com","A description",new Date(),"",tags1);
-        Video video2 = new Video(2,"http://video2.com","A description",new Date(),"",tags2);
+        Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1);
+        Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag2,tag3));
@@ -147,8 +147,8 @@ public class VideoServiceTests {
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video.com","A description",new Date(),"",tags1);
-        Video video2 = new Video(2,"http://video.com","A description",new Date(),"",tags2);
+        Video video1 = new Video(1,"http://video.com","a title","A description",new Date(),"",tags1);
+        Video video2 = new Video(2,"http://video.com","a title","A description",new Date(),"",tags2);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>());
         List<Video> result = service.findAllVideosByTags(new ArrayList<Tag>());

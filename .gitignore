@@ -22,6 +22,7 @@ target/
 firebase-service-credentials.json
 !**/src/main/**/TestController/
 TestController/
+application.properties
 
 ### NetBeans ###
 /nbproject/private/
