@@ -46,6 +46,16 @@ public class TagService {
         }
     }
 
+    public Tag findByValue(String value) {
+        try{
+            return tagRepo.findByValue(value);
+        }
+        catch (Exception e){
+            logger.warn(e.getMessage());
+            return null;
+        }
+    }
+
     public boolean save(Tag tag) {
         try {
             tagRepo.save(tag);
