@@ -104,11 +104,6 @@ public class FileUploadController {
         if (mediaType.equalsIgnoreCase("note")) {
             log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
             Note newNote = (Note) media;
-            Note saveNote = new Note();
-            saveNote.setTitle(newNote.getTitle());
-            saveNote.setDescription(newNote.getDescription());
-            saveNote.setUrl(newNote.getUrl());
-            saveNote.setUser(newNote.getUser());
             List<Tag> noteTags = new ArrayList<>();
             for (Tag tag: newNote.getTags()) {
                 Tag tempTag = new Tag();
@@ -121,16 +116,11 @@ public class FileUploadController {
                 }
                 noteTags.add(tempTag);
             }
-            saveNote.setTags(noteTags);
-            noteService.save(saveNote);
+            newNote.setTags(noteTags);
+            noteService.save(newNote);
         } else if (mediaType.equalsIgnoreCase("video")) {
             log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
             Video newVideo = (Video) media;
-            Video saveVideo = new Video();
-            saveVideo.setTitle(newVideo.getTitle());
-            saveVideo.setDescription(newVideo.getDescription());
-            saveVideo.setUrl(newVideo.getUrl());
-            saveVideo.setUser(newVideo.getUser());
             List<Tag> videoTags = new ArrayList<>();
             for (Tag tag: newVideo.getTags()) {
                 Tag tempTag = new Tag();
@@ -143,8 +133,8 @@ public class FileUploadController {
                 }
                 videoTags.add(tempTag);
             }
-            saveVideo.setTags(videoTags);
-            videoService.save(saveVideo);
+            newVideo.setTags(videoTags);
+            videoService.save(newVideo);
         }
     }
 }
