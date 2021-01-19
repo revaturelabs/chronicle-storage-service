@@ -2,6 +2,7 @@ package com.revature.chronicle.Controller;
 
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
+import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.VideoService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,13 +55,16 @@ public class S3ControllerTest {
 	@MockBean
 	private  NoteService noteMock;
 
+	@MockBean
+	private TagService tagMock;
+
 	@Before
 	public void setup() throws JSONException {
 		s3FileMock = mock(S3FileService.class);
 		videoMock = mock(VideoService.class);
 		noteMock = mock(NoteService.class);
 
-		mock = MockMvcBuilders.standaloneSetup(new FileUploadController(s3FileMock, videoMock, noteMock)).build();
+		mock = MockMvcBuilders.standaloneSetup(new FileUploadController(s3FileMock, videoMock, noteMock, tagMock)).build();
 
 		//given a mock text MultipartFile to pass into the controller
 		file1 = new MockMultipartFile(

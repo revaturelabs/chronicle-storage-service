@@ -12,4 +12,6 @@ import java.util.List;
 public interface TagRepo extends JpaRepository<Tag, Integer> {
 
     List<Tag> findByNameIn(Collection<String> tagNames);
+
+    Tag findByValue(String value);
 }
