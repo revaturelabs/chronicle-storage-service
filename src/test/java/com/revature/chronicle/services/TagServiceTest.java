@@ -2,21 +2,25 @@ package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.services.TagService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TagServiceTest {
+
     @Mock
     private TagRepo repo;
-
     @InjectMocks
     private TagService service;
 
@@ -33,9 +37,10 @@ public class TagServiceTest {
     @Test
     public void shouldReturnATagById(){
         Tag tag = new Tag(1,"Technology","Java");
-        when(repo.findById(1)).thenReturn(Optional.of(tag));
+        Optional<Tag> optional = Optional.of(tag);
+        when(repo.findById(1)).thenReturn(optional);
         Optional<Tag> result = service.findById(1);
-        Assertions.assertEquals(result, tag);
+        Assertions.assertEquals(result, optional);
         verify(repo).findById(1);
     }
 
