@@ -1,4 +1,4 @@
-package com.revature.chronicle.Controller;
+package com.revature.chronicle.controller;
 
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
