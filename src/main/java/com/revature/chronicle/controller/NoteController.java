@@ -94,6 +94,7 @@ public class NoteController {
         tagNames.add("Batch");
         logger.info("Retrieving all note tags with keys: " + tagNames +" ...");
         List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
+        logger.info("Tags retrieved: " + availableTags);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
 
