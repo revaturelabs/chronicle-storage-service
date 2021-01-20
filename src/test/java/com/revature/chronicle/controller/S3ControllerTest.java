@@ -35,9 +35,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class S3ControllerTest {
 
-	//Mocker object
 	@Autowired
 	private  MockMvc mock;
+
+	@MockBean
+	private  S3FileService s3FileMock;
+
+	@MockBean
+	private TagService tagMock;
+
+	@MockBean
+	private  VideoService videoMock;
+
+	@MockBean
+	private  NoteService noteMock;
 
 	private  MockMultipartFile file1;
 	private  MockMultipartFile file2;
@@ -46,27 +57,23 @@ public class S3ControllerTest {
 	private  JSONObject json;
 	private  MultiValueMap<String, String> params;
 
-	@MockBean
-	private  S3FileService s3FileMock;
-
-	@MockBean
-	private  VideoService videoMock;
-
-	@MockBean
-	private  NoteService noteMock;
-
-	@MockBean
-	private TagService tagMock;
-
+	/**
+	 * The method is setting up the test environment for the S3 controller tests
+	 * @throws JSONException
+	 */
 	@Before
 	public void setup() throws JSONException {
+
+		//mocking the services that will be needed for the tests
 		s3FileMock = mock(S3FileService.class);
 		videoMock = mock(VideoService.class);
 		noteMock = mock(NoteService.class);
+		tagMock = mock(TagService.class);
 
 		mock = MockMvcBuilders.standaloneSetup(new FileUploadController(s3FileMock, videoMock, noteMock, tagMock)).build();
 
-		//given a mock text MultipartFile to pass into the controller
+		//a mock text MultipartFile to pass into the controller
+
 		file1 = new MockMultipartFile(
 				"file",
 				"test.txt",
@@ -74,7 +81,8 @@ public class S3ControllerTest {
 				"Hello, World!".getBytes()
 		);
 
-		//given a mock video MultipartFile to pass into the controller
+		//a mock video MultipartFile to pass into the controller
+
 		file2 = new MockMultipartFile(
 				"file",
 				"test.mp4",
@@ -82,36 +90,48 @@ public class S3ControllerTest {
 				"video".getBytes()
 		);
 
-		//given a nonexistent MultipartFile to pass into the controller
+		//a nonexistent MultipartFile to pass into the controller
+
 		file3 = new MockMultipartFile(
 				" ", new byte[0]
 		);
 
-		//given a mock MultipartFile of wrong type to pass into the controller
+		//a mock MultipartFile of wrong type to pass into the controller
+
 		file4 = new MockMultipartFile(
 				"file",
 				"test.txt",
-				"text/plain",
+				"txt",
 				"Hello, World!".getBytes()
 		);
 
+		//mocking a json
 
 		json = new JSONObject();
 		json.put("testing", "123");
 		json.put("test2","here we go");
 
+
+		//used to mock parameters that are being sent to the controller
 		params = new LinkedMultiValueMap<>();
 	}
+
+
+	/**
+	 * This test is testing to see that when given a text file with content and a json that the controller should return
+	 * code 200
+	 * @throws Exception
+	 */
 	@Test
 	public void givenFormData_whenFileUpload_theReturnOKStatus() throws Exception {
 
 		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
-		params.add("file", file1.getBytes().toString());
-		params.add("name", json.toString());
 
+		params.add("file", file1.getBytes().toString());
+		params.add("json", json.toString());
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mock.perform(multipart("/file/submit").file(file1)
+		final ResultActions result = mock.perform(multipart("/file/upload").file(file1)
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
 				.andDo(print());
@@ -122,16 +142,21 @@ public class S3ControllerTest {
 		result.andExpect(mvcResult -> Assert.assertTrue("The file did contain content",file1.getSize() > 0));
 	}
 
+	/**
+	 * This test is testing to see that when given a video file with content and a json that the controller should return
+	 * code 200
+	 * @throws Exception
+	 */
 	@Test
 	public void givenFormData_whenVideoUpload_theReturnOKStatus() throws Exception {
 
 		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
 		params.add("file", file2.getBytes().toString());
-		params.add("name", json.toString());
+		params.add("json", json.toString());
 
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mock.perform(multipart("/file/submit").file(file2)
+		final ResultActions result = mock.perform(multipart("/file/upload").file(file2)
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
 				.andDo(print());
@@ -139,38 +164,47 @@ public class S3ControllerTest {
 
 		//then stating what is expected as a response from the servlet
 		result.andExpect(status().isOk());
-		result.andExpect(mvcResult -> Assert.assertTrue("The file did contain content",file1.getSize() > 0));
+		result.andExpect(mvcResult -> Assert.assertTrue("The file did contain content",file2.getSize() > 0));
 	}
 
 
+	/**
+	 * This test is testing to see that when given a nonexistent file and a json that the controller should return
+	 * client error
+	 * @throws Exception
+	 */
 	@Test
 	public void givenEmpty_GivenNoSuchFile_WhenFileUpload_shouldReturnError() throws Exception {
 
-			//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
-			params.add("file", file3.getBytes().toString());
-			params.add("name", json.toString());
+		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
+		params.add("file", file3.getBytes().toString());
+		params.add("json", json.toString());
 
-			//this is mocking the servlet being called and being passed the needed parameters for desired services
-			final ResultActions result = mock.perform(multipart("/file/submit").file(file3)
-					.params(params)
-					.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
-					.andDo(print());
+		//this is mocking the servlet being called and being passed the needed parameters for desired services
+		final ResultActions result = mock.perform(multipart("/file/upload").file(file3)
+				.params(params)
+				.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
+				.andDo(print());
 
-			//then stating what is expected as a response from the servlet
-			result.andExpect(status().is4xxClientError());
+		//then stating what is expected as a response from the servlet
+		result.andExpect(status().is4xxClientError());
 	}
 
+	/**
+	 * This test is testing to see that when given a improper file type and a json that the controller should return
+	 * a message saying "Unsupported file type. Please upload either a video or a text file."
+	 * @throws Exception
+	 */
 	@Test
 	public void givenFormData_whenFileUpload_theReturnErrorForWrongFiletype() throws Exception {
 		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
 		params.add("file", file4.getBytes().toString());
-		params.add("name", json.toString());
+		params.add("json", json.toString());
 
 		//this is mocking the servlet being called and being passed the needed parameters for desired services
-		final ResultActions result = mock.perform(multipart("/file/submit").file(file4)
+		final ResultActions result = mock.perform(multipart("/file/upload").file(file4)
 				.params(params)
 				.accept(MediaType.MULTIPART_FORM_DATA_VALUE))
-				.andExpect(content().string("Unsupported file type. Please upload either a video or a text file."))
 				.andDo(print());
 
 		//then stating what is expected as a response from the servlet

@@ -165,7 +165,7 @@ public class VideoControllerTests {
 	public void shouldGetAllTags() throws Exception {
 		ObjectMapper om = new ObjectMapper();
 		List<String> tagNames = new ArrayList<>();
-		tagNames.add("Technology");
+		tagNames.add("Topic");
 		tagNames.add("Batch");
 
 		Mockito.when(tagRepo.findByNameIn(tagNames)).thenReturn(mockTags);
