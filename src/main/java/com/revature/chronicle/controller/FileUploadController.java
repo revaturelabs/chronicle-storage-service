@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.revature.chronicle.models.Media;
 import com.revature.chronicle.models.Note;
+import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
+import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.VideoService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -27,15 +31,16 @@ import java.nio.charset.StandardCharsets;
 public class FileUploadController {
 
     private final S3FileService s3FileService;
-
+    private final TagService tagService;
     private final VideoService videoService;
     private final NoteService noteService;
 
     @Autowired
-    public FileUploadController(S3FileService service, VideoService videoService, NoteService noteService) {
+    public FileUploadController(S3FileService service, VideoService videoService, NoteService noteService, TagService tagService) {
         this.s3FileService = service;
         this.videoService = videoService;
         this.noteService = noteService;
+        this.tagService = tagService;
     }
 
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -98,10 +103,38 @@ public class FileUploadController {
     public void saveToDatabase (Media media, String mediaType){
         if (mediaType.equalsIgnoreCase("note")) {
             log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
-            noteService.save((Note) media);
+            Note newNote = (Note) media;
+            List<Tag> noteTags = new ArrayList<>();
+            for (Tag tag: newNote.getTags()) {
+                Tag tempTag = new Tag();
+                tempTag.setTagID(tag.getTagID());
+                tempTag.setName(tag.getName());
+                tempTag.setValue(tag.getValue());
+                if (tag.getTagID() == 0) {
+                    tagService.save(tempTag);
+                    tempTag = tagService.findByValue(tempTag.getValue());
+                }
+                noteTags.add(tempTag);
+            }
+            newNote.setTags(noteTags);
+            noteService.save(newNote);
         } else if (mediaType.equalsIgnoreCase("video")) {
             log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
-            videoService.save((Video) media);
+            Video newVideo = (Video) media;
+            List<Tag> videoTags = new ArrayList<>();
+            for (Tag tag: newVideo.getTags()) {
+                Tag tempTag = new Tag();
+                tempTag.setTagID(tag.getTagID());
+                tempTag.setName(tag.getName());
+                tempTag.setValue(tag.getValue());
+                if (tag.getTagID() == 0) {
+                    tagService.save(tempTag);
+                    tempTag = tagService.findByValue(tempTag.getValue());
+                }
+                videoTags.add(tempTag);
+            }
+            newVideo.setTags(videoTags);
+            videoService.save(newVideo);
         }
     }
 }

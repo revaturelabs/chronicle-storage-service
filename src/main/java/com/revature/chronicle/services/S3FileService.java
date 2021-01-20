@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:aws.properties")
 public class S3FileService {
 
     private AmazonS3 s3Client;

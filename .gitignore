@@ -22,6 +22,7 @@ target/
 firebase-service-credentials.json
 !**/src/main/**/TestController/
 TestController/
+application.properties
 
 ### NetBeans ###
 /nbproject/private/
@@ -35,3 +36,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+## AWS Credentials ##
+aws.properties

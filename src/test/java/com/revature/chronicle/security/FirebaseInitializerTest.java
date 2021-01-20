@@ -26,6 +26,9 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
+/**
+ * test class for FirebaseInitializer.class
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(fullyQualifiedNames = {
         "com.google.auth.oauth2.GoogleCredentials",
@@ -41,12 +44,20 @@ public class FirebaseInitializerTest extends FirebaseInitializer {
     private FirebaseApp fireBaseAppMock;
     private GoogleCredentials googleCredentialsMock;
 
+    /**
+     * setup method that runs before each FirebaseInitializer test. creates a new FirebaseInitializer object and a
+     * new mock of the FirebaseInitializer class.
+     */
     @Before
     public void init() {
         firebaseInitializerMock = mock(FirebaseInitializer.class);
         firebaseInitializer = new FirebaseInitializer();
     }
 
+    /**
+     * tests that all of the necessary methods are called in InitializeFirebaseApp() to configure Firebase.
+     * @throws Exception
+     */
     @Test
     public void testInitializeFirebaseApp() throws Exception {
         // Initializing mocks

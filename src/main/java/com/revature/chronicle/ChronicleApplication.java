@@ -35,15 +35,16 @@ public class ChronicleApplication {
 	@Bean
 	public CommandLineRunner runner() {
 		return args -> {
+			String user = "August Duet";
 
 			Tag tag1 = new Tag();
-			tag1.setName("Technology");
+			tag1.setName("Topic");
 			tag1.setValue("Angular");
 			tagService.save(tag1);
 
 			Tag tag2 = new Tag();
-			tag2.setName("Technology");
-			tag2.setValue("Java");
+			tag2.setName("Topic");
+			tag2.setValue("Spring");
 			tagService.save(tag2);
 
 			Tag tag3 = new Tag();
@@ -51,47 +52,53 @@ public class ChronicleApplication {
 			tag3.setValue("1120-August");
 			tagService.save(tag3);
 
+			Tag tag4 = new Tag();
+			tag4.setName("Batch");
+			tag4.setValue("1020-Ben");
+			tagService.save(tag4);
+
+			Tag tag5 = new Tag();
+			tag5.setName("Topic");
+			tag5.setValue("Typescript");
+			tagService.save(tag5);
+
 			List<Tag> tags1 = new ArrayList<>();
 			tags1.add(tag1);
 			tags1.add(tag3);
+			tags1.add(tag5);
 			Video video1 = new Video();
-			video1.setUrl("http://video1.com");
-			video1.setUser("TESTUSER");
-			video1.setDescription("A description");
+			video1.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
+			video1.setTitle("Angular and TypeScript Overview");
+			video1.setUser(user);
+			video1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
 			video1.setTags(tags1);
-			System.out.println(video1.toString());
 			videoService.save(video1);
 
 			List<Tag> tags2 = new ArrayList<>();
-			tags2.add(tag1);
 			tags2.add(tag2);
+			tags2.add(tag4);
 			Video video2 = new Video();
-			video2.setUrl("http://video2.com");
-			video2.setUser("TESTUSER");
-			video2.setDescription("A description");
+			video2.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
+			video2.setUser(user);
+			video1.setTitle("Spring Boot Overview and Setup");
+			video2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
 			video2.setTags(tags2);
 			videoService.save(video2);
 
-			List<Tag> tags3 = new ArrayList<>();
-			tags3.add(tag1);
-			tags3.add(tag3);
 			Note note1 = new Note();
-			note1.setUrl("http://video1.com");
-			note1.setUser("TESTUSER");
-			note1.setDescription("A description");
-			note1.setTags(tags3);
-			System.out.println(note1.toString());
+			note1.setUrl("http://www.africau.edu/images/default/sample.pdf");
+			note1.setUser(user);
+			note1.setTitle("Angular and TypeScript Overview");
+			note1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
+			note1.setTags(tags1);
 			noteService.save(note1);
 
-			List<Tag> tags4 = new ArrayList<>();
-			tags4.add(tag1);
-			tags4.add(tag2);
 			Note note2 = new Note();
-			note2.setUrl("http://video1.com");
-			note2.setUser("TESTUSER");
-			note2.setDescription("A description");
-			note2.setTags(tags4);
-			System.out.println(note2.toString());
+			note2.setUrl("https://www.w3.org/TR/PNG/iso_8859-1.txt");
+			note2.setUser(user);
+			note2.setTitle("Spring Boot Overview and Setup");
+			note2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
+			note2.setTags(tags2);
 			noteService.save(note2);
 
 
