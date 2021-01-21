@@ -18,12 +18,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Log4j2
 @RestController
@@ -43,36 +43,48 @@ public class FileUploadController {
         this.tagService = tagService;
     }
 
-    @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
+    /**
+     * Takes in a 'json' and 'file' pair, maps them to the proper Media object before saving the 'file' to the s3 bucket and persisting the media object to the database.
+     * @param json A JSON object containing meta data for the file
+     * @param file The multipart file to be saved to the s3 bucket using S3FileService
+     * @return An HTTP Status code whether the media sent back is of the proper type or not
+     * @throws IOException
+     */
+    @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> uploadFile(@RequestParam("json") String json,
                                              @RequestParam("file") MultipartFile file) throws IOException {
         String content = new String(file.getBytes(), StandardCharsets.UTF_8);
         log.info("Processing the following file data:" + content);
 
+        ObjectMapper mapper = new ObjectMapper();
+        //HTTP Response to send back
+        String responseBody = "Successfully uploaded file!";
+
+        //File to upload to S3 and save to database
         Media newFile = null;
         String fileType = "";
 
         //Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
         try {
-            if (file.getContentType().contains("text") || file.getContentType().contains("pdf")) {
-                newFile = new ObjectMapper().readValue(json, Note.class);
+            if (Objects.requireNonNull(file.getContentType()).contains("text") || file.getContentType().contains("pdf")) {
+                newFile = mapper.readValue(json, Note.class);
                 fileType = "note";
             } else if (file.getContentType().contains("video")) {
-                newFile = new ObjectMapper().readValue(json, Video.class);
+                newFile = mapper.readValue(json, Video.class);
                 fileType = "video";
             } else {
-                return new ResponseEntity<>("Unsupported file type. Please upload either a video or a text file.", HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+                responseBody = "Unsupported file type. Please upload either a video or a text file.";
+                return new ResponseEntity<>(mapper.writeValueAsString(responseBody), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
             log.info(fileType.toUpperCase() + ": " + newFile.toString());
 
         } catch (MismatchedInputException e) {
             log.warn(e.getMessage());
         }
+        File compiledFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
+        compiledFile.deleteOnExit();
 
-            File compiledFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
-            compiledFile.deleteOnExit();
-
+        //Save file to S3 bucket and persist newFile object to the database
         try {
             file.transferTo(compiledFile.getAbsoluteFile());
             log.debug(compiledFile);
@@ -96,45 +108,44 @@ public class FileUploadController {
             e.printStackTrace();
             log.error("Service was interrupted!");
         } finally {
-            compiledFile.delete();
+            if(compiledFile.delete())
+                log.info("Temporary compiled file successfully deleted.");
         }
-        return new ResponseEntity<>("Upload Successful", HttpStatus.OK);
+        return new ResponseEntity<>(mapper.writeValueAsString(responseBody), HttpStatus.OK);
     }
-    public void saveToDatabase (Media media, String mediaType){
+
+    /**
+     * Ensures the media file gets saved to the proper database
+     * @param media The file being saved to the Notes or Videos database
+     * @param mediaType A string representation of the media type for the conditional statement
+     */
+    private void saveToDatabase (Media media, String mediaType){
+        log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getTitle() + " to the database!");
+        media.setTags(configureTags(media.getTags()));
         if (mediaType.equalsIgnoreCase("note")) {
-            log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
-            Note newNote = (Note) media;
-            List<Tag> noteTags = new ArrayList<>();
-            for (Tag tag: newNote.getTags()) {
-                Tag tempTag = new Tag();
-                tempTag.setTagID(tag.getTagID());
-                tempTag.setName(tag.getName());
-                tempTag.setValue(tag.getValue());
-                if (tag.getTagID() == 0) {
-                    tagService.save(tempTag);
-                    tempTag = tagService.findByValue(tempTag.getValue());
-                }
-                noteTags.add(tempTag);
-            }
-            newNote.setTags(noteTags);
-            noteService.save(newNote);
+            noteService.save((Note)media);
         } else if (mediaType.equalsIgnoreCase("video")) {
-            log.info("Saving the " + mediaType.toUpperCase() + ": " + media.getDescription() + " to the database!");
-            Video newVideo = (Video) media;
-            List<Tag> videoTags = new ArrayList<>();
-            for (Tag tag: newVideo.getTags()) {
-                Tag tempTag = new Tag();
-                tempTag.setTagID(tag.getTagID());
-                tempTag.setName(tag.getName());
-                tempTag.setValue(tag.getValue());
-                if (tag.getTagID() == 0) {
-                    tagService.save(tempTag);
-                    tempTag = tagService.findByValue(tempTag.getValue());
-                }
-                videoTags.add(tempTag);
-            }
-            newVideo.setTags(videoTags);
-            videoService.save(newVideo);
+            videoService.save((Video)media);
         }
+    }
+    /**
+     * Persists tags to the database and ensures no duplicates
+     * @param tags A list of tags to be compared to the Tags table
+     * @return A list of properly configured tags
+     */
+    private List<Tag> configureTags(List<Tag> tags) {
+        List<Tag> configuredTags = new ArrayList<>();
+        for (Tag tag: tags) {
+            Tag tempTag = new Tag();
+            tempTag.setTagID(tag.getTagID());
+            tempTag.setName(tag.getName());
+            tempTag.setValue(tag.getValue());
+            if (tag.getTagID() == 0) {
+                tagService.save(tempTag);
+                tempTag = tagService.findByValue(tempTag.getValue());
+            }
+            configuredTags.add(tempTag);
+        }
+        return configuredTags;
     }
 }

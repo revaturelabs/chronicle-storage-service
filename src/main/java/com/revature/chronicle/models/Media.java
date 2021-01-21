@@ -2,7 +2,6 @@ package com.revature.chronicle.models;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public abstract class Media {
 
@@ -14,6 +13,9 @@ public abstract class Media {
 
     public abstract String getDescription();
     public abstract void setDescription(String description);
+
+    public abstract String getTitle();
+    public abstract void setTitle(String title);
 
     public abstract Date getDate();
     public abstract void setDate(Date date);

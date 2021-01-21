@@ -1,11 +1,8 @@
 package com.revature.chronicle.daos;
 
 import com.revature.chronicle.models.Note;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
