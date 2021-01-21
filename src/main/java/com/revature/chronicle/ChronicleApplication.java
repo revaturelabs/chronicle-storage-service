@@ -2,7 +2,6 @@ package com.revature.chronicle;
 
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.TagService;

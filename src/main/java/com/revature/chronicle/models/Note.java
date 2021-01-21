@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * A note uploaded by a user. Can be any file type
