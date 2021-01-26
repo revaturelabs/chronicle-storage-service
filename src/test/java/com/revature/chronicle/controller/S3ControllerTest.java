@@ -208,6 +208,6 @@ public class S3ControllerTest {
 				.andDo(print());
 
 		//then stating what is expected as a response from the servlet
-		result.andExpect(content().string("Unsupported file type. Please upload either a video or a text file."));
+		result.andExpect(status().isUnsupportedMediaType());
 	}
 }
