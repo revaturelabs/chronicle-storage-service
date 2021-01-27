@@ -79,7 +79,7 @@ public class ChronicleApplication {
 			Video video2 = new Video();
 			video2.setUrl("https://chronicle-p3.s3.amazonaws.com/sample-mp4-file.mp4");
 			video2.setUser(user);
-			video1.setTitle("Spring Boot Overview and Setup");
+			video2.setTitle("Spring Boot Overview and Setup");
 			video2.setDescription("Setup a basic Spring Boot web application with rest-controllers and H2 database. Demonstrated Spring Data capabilities via api calls to controller methods");
 			video2.setTags(tags2);
 			videoService.save(video2);

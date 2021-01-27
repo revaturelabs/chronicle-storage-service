@@ -50,7 +50,7 @@ public class FileUploadController {
      * @return An HTTP Status code whether the media sent back is of the proper type or not
      * @throws IOException
      */
-    @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> uploadFile(@RequestParam("json") String json,
                                              @RequestParam("file") MultipartFile file) throws IOException {
         String content = new String(file.getBytes(), StandardCharsets.UTF_8);
@@ -95,8 +95,8 @@ public class FileUploadController {
             //Insert s3URL and json form data into the database
             if (newFile != null) {
                 newFile.setUrl(s3URL);
+                saveToDatabase(newFile, fileType);
             }
-            saveToDatabase(newFile, fileType);
 
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
