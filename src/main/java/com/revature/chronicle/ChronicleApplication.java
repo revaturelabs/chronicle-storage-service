@@ -37,27 +37,27 @@ public class ChronicleApplication {
 			String user = "August Duet";
 
 			Tag tag1 = new Tag();
-			tag1.setName("Topic");
+			tag1.setType("Topic");
 			tag1.setValue("Angular");
 			tagService.save(tag1);
 
 			Tag tag2 = new Tag();
-			tag2.setName("Topic");
+			tag2.setType("Topic");
 			tag2.setValue("Spring");
 			tagService.save(tag2);
 
 			Tag tag3 = new Tag();
-			tag3.setName("Batch");
+			tag3.setType("Batch");
 			tag3.setValue("1120-August");
 			tagService.save(tag3);
 
 			Tag tag4 = new Tag();
-			tag4.setName("Batch");
+			tag4.setType("Batch");
 			tag4.setValue("1020-Ben");
 			tagService.save(tag4);
 
 			Tag tag5 = new Tag();
-			tag5.setName("Topic");
+			tag5.setType("Topic");
 			tag5.setValue("Typescript");
 			tagService.save(tag5);
 

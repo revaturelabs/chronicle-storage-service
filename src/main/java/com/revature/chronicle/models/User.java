@@ -10,8 +10,6 @@ import javax.persistence.*;
  * Represents a user of Chronicle
  * -NOTE- may change depending on progress
  */
-@Deprecated
-
 @Entity
 @Table(name="user")
 @Data
@@ -20,10 +18,9 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
+    @Column(name = "user_id", unique = true)
+    private String userID;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "admin")
+    private boolean admin;
 }
