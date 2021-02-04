@@ -25,20 +25,20 @@ public class Video extends Media{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "url")
+    @Column(name = "url", nullable = false)
     private String url;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     @CreationTimestamp
     private Date date;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String user;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -46,8 +46,19 @@ public class Video extends Media{
             joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     private List<Tag> tags;
+    
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+//    @JoinTable(name = "video_user",
+//            joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id", columnDefinition = "STRING"))
+//    private List<User> users;
+//    
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name="whitelist_id", referencedColumnName = "whitelist_id", nullable = false)
+//    private Whitelist whitelist;
 
     public Video(String description, Date date, String user, List<Tag> tags) {
+    	super();
         this.description = description;
         this.date = date;
         this.user = user;

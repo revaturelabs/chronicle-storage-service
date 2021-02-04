@@ -65,21 +65,20 @@ public class VideoControllerTests {
 		mockSingleTag = new ArrayList<>();
 
 		User user = new User();
-		user.setUsername("TESTUSER");
 
 		Tag tag1 = new Tag();
 		tag1.setTagID(1);
-		tag1.setName("Technology");
+		tag1.setType("Technology");
 		tag1.setValue("Angular");
 
 		Tag tag2 = new Tag();
 		tag2.setTagID(2);
-		tag2.setName("Technology");
+		tag2.setType("Technology");
 		tag2.setValue("Java");
 
 		Tag tag3 = new Tag();
 		tag3.setTagID(3);
-		tag3.setName("Batch");
+		tag3.setType("Batch");
 		tag3.setValue("1120-August");
 
 		List<Tag> tags1 = new ArrayList<>();
@@ -88,7 +87,6 @@ public class VideoControllerTests {
 
 		Video video1 = new Video();
 		video1.setUrl("http://video1.com/%22");
-		video1.setUser(user.getUsername());
 		video1.setDescription("A description");
 		video1.setTags(tags1);
 		video1.setId(1);
@@ -100,7 +98,6 @@ public class VideoControllerTests {
 
 		Video video2 = new Video();
 		video2.setUrl("http://video2.com/%22");
-		video2.setUser(user.getUsername());
 		video2.setDescription("A description");
 		video2.setTags(tags2);
 		video2.setId(2);

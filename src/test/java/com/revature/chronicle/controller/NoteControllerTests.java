@@ -65,21 +65,20 @@ public class NoteControllerTests {
         mockSingleTag = new ArrayList<>();
 
         User user = new User();
-        user.setUsername("TESTUSER");
 
         Tag tag1 = new Tag();
         tag1.setTagID(1);
-        tag1.setName("Technology");
+        tag1.setType("Technology");
         tag1.setValue("Angular");
 
         Tag tag2 = new Tag();
         tag2.setTagID(2);
-        tag2.setName("Technology");
+        tag2.setType("Technology");
         tag2.setValue("Java");
 
         Tag tag3 = new Tag();
         tag3.setTagID(3);
-        tag3.setName("Batch");
+        tag3.setType("Batch");
         tag3.setValue("1120-August");
 
         List<Tag> tags1 = new ArrayList<>();
@@ -89,7 +88,6 @@ public class NoteControllerTests {
         Note note1 = new Note();
         note1.setId(1);
         note1.setUrl("http://note1.com/%22");
-        note1.setUser(user.getUsername());
         note1.setDescription("A description");
         note1.setTags(tags1);
         mockNote = note1;
@@ -101,7 +99,6 @@ public class NoteControllerTests {
         Note note2 = new Note();
         note2.setId(2);
         note2.setUrl("http://note2.com/%22");
-        note2.setUser(user.getUsername());
         note2.setDescription("A description");
         note2.setTags(tags2);
 

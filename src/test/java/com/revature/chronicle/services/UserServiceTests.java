@@ -27,20 +27,10 @@ public class UserServiceTests {
     @Test
     public void saveAUser(){
         User newUser = new User();
-        newUser.setUsername("username123");
 
         service.save(newUser);
 
         verify(repo).save(newUser);
     }
 
-    @Test
-    public void returnUserByUsername(){
-        when(repo.findByUsername("foundme123")).thenReturn(new User(1, "foundme123"));
-
-        User user = service.findByUsername("foundme123");
-
-        Assert.assertEquals("foundme123",user.getUsername());
-        Assert.assertEquals(1,user.getUserID());
-    }
 }

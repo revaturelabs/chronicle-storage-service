@@ -138,7 +138,7 @@ public class FileUploadController {
         for (Tag tag: tags) {
             Tag tempTag = new Tag();
             tempTag.setTagID(tag.getTagID());
-            tempTag.setName(tag.getName());
+            tempTag.setType(tag.getType());
             tempTag.setValue(tag.getValue());
             if (tag.getTagID() == 0) {
                 tagService.save(tempTag);

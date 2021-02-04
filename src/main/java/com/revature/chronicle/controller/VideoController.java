@@ -58,7 +58,7 @@ public class VideoController {
             Tag tempTag = new Tag();
             String[] tagComponents = tag.split(":");
             tempTag.setTagID(Integer.parseInt(tagComponents[0]));
-            tempTag.setName(tagComponents[1]);
+            tempTag.setType(tagComponents[1]);
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
@@ -94,7 +94,7 @@ public class VideoController {
         tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all video tags with keys: " + tagNames +" ...");
-        List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
+        List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
 
