@@ -17,19 +17,18 @@ import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.TagService;
+
 import com.revature.chronicle.services.VideoService;
 
 
 @SpringBootApplication
 public class ChronicleApplication extends SpringBootServletInitializer{
-	
 	@Autowired
 	public TagService tagService;
 	@Autowired
 	public VideoService videoService;
 	@Autowired
 	public NoteService noteService;
-
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder){
