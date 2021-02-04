@@ -1,5 +1,16 @@
 package com.revature.chronicle;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
@@ -7,17 +18,10 @@ import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.UserService;
 import com.revature.chronicle.services.VideoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.util.*;
 
 
 @SpringBootApplication
-public class ChronicleApplication {
+public class ChronicleApplication extends SpringBootServletInitializer {
 	@Autowired
 	public UserService userService;
 	@Autowired
@@ -26,6 +30,11 @@ public class ChronicleApplication {
 	public VideoService videoService;
 	@Autowired
 	public NoteService noteService;
+	
+	@Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder){
+        return springApplicationBuilder.sources(ChronicleApplication.class);
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(ChronicleApplication.class, args);
