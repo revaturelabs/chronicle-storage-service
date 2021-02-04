@@ -39,39 +39,35 @@ public class VideoController {
 		this.videoRepo = vr;
 	}
 
-	/**
-	 * returns a list of <code>Video</code> objects in the response body, determined
-	 * by the tags specified in the URI path in the form 'TagID:TagKey:TagValue',
-	 * separating multiple tags by the '+' character. The handler method is mapped
-	 * to the path '/videos/tags/{videoTags}' and produces media of type
-	 * application-json. The method formats the passed path variables into
-	 * <code>Tag</code> objects and passes this formatted list into the
-	 * <code>VideoService</code> <code>findAllVideosByTags</code> method. The
-	 * returned list of <code>Video</code> objects is returned int the response body
-	 * with an HTTP status code of 200.
-	 *
-	 * @param crudeTags URI path variable in the form 'TagID:TagKey:TagValue'
-	 * @return list of <code>Video</code> objects
-	 */
-	// Can convert the path variable formatting clause into a service method which
-	// can be called in both controllers to reduce clutter
-	@GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name = "videoTags") String crudeTags) {
-		logger.info("Received request for videos with tags: " + crudeTags);
-		String[] arrTags = crudeTags.split("\\+");
-		List<Tag> targetTags = new ArrayList<>();
-		for (String tag : arrTags) {
-			Tag tempTag = new Tag();
-			String[] tagComponents = tag.split(":");
-			tempTag.setTagID(Integer.parseInt(tagComponents[0]));
-			tempTag.setName(tagComponents[1]);
-			tempTag.setValue(tagComponents[2]);
-			targetTags.add(tempTag);
-		}
-		logger.info("Retrieving target videos...");
-		List<Video> targetVideos = videoService.findAllVideosByTags(targetTags);
-		return new ResponseEntity<>(targetVideos, HttpStatus.OK);
-	}
+    /**
+     * returns a list of <code>Video</code> objects in the response body, determined by the tags specified in the URI
+     * path in the form 'TagID:TagKey:TagValue', separating multiple tags by the '+' character. The handler method is
+     * mapped to the path '/videos/tags/{videoTags}' and produces media of type application-json. The method formats the
+     * passed path variables into <code>Tag</code> objects and passes this formatted list into the <code>VideoService</code>
+     * <code>findAllVideosByTags</code> method. The returned list of <code>Video</code> objects is returned int the
+     * response body with an HTTP status code of 200.
+     *
+     * @param crudeTags URI path variable in the form 'TagID:TagKey:TagValue'
+     * @return list of <code>Video</code> objects
+     */
+    // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
+    @GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name="videoTags") String crudeTags){
+        logger.info("Received request for videos with tags: " + crudeTags);
+        String[] arrTags = crudeTags.split("\\+");
+        List<Tag> targetTags = new ArrayList<>();
+        for (String tag: arrTags) {
+            Tag tempTag = new Tag();
+            String[] tagComponents = tag.split(":");
+            tempTag.setTagID(Integer.parseInt(tagComponents[0]));
+            tempTag.setType(tagComponents[1]);
+            tempTag.setValue(tagComponents[2]);
+            targetTags.add(tempTag);
+        }
+        logger.info("Retrieving target videos...");
+        List <Video> targetVideos = videoService.findAllVideosByTags(targetTags);
+        return new ResponseEntity<>(targetVideos, HttpStatus.OK);
+    }
 
 	/**
 	 * returns a list of all <code>Video</code> objects in the database in the
@@ -89,25 +85,22 @@ public class VideoController {
 		return new ResponseEntity<>(targetVideos, HttpStatus.OK);
 	}
 
-	/**
-	 * returns a list of all <code>Tag</code> objects in the database linked to a
-	 * <code>Video</code> in the response body. The handler method is mapped to the
-	 * URI '/videos/available-tags/' and produces media type of application-json.
-	 * The handler retrieves the list through the <code>TagRepo</code>
-	 * <code>findByNameIn</code> method. The tag keys are determined by a list
-	 * tagNames which cn be updated based on what keys exist in the database.
-	 * 
-	 * @return list of all <code>Video</code> objects
-	 */
-	@GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Tag>> getAllVideoTags() {
-		List<String> tagNames = new ArrayList<>();
-		tagNames.add("Topic");
-		tagNames.add("Batch");
-		logger.info("Retrieving all video tags with keys: " + tagNames + " ...");
-		List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
-		return new ResponseEntity<>(availableTags, HttpStatus.OK);
-	}
+    /**
+     * returns a list of all <code>Tag</code> objects in the database linked to a <code>Video</code> in the response
+     * body. The handler method is mapped to the URI '/videos/available-tags/' and produces media type of application-json.
+     * The handler retrieves the list through the <code>TagRepo</code> <code>findByNameIn</code> method. The tag keys are
+     * determined by a list tagNames which cn be updated based on what keys exist in the database.
+     * @return list of all <code>Video</code> objects
+     */
+    @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Tag>> getAllVideoTags() {
+        List<String> tagNames = new ArrayList<>();
+        tagNames.add("Topic");
+        tagNames.add("Batch");
+        logger.info("Retrieving all video tags with keys: " + tagNames +" ...");
+        List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
+        return new ResponseEntity<>(availableTags, HttpStatus.OK);
+    }
 
 	/**
 	 * returns a <code>Video</code> object in the response body, determined by the
