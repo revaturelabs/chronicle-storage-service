@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/notes")
 public class NoteController {
 
@@ -50,7 +50,6 @@ public class NoteController {
      * @return list of <code>Note</code> objects
      */
     // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "tags/{noteTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getNotesByTag(@PathVariable(name="noteTags") String crudeTags){
         logger.info("Received request for notes with tags: " + crudeTags);
@@ -75,7 +74,6 @@ public class NoteController {
      * the <code>NoteService</code> <code>findAll</code> method.
      * @return list of all <code>Note</code> objects
      */
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getAllNotes() {
         logger.info("Retrieving all notes...");
@@ -90,7 +88,6 @@ public class NoteController {
      * determined by a list tagNames which cn be updated based on what keys exist in the database.
      * @return list of all <code>Note</code> objects
      */
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tag>> getAllNoteTags() {
         List<String> tagNames = new ArrayList<>();
@@ -110,7 +107,6 @@ public class NoteController {
      * @param id target <code>Note</code>'s ID
      * @return target <code>Note</code> object
      */
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
         logger.info("Retrieving target note with ID: " + id + " ...");

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/videos")
 public class VideoController {
 
@@ -50,7 +50,6 @@ public class VideoController {
      * @return list of <code>Video</code> objects
      */
     // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name="videoTags") String crudeTags){
         logger.info("Received request for videos with tags: " + crudeTags);
@@ -76,7 +75,6 @@ public class VideoController {
      * @return list of all <code>Video</code> objects
      */
     //future iterations can add pagination to backend or front end
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getAllVideos() {
         logger.info("Retrieving all videos...");
@@ -91,7 +89,6 @@ public class VideoController {
      * determined by a list tagNames which cn be updated based on what keys exist in the database.
      * @return list of all <code>Video</code> objects
      */
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tag>> getAllVideoTags() {
         List<String> tagNames = new ArrayList<>();
@@ -110,7 +107,6 @@ public class VideoController {
      * @param id target <code>Video</code>'s ID
      * @return target <code>Video</code> object
      */
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Video> getVideoById(@PathVariable(name="videoId") int id) {
         logger.info("Retrieving target video with ID: " + id + " ...");

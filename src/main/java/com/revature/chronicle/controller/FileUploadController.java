@@ -27,7 +27,7 @@ import java.util.Objects;
 
 @Log4j2
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path="/file", method = {RequestMethod.GET, RequestMethod.POST})
 public class FileUploadController {
 
@@ -51,7 +51,6 @@ public class FileUploadController {
      * @return An HTTP Status code whether the media sent back is of the proper type or not
      * @throws IOException
      */
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> uploadFile(@RequestParam("json") String json,
                                              @RequestParam("file") MultipartFile file) throws IOException {
