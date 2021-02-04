@@ -93,7 +93,7 @@ public class NoteController {
         tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all note tags with keys: " + tagNames +" ...");
-        List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
+        List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
         logger.info("Tags retrieved: " + availableTags);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }

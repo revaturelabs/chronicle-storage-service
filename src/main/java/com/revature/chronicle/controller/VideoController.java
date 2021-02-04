@@ -94,7 +94,7 @@ public class VideoController {
         tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all video tags with keys: " + tagNames +" ...");
-        List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
+        List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
 
