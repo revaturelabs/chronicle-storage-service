@@ -13,29 +13,28 @@ import org.springframework.context.annotation.Bean;
 
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.TagService;
-import com.revature.chronicle.services.UserService;
+
 import com.revature.chronicle.services.VideoService;
 
 
 @SpringBootApplication
-public class ChronicleApplication extends SpringBootServletInitializer {
-	@Autowired
-	public UserService userService;
+public class ChronicleApplication extends SpringBootServletInitializer{
 	@Autowired
 	public TagService tagService;
 	@Autowired
 	public VideoService videoService;
 	@Autowired
 	public NoteService noteService;
-	
-	@Override
+
+    @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder){
         return springApplicationBuilder.sources(ChronicleApplication.class);
     }
-
+    
 	public static void main(String[] args) {
 		SpringApplication.run(ChronicleApplication.class, args);
 	}
@@ -46,27 +45,27 @@ public class ChronicleApplication extends SpringBootServletInitializer {
 			String user = "August Duet";
 
 			Tag tag1 = new Tag();
-			tag1.setName("Topic");
+			tag1.setType("Topic");
 			tag1.setValue("Angular");
 			tagService.save(tag1);
 
 			Tag tag2 = new Tag();
-			tag2.setName("Topic");
+			tag2.setType("Topic");
 			tag2.setValue("Spring");
 			tagService.save(tag2);
 
 			Tag tag3 = new Tag();
-			tag3.setName("Batch");
+			tag3.setType("Batch");
 			tag3.setValue("1120-August");
 			tagService.save(tag3);
 
 			Tag tag4 = new Tag();
-			tag4.setName("Batch");
+			tag4.setType("Batch");
 			tag4.setValue("1020-Ben");
 			tagService.save(tag4);
 
 			Tag tag5 = new Tag();
-			tag5.setName("Topic");
+			tag5.setType("Topic");
 			tag5.setValue("Typescript");
 			tagService.save(tag5);
 

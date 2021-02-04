@@ -21,14 +21,14 @@ public class Tag {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int tagID;
 
-    @Column(name="name")
-    private String name;
+    @Column(name="type")
+    private String type;
 
     @Column(name = "value")
     private String value;
 
-    public Tag(String name, String value) {
-        this.name = name;
+    public Tag(String type, String value) {
+        this.type = type;
         this.value = value;
     }
 }

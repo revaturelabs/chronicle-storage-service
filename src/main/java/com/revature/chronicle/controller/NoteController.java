@@ -58,7 +58,7 @@ public class NoteController {
             Tag tempTag = new Tag();
             String[] tagComponents = tag.split(":");
             tempTag.setTagID(Integer.parseInt(tagComponents[0]));
-            tempTag.setName(tagComponents[1]);
+            tempTag.setType(tagComponents[1]);
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
