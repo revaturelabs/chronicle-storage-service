@@ -1,25 +1,28 @@
 package com.revature.chronicle;
 
-import com.revature.chronicle.models.Note;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.Video;
-import com.revature.chronicle.services.NoteService;
-import com.revature.chronicle.services.TagService;
-import com.revature.chronicle.services.UserService;
-import com.revature.chronicle.services.VideoService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-import java.util.*;
+import com.revature.chronicle.models.Note;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.NoteService;
+import com.revature.chronicle.services.TagService;
+import com.revature.chronicle.services.VideoService;
 
 
 @SpringBootApplication
-public class ChronicleApplication {
-	@Autowired
-	public UserService userService;
+public class ChronicleApplication extends SpringBootServletInitializer{
+	
 	@Autowired
 	public TagService tagService;
 	@Autowired
@@ -27,6 +30,12 @@ public class ChronicleApplication {
 	@Autowired
 	public NoteService noteService;
 
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder){
+        return springApplicationBuilder.sources(ChronicleApplication.class);
+    }
+    
 	public static void main(String[] args) {
 		SpringApplication.run(ChronicleApplication.class, args);
 	}

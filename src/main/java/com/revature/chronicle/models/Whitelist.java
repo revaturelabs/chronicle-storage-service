@@ -20,8 +20,8 @@ public class Whitelist {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int whitelist_id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="user_id", referencedColumnName = "user_id", nullable = false)
-	private List<User> users;
+//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JoinColumn(name="user_id", referencedColumnName = "userID", nullable = false)
+//	private List<User> users;
 	
 }
