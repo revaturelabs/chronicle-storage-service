@@ -1,5 +1,6 @@
 package com.revature.chronicle.security;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -44,7 +45,8 @@ public class FirebaseInitializer {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(
                             GoogleCredentials.fromStream(
-                                    returnResourceAsStream("/firebase-service-credentials.json")
+                                    new FileInputStream(System.getenv("FIREBASE_ACCOUNT"))
+                            		//returnResourceAsStream("/firebase-service-credentials.json")
                             )
                     )
                     .build();
