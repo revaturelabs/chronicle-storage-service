@@ -84,28 +84,6 @@ public class NoteController {
 		return new ResponseEntity<>(targetNotes, HttpStatus.OK);
 	}
 
-<<<<<<< HEAD
-	/**
-	 * returns a list of all <code>Tag</code> objects in the database linked to a
-	 * <code>Note</code> in the response body. The handler method is mapped to the
-	 * URI '/notes/available-tags/' and produces media type of application-json. The
-	 * handler retrieves the list through the <code>TagRepo</code>
-	 * <code>findByNameIn</code> method. The tag keys are determined by a list
-	 * tagNames which cn be updated based on what keys exist in the database.
-	 * 
-	 * @return list of all <code>Note</code> objects
-	 */
-	@GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Tag>> getAllNoteTags() {
-		List<String> tagNames = new ArrayList<>();
-		tagNames.add("Topic");
-		tagNames.add("Batch");
-		logger.info("Retrieving all note tags with keys: " + tagNames + " ...");
-		List<Tag> availableTags = tagRepo.findByNameIn(tagNames);
-		logger.info("Tags retrieved: " + availableTags);
-		return new ResponseEntity<>(availableTags, HttpStatus.OK);
-	}
-=======
     /**
      * returns a list of all <code>Tag</code> objects in the database linked to a <code>Note</code> in the response
      * body. The handler method is mapped to the URI '/notes/available-tags/' and produces media type of application-json.
@@ -123,7 +101,6 @@ public class NoteController {
         logger.info("Tags retrieved: " + availableTags);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
->>>>>>> cc1b448bc4ef456081e32925f7005aa437884bf7
 
 	/**
 	 * returns a <code>Note</code> object in the response body, determined by the
