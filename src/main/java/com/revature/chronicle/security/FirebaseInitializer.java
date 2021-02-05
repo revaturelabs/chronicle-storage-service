@@ -64,7 +64,7 @@ public class FirebaseInitializer {
             roles.add("ROLE_ADMIN");
             roles.add("ROLE_USER");
             claims.put("role", roles);
-            FirebaseAuth.getInstance().setCustomUserClaims("cFXnDSjVqjWuYpxaj5a1sIknG5j1", claims);
+//            FirebaseAuth.getInstance().setCustomUserClaims("", claims); // insert a valid userId within the double quotes
             ListUsersPage page = FirebaseAuth.getInstance().listUsers(null);
             while (page != null) {
             	for (ExportedUserRecord user : page.getValues()) {
