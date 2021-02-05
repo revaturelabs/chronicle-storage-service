@@ -44,7 +44,7 @@ public class FirebaseInitializer {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(
                             GoogleCredentials.fromStream(
-                                    returnResourceAsStream("firebase-service-credentials.json")
+                                    returnResourceAsStream("/firebase-service-credentials.json")
                             )
                     )
                     .build();
