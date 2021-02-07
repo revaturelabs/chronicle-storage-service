@@ -14,5 +14,7 @@ import lombok.NoArgsConstructor;
 public class User {
     private String userID;
 
-    private boolean admin;
+    private String name;
+    
+    private String email;
 }
