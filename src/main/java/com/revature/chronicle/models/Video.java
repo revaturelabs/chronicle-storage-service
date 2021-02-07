@@ -47,15 +47,11 @@ public class Video extends Media{
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     private List<Tag> tags;
     
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-//    @JoinTable(name = "video_user",
-//            joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id", columnDefinition = "STRING"))
-//    private List<User> users;
-//    
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name="whitelist_id", referencedColumnName = "whitelist_id", nullable = false)
-//    private Whitelist whitelist;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "video_whitelist",
+    			joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
+    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    private List<User> whitelist;
 
     public Video(String description, Date date, String user, List<Tag> tags) {
     	super();
