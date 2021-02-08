@@ -51,11 +51,15 @@ public class Note extends Media{
     			joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
     			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private List<User> whitelist;
+    
+    @Column(name = "private", nullable = false)
+    private boolean isPrivate;
 
-    public Note(String description, Date date, String user, List<Tag> tags) {
+    public Note(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
     	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.isPrivate = isPrivate;
     }
 }

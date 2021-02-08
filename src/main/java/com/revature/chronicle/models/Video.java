@@ -52,11 +52,15 @@ public class Video extends Media{
     			joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
     			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private List<User> whitelist;
+    
+    @Column(name = "private", nullable = false)
+    private boolean isPrivate;
 
-    public Video(String description, Date date, String user, List<Tag> tags) {
+    public Video(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
     	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.isPrivate = isPrivate;
     }
 }
