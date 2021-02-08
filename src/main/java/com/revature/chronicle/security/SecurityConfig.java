@@ -39,10 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/*")
-                        .authenticated()
+                        .permitAll()
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
+        
+        http.headers().frameOptions().disable();
     }
 
     /**
