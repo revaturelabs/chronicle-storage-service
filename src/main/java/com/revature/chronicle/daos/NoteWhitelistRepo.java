@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.revature.chronicle.models.Video;
 
-public interface NoteWhitelist {
+public interface NoteWhitelistRepo {
 	public static final String ADD_USER = "INSERT INTO note_whitelist VALUES ? ?";
 	public static final String GET_USERS = "SELECT * FROM note_whitelist WHERE note_id = ?";
 	
