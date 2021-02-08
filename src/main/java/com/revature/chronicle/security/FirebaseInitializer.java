@@ -17,6 +17,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.ExportedUserRecord;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.ListUsersPage;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,8 +55,8 @@ public class FirebaseInitializer {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(
                             GoogleCredentials.fromStream(
-                                    new FileInputStream(System.getenv("FIREBASE_ACCOUNT"))
-                            		//returnResourceAsStream("/firebase-service-credentials.json")
+                                    //new FileInputStream(System.getenv("FIREBASE_ACCOUNT"))
+                            		returnResourceAsStream("/firebase-service-credentials.json")
                             )
                     )
                     .build();
