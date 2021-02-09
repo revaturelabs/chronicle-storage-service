@@ -1,10 +1,9 @@
 package com.revature.chronicle.controller;
 
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.daos.VideoRepo;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.Video;
-import com.revature.chronicle.services.VideoService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +12,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.chronicle.daos.TagRepo;
+import com.revature.chronicle.daos.VideoRepo;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.VideoService;
+import com.revature.chronicle.services.VideoWhitelistService;
 
 @RestController
 @RequestMapping(path = "/videos")
@@ -27,12 +36,14 @@ public class VideoController {
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
     private final VideoService videoService;
+    private final VideoWhitelistService videoWhitelistService;
     private final TagRepo tagRepo;
     private final VideoRepo videoRepo;
 
-    @Autowired
-    public VideoController (VideoService vs, TagRepo tr, VideoRepo vr) {
+    @Autowired	
+    public VideoController (VideoService vs, VideoWhitelistService vws, TagRepo tr, VideoRepo vr) {
         this.videoService = vs;
+        this.videoWhitelistService = vws;
         this.tagRepo = tr;
         this.videoRepo = vr;
     }
@@ -111,5 +122,23 @@ public class VideoController {
         logger.info("Retrieving target video with ID: " + id + " ...");
         Optional<Video> targetVideo = videoService.findById(id);
         return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+    
+    @PostMapping(path = "{videoId}/whitelist/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addToWhitelist(@PathVariable(name="videoId") int id, @RequestParam("json") String json) throws JsonMappingException, JsonProcessingException {
+    	ObjectMapper mapper = new ObjectMapper();
+    	List<User> userList = mapper.readValue(json, new TypeReference<List<User>>(){});
+    	Optional<Video> targetVideo = videoService.findById(id);
+    	targetVideo.ifPresent(video ->
+    		videoWhitelistService.addUserToWhitelist((Video)video, userList)
+    	);
+    	String response = "";
+    	if(targetVideo.isPresent()) {
+    		response = "Successfully retrieved and added to the video.";
+    	} else {
+    		response = "Error, invalid note";
+    		return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.BAD_REQUEST);
+    	}
+    	return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.OK);
     }
 }

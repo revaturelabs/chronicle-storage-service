@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,12 +56,23 @@ public class Note extends Media{
     
     @Column(name = "private", nullable = false)
     private boolean isPrivate;
+    
 
     public Note(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
     	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.whitelist = new ArrayList<>();
+        this.isPrivate = isPrivate;
+    }
+    
+    public Note(String description, Date date, String user, List<Tag> tags, boolean isPrivate, List<User> users) {
+    	super();
+        this.description = description;
+        this.date = date;
+        this.user = user;
+        this.whitelist = users;
         this.isPrivate = isPrivate;
     }
 }

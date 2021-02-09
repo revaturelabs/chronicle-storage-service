@@ -1,10 +1,10 @@
 package com.revature.chronicle.controller;
 
-import com.revature.chronicle.daos.NoteRepo;
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.models.Note;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.services.NoteService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +13,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.chronicle.daos.NoteRepo;
+import com.revature.chronicle.daos.TagRepo;
+import com.revature.chronicle.models.Note;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.services.NoteService;
+import com.revature.chronicle.services.NoteWhitelistService;
 
 @RestController
 @RequestMapping(path = "/notes")
@@ -27,13 +37,13 @@ public class NoteController {
     private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
     private final NoteService noteService;
-    private final NoteRepo noteRepo;
+    private final NoteWhitelistService noteWhitelistService;
     private final TagRepo tagRepo;
 
     @Autowired
-    public NoteController (NoteService ns, NoteRepo nr, TagRepo tr) {
+    public NoteController (NoteService ns, NoteWhitelistService nws, NoteRepo nr, TagRepo tr) {
         this.noteService = ns;
-        this.noteRepo = nr;
+        this.noteWhitelistService = nws;
         this.tagRepo = tr;
     }
 
@@ -112,4 +122,29 @@ public class NoteController {
         Optional<Note> targetNote = noteService.findById(id);
         return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+    
+    //Verify User Authorization
+    @PostMapping(path = "/whitelist/add/{noteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addToWhitelist(@PathVariable(name="noteId") int id, @RequestParam("json") String json) throws JsonMappingException, JsonProcessingException {
+    	ObjectMapper mapper = new ObjectMapper();
+    	List<User> userList = mapper.readValue(json, new TypeReference<List<User>>(){});
+    	Optional<Note> targetNote = noteService.findById(id);
+    	targetNote.ifPresent(note ->
+    		noteWhitelistService.addUserToWhitelist((Note)note, userList)
+    	);
+    	String response = "";
+    	if(targetNote.isPresent()) {
+    		response = "Successfully retrieved and added to the note.";
+    	} else {
+    		response = "Error, invalid note";
+    		return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.BAD_REQUEST);
+    	}
+    	return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.OK);
+    }
+    
+//    @PostMapping(path = "whitelist/delete/{noteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<String> deleteFromWhitelist(@PathVariable(name="noteId") int id, @RequestParam("json") String json) {
+//    	
+//		return null;
+//    }
 }

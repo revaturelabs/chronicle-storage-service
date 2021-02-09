@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.revature.chronicle.daos.VideoWhitelistRepo;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.security.FirebaseInitializer;
 
@@ -32,4 +33,14 @@ public class VideoWhitelistService {
     	logger.info("Adding user to video whitelist" );
     	videoWhitelistRepo.addUser(video.getId(), user.getUserID());
     }
+	public void deleteUserFromWhitelist(Video video, User user) {
+		logger.info("Removing user from whitelist");
+		videoWhitelistRepo.deleteUser(user.getUserID());
+	}
+	public void deleteUserFromWhitelist(Video video, List<User> users) {
+		logger.info("Removing users from whitelist");
+		for(User user : users) {
+			this.deleteUserFromWhitelist(video, user);
+		}
+	}
 }

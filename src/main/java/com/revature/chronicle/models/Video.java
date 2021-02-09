@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +63,16 @@ public class Video extends Media{
         this.description = description;
         this.date = date;
         this.user = user;
+        this.whitelist = new ArrayList<>();
         this.isPrivate = isPrivate;
+    }
+    
+    public Video(String description, Date date, String user, List<Tag> tags, boolean isPrivate, List<User> users) {
+    	super();
+        this.description = description;
+        this.date = date;
+        this.user = user;
+        this.isPrivate = isPrivate;
+        this.whitelist = users;
     }
 }

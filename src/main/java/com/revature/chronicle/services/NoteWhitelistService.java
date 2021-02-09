@@ -33,4 +33,14 @@ public class NoteWhitelistService {
     	logger.info("Adding user to whitelist" );
     	noteWhitelistRepo.addUser(note.getId(), user.getUserID());
     }
+    public void deleteUserFromWhitelist(Note note, User user) {
+    	logger.info("Removing user from whitelist");
+    	noteWhitelistRepo.deleteUser(user.getUserID());
+    }
+    public void deleteUserFromWhitelist(Note note, List<User> users) {
+    	logger.info("Removing users from whitelist");
+    	for(User user : users) {
+    		this.deleteUserFromWhitelist(note, user);
+    	}
+    }
 }
