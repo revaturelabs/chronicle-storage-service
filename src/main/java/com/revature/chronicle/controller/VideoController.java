@@ -21,6 +21,8 @@ import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.VideoService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 //@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/videos")
@@ -52,7 +54,7 @@ public class VideoController {
      */
     // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
     @GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name="videoTags") String crudeTags){
+    public ResponseEntity<List<Video>> getVideosByTag(HttpServletRequest request, @PathVariable(name="videoTags") String crudeTags){
         logger.info("Received request for videos with tags: " + crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
@@ -69,21 +71,19 @@ public class VideoController {
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
-	/**
-	 * returns a list of all <code>Video</code> objects in the database in the
-	 * response body. The handler method is mapped to the URI '/videos/all/' and
-	 * produces media type of application-json. The handler retrieves the list
-	 * through the <code>VideoService</code> <code>findAll</code> method.
-	 * 
-	 * @return list of all <code>Video</code> objects
-	 */
-	// future iterations can add pagination to backend or front end
-	@GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Video>> getAllVideos() {
-		logger.info("Retrieving all videos...");
-		List<Video> targetVideos = videoService.findAll();
-		return new ResponseEntity<>(targetVideos, HttpStatus.OK);
-	}
+    /**
+     * returns a list of all <code>Video</code> objects in the database in the response body. The handler method is
+     * mapped to the URI '/videos/all/' and produces media type of application-json. The handler retrieves the list through
+     * the <code>VideoService</code> <code>findAll</code> method.
+     * @return list of all <code>Video</code> objects
+     */
+    //future iterations can add pagination to backend or front end
+    @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Video>> getAllVideos(HttpServletRequest request) {
+        logger.info("Retrieving all videos...");
+        List<Video> targetVideos = videoService.findAll();
+        return new ResponseEntity<>(targetVideos, HttpStatus.OK);
+    }
 
     /**
      * returns a list of all <code>Tag</code> objects in the database linked to a <code>Video</code> in the response
@@ -93,7 +93,7 @@ public class VideoController {
      * @return list of all <code>Video</code> objects
      */
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Tag>> getAllVideoTags() {
+    public ResponseEntity<List<Tag>> getAllVideoTags(HttpServletRequest request) {
         List<String> tagNames = new ArrayList<>();
         tagNames.add("Topic");
         tagNames.add("Batch");
@@ -102,21 +102,18 @@ public class VideoController {
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
 
-	/**
-	 * returns a <code>Video</code> object in the response body, determined by the
-	 * specified videoID in the URI path. The handler method is mapped to the URI
-	 * 'videos/id/{videoId}' and returns media type of application-json. The target
-	 * video is retrieved via the <code>VideoService</code> <code>findById</code>
-	 * method, passing in the URI path variable.
-	 * 
-	 * @param id target <code>Video</code>'s ID
-	 * @return target <code>Video</code> object
-	 */
-	@GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Video> getVideoById(@PathVariable(name = "videoId") int id) {
-		logger.info("Retrieving target video with ID: " + id + " ...");
-		Optional<Video> targetVideo = videoService.findById(id);
-		return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK))
-				.orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
-	}
+    /**
+     * returns a <code>Video</code> object in the response body, determined by the specified videoID in the URI path.
+     * The handler method is mapped to the URI 'videos/id/{videoId}' and returns media type of application-json. The
+     * target video is retrieved via the <code>VideoService</code> <code>findById</code> method, passing in the URI
+     * path variable.
+     * @param id target <code>Video</code>'s ID
+     * @return target <code>Video</code> object
+     */
+    @GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Video> getVideoById(HttpServletRequest request, @PathVariable(name="videoId") int id) {
+        logger.info("Retrieving target video with ID: " + id + " ...");
+        Optional<Video> targetVideo = videoService.findById(id);
+        return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
 }
