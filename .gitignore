@@ -40,6 +40,8 @@ build/
 ## AWS Credentials ##
 aws.properties
 
-
+/secrets/*
+/secrets/firebase-service-credentials.json
+/secrets/firebase-client-config.dms
 pom.xml
 lombok.jar

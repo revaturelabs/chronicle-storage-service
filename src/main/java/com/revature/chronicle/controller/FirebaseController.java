@@ -17,6 +17,7 @@ import com.google.firebase.auth.ListUsersPage;
 @RestController
 @RequestMapping(value = "/firebase")
 public class FirebaseController {	
+	
 	@GetMapping(value = "/authenticate")
 	public void authenticateUser(HttpServletRequest req, HttpServletResponse resp) throws FirebaseAuthException {
 		String idToken = "";
