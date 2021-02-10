@@ -1,10 +1,11 @@
 package com.revature.chronicle.controller;
 
-import com.revature.chronicle.daos.NoteRepo;
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.models.Note;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.services.NoteService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.revature.chronicle.daos.NoteRepo;
+import com.revature.chronicle.daos.TagRepo;
+import com.revature.chronicle.models.Note;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.services.NoteService;
 
 @RestController
 @RequestMapping(path = "/notes")
@@ -50,7 +53,7 @@ public class NoteController {
      */
     // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
     @GetMapping(path = "tags/{noteTags}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Note>> getNotesByTag(@PathVariable(name="noteTags") String crudeTags){
+    public ResponseEntity<List<Note>> getNotesByTag(HttpServletRequest request, @PathVariable(name="noteTags") String crudeTags){
         logger.info("Received request for notes with tags: " + crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
@@ -74,7 +77,7 @@ public class NoteController {
      * @return list of all <code>Note</code> objects
      */
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Note>> getAllNotes() {
+    public ResponseEntity<List<Note>> getAllNotes(HttpServletRequest request) {
         logger.info("Retrieving all notes...");
         List<Note> targetNotes = noteService.findAll();
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
@@ -88,7 +91,7 @@ public class NoteController {
      * @return list of all <code>Note</code> objects
      */
     @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Tag>> getAllNoteTags() {
+    public ResponseEntity<List<Tag>> getAllNoteTags(HttpServletRequest request) {
         List<String> tagNames = new ArrayList<>();
         tagNames.add("Topic");
         tagNames.add("Batch");
@@ -107,7 +110,7 @@ public class NoteController {
      * @return target <code>Note</code> object
      */
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Note> getNoteById(@PathVariable(name="noteId") int id) {
+    public ResponseEntity<Note> getNoteById(HttpServletRequest request, @PathVariable(name="noteId") int id) {
         logger.info("Retrieving target note with ID: " + id + " ...");
         Optional<Note> targetNote = noteService.findById(id);
         return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
