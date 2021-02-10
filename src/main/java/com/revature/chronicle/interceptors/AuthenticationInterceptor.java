@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.security.FirebaseInitializer;
-import com.revature.chronicle.services.TokenService;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor{
@@ -45,7 +43,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 				if(rolesObject.contains("ROLE_ADMIN")) {
 					user.setAdmin(true);
 				}
-				request.setAttribute("user", TokenService.parseUser(bearerToken));
+				request.setAttribute("user", user);
 				result = true;
 			}catch (FirebaseException e){
 				logger.warn(e.getMessage());

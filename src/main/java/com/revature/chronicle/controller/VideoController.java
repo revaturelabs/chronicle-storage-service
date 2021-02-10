@@ -2,7 +2,6 @@ package com.revature.chronicle.controller;
 
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.VideoRepo;
-import com.revature.chronicle.interceptors.CurrentRequestUser;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.VideoService;
