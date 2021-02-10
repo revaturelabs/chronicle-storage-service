@@ -1,7 +1,6 @@
 package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.VideoRepo;
-import com.revature.chronicle.daos.VideoWhitelistRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
