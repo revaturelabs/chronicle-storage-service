@@ -27,7 +27,6 @@ import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.VideoService;
-import com.revature.chronicle.services.VideoWhitelistService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,14 +37,12 @@ public class VideoController {
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
     private final VideoService videoService;
-    private final VideoWhitelistService videoWhitelistService;
     private final TagRepo tagRepo;
     private final VideoRepo videoRepo;
 
     @Autowired	
-    public VideoController (VideoService vs, VideoWhitelistService vws, TagRepo tr, VideoRepo vr) {
+    public VideoController (VideoService vs, TagRepo tr, VideoRepo vr) {
         this.videoService = vs;
-        this.videoWhitelistService = vws;
         this.tagRepo = tr;
         this.videoRepo = vr;
     }

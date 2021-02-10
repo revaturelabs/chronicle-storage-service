@@ -31,7 +31,6 @@ import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 
 import com.revature.chronicle.services.NoteService;
-import com.revature.chronicle.services.NoteWhitelistService;
 
 @RestController
 @RequestMapping(path = "/notes")
@@ -40,13 +39,11 @@ public class NoteController {
     private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
     private final NoteService noteService;
-    private final NoteWhitelistService noteWhitelistService;
     private final TagRepo tagRepo;
 
     @Autowired
-    public NoteController (NoteService ns, NoteWhitelistService nws, NoteRepo nr, TagRepo tr) {
+    public NoteController (NoteService ns, NoteRepo nr, TagRepo tr) {
         this.noteService = ns;
-        this.noteWhitelistService = nws;
         this.tagRepo = tr;
     }
 
@@ -132,9 +129,9 @@ public class NoteController {
     	ObjectMapper mapper = new ObjectMapper();
     	List<User> userList = mapper.readValue(json, new TypeReference<List<User>>(){});
     	Optional<Note> targetNote = noteService.findById(id);
-    	targetNote.ifPresent(note ->
-    		noteService.addUserToWhitelist((Note)note, userList)
-    	);
+//    	targetNote.ifPresent(note ->
+//    		noteService.addUserToWhitelist((Note)note, userList)
+//    	);
     	String response = "";
     	if(targetNote.isPresent()) {
     		response = "Successfully retrieved and added to the note.";
