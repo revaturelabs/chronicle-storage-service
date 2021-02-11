@@ -20,28 +20,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.revature.chronicle.daos.TagRepo;
+import com.revature.chronicle.daos.VideoRepo;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.VideoService;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+//@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/videos")
 public class VideoController {
 
-    private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
+	private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
-    private final VideoService videoService;
-    private final TagRepo tagRepo;
-    private final VideoRepo videoRepo;
+	private final VideoService videoService;
+	private final TagRepo tagRepo;
+	private final VideoRepo videoRepo;
 
-    @Autowired
-    public VideoController (VideoService vs, TagRepo tr, VideoRepo vr) {
-        this.videoService = vs;
-        this.tagRepo = tr;
-        this.videoRepo = vr;
-    }
+	@Autowired
+	public VideoController(VideoService vs, TagRepo tr, VideoRepo vr) {
+		this.videoService = vs;
+		this.tagRepo = tr;
+		this.videoRepo = vr;
+	}
 
     /**
      * returns a list of <code>Video</code> objects in the response body, determined by the tags specified in the URI

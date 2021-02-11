@@ -26,21 +26,22 @@ import com.revature.chronicle.models.User;
 import com.revature.chronicle.services.NoteService;
 
 @RestController
+//@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/notes")
 public class NoteController {
 
-    private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
+	private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
-    private final NoteService noteService;
-    private final NoteRepo noteRepo;
-    private final TagRepo tagRepo;
+	private final NoteService noteService;
+	private final NoteRepo noteRepo;
+	private final TagRepo tagRepo;
 
-    @Autowired
-    public NoteController (NoteService ns, NoteRepo nr, TagRepo tr) {
-        this.noteService = ns;
-        this.noteRepo = nr;
-        this.tagRepo = tr;
-    }
+	@Autowired
+	public NoteController(NoteService ns, NoteRepo nr, TagRepo tr) {
+		this.noteService = ns;
+		this.noteRepo = nr;
+		this.tagRepo = tr;
+	}
 
     /**
      * returns a list of <code>Note</code> objects in the response body, determined by the tags specified in the URI
