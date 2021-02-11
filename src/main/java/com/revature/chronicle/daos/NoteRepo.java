@@ -34,4 +34,5 @@ public interface NoteRepo extends JpaRepository<Note, Integer> {
 	
 	@Query(value = GET_USERS, nativeQuery = true)
     List<Video> getUsers(int noteId);
+
 }

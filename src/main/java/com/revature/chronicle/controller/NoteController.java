@@ -2,7 +2,6 @@ package com.revature.chronicle.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-
+import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 
 @RestController
@@ -117,29 +118,19 @@ public class NoteController {
      * @return target <code>Note</code> object
      */
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Note> getNoteById(HttpServletRequest request, @PathVariable(name="noteId") int id) {
+    public Note getNoteById(HttpServletRequest request, @PathVariable(name="noteId") int id) {
         logger.info("Retrieving target note with ID: " + id + " ...");
-        Optional<Note> targetNote = noteService.findById(id);
-        return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        Note targetNote = noteService.findById(id);
+        return targetNote;
+        //return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
     
-    //Verify User Authorization
-    @PostMapping(path = "/whitelist/add/{noteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addToWhitelist(@PathVariable(name="noteId") int id, @RequestParam("json") String json) throws JsonMappingException, JsonProcessingException {
-    	ObjectMapper mapper = new ObjectMapper();
-    	List<User> userList = mapper.readValue(json, new TypeReference<List<User>>(){});
-    	Optional<Note> targetNote = noteService.findById(id);
-//    	targetNote.ifPresent(note ->
-//    		noteService.addUserToWhitelist((Note)note, userList)
-//    	);
-    	String response = "";
-    	if(targetNote.isPresent()) {
-    		response = "Successfully retrieved and added to the note.";
-    	} else {
-    		response = "Error, invalid note";
-    		return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.BAD_REQUEST);
-    	}
-    	return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.OK);
+    @PutMapping(path = "whitelist/{noteId}")
+    public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="noteId") int noteId, @RequestBody List<User> users){
+    	Note currentNote = this.noteService.findById(noteId);
+    	currentNote.setWhitelist(users);
+    	this.noteService.save(currentNote);
+    	return null;
     }
     
 //    @PostMapping(path = "whitelist/delete/{noteId}", consumes = MediaType.APPLICATION_JSON_VALUE)

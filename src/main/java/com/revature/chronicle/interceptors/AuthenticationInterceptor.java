@@ -41,7 +41,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 				
 				ArrayList<String> rolesObject = (ArrayList<String>) decodedToken.getClaims().get("role");
 				if(rolesObject.contains("ROLE_ADMIN")) {
-					user.setAdmin(true);
+					user.setRole("ROLE_ADMIN");
 				}
 				request.setAttribute("user", user);
 				result = true;

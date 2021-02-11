@@ -1,8 +1,10 @@
 package com.revature.chronicle.controller;
 
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,23 +14,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.VideoService;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/videos")
@@ -119,25 +115,16 @@ public class VideoController {
     @GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Video> getVideoById(HttpServletRequest request, @PathVariable(name="videoId") int id) {
         logger.info("Retrieving target video with ID: " + id + " ...");
-        Optional<Video> targetVideo = videoService.findById(id);
-        return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        Video targetVideo = videoService.findById(id);
+        return new ResponseEntity<>(targetVideo, HttpStatus.OK);
     }
     
-    @PostMapping(path = "{videoId}/whitelist/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addToWhitelist(@PathVariable(name="videoId") int id, @RequestParam("json") String json) throws JsonMappingException, JsonProcessingException {
-    	ObjectMapper mapper = new ObjectMapper();
-    	List<User> userList = mapper.readValue(json, new TypeReference<List<User>>(){});
-    	Optional<Video> targetVideo = videoService.findById(id);
-    	targetVideo.ifPresent(video ->
-    		videoWhitelistService.addUserToWhitelist((Video)video, userList)
-    	);
-    	String response = "";
-    	if(targetVideo.isPresent()) {
-    		response = "Successfully retrieved and added to the video.";
-    	} else {
-    		response = "Error, invalid note";
-    		return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.BAD_REQUEST);
-    	}
-    	return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.OK);
+    @PutMapping(path = "whitelist/{videoId}")
+    public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="videoId") int videoId, @RequestBody List<User> users){
+    	Video currentVideo = this.videoService.findById(videoId);
+    	currentVideo.setWhitelist(users);
+    	this.videoService.save(currentVideo);
+		return null;
     }
+    
 }
