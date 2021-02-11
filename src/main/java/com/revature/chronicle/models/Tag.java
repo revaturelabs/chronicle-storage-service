@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 /**
@@ -26,9 +28,17 @@ public class Tag {
 
     @Column(name = "value")
     private String value;
+    
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Video> vids;
+    
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Note> notes;
 
-    public Tag(String type, String value) {
+    public Tag(String type, String value, List<Video> vids) {
         this.type = type;
         this.value = value;
+//        this.vids = vids;
     }
+    
 }

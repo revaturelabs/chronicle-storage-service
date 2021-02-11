@@ -3,6 +3,8 @@ package com.revature.chronicle.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -44,6 +46,7 @@ public class Note extends Media{
     @JoinTable(name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
+    @ToString.Exclude
     private List<Tag> tags;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
