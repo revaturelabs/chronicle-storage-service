@@ -20,10 +20,5 @@ public interface TagRepo extends JpaRepository<Tag, Integer> {
     List<Tag> findByTypeIn(Collection<String> tagNames);
 
     Tag findByValue(String value);
-    
-    @Query(value = "select t.vids from Tag t WHERE t.tagID = ?1")
-    List<Video> getVidTagByValue(int tag);
-    
-    @Query(value = "select t.notes from Tag t WHERE t.tagID = ?1")
-    List<Note> getNoteTagByValue(int tag);
+
 }

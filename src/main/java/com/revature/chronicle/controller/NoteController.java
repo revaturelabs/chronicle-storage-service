@@ -122,7 +122,6 @@ public class NoteController {
         logger.info("Retrieving target note with ID: " + id + " ...");
         Note targetNote = noteService.findById(id);
         return targetNote;
-        //return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
     
     @PutMapping(path = "whitelist/{noteId}")
@@ -132,10 +131,4 @@ public class NoteController {
     	this.noteService.save(currentNote);
     	return null;
     }
-    
-//    @PostMapping(path = "whitelist/delete/{noteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<String> deleteFromWhitelist(@PathVariable(name="noteId") int id, @RequestParam("json") String json) {
-//    	
-//		return null;
-//    }
 }
