@@ -1,8 +1,13 @@
 package com.revature.chronicle.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -21,8 +26,16 @@ import lombok.NoArgsConstructor;
 public class User {
 	@Id
 	@Column(name = "user_id")
-    private String userID;
+    private String uid;
 	
-	@Column(name = "isAdmin")
-    private boolean admin;
+    private String role;
+    
+    private String email;
+    
+    private String displayName;
+    
+    public User(String userID) {
+    	this.uid = userID;
+    }
+	
 }

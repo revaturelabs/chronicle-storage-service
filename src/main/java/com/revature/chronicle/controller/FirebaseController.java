@@ -28,9 +28,9 @@ public class FirebaseController {
 		while (page != null) {
         	for (ExportedUserRecord user : page.getValues()) {
         		JSONObject item = new JSONObject();
-        		item.put("UID", user.getUid());
-        		item.put("Email", user.getEmail());
-        		item.put("Display Name", user.getDisplayName());
+        		item.put("uid", user.getUid());
+        		item.put("email", user.getEmail());
+        		item.put("displayName", user.getDisplayName());
         		response.add(item);
         	}
         	page = page.getNextPage();
