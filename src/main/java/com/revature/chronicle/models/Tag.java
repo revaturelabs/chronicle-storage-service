@@ -32,15 +32,6 @@ public class Tag {
 
     @Column(name = "value")
     private String value;
-    
-    
-    @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JsonBackReference
-    private List<Video> vids;
-    
-    @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JsonBackReference
-    private List<Note> notes;
 
     public Tag(String type, String value) {
         this.type = type;
