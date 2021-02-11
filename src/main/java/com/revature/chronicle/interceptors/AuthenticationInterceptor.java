@@ -15,15 +15,17 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.security.FirebaseInitializer;
 
+/*
+ * Interceptor for Firebase Authentication and pre-Controller User construction
+ */
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor{
-	private static final Logger logger = LoggerFactory.getLogger(FirebaseInitializer.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		boolean result = false;
+		boolean handleRequest = false;
 		
 		String authorization = request.getHeader("Authorization");
 		String bearerToken = null;
@@ -32,6 +34,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 		}
 		
 		if(bearerToken == null) {
+			logger.info("No JWT Token present, ignoring request");
 			response.setStatus(401);
 		} else {
 			User user = new User();
@@ -39,17 +42,20 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 				FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(bearerToken, true);
 				user.setUserID(decodedToken.getUid());
 				
-				ArrayList<String> rolesObject = (ArrayList<String>) decodedToken.getClaims().get("role");
-				if(rolesObject.contains("ROLE_ADMIN")) {
-					user.setAdmin(true);
+				Object rolesObject = decodedToken.getClaims().get("role");
+				if(rolesObject != null && rolesObject instanceof ArrayList) {
+					ArrayList<String> rolesList = (ArrayList<String>) rolesObject;
+					if(rolesList.contains("ROLE_ADMIN")) {
+						user.setAdmin(true);
+					}
 				}
 				request.setAttribute("user", user);
-				result = true;
+				handleRequest = true;
 			}catch (FirebaseException e){
 				logger.warn(e.getMessage());
 			}
 		}
-		return result;
+		return handleRequest;
 	}
 }
 
