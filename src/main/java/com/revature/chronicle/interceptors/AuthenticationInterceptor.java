@@ -41,12 +41,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 			try {
 				FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(bearerToken, true);
 				user.setUserID(decodedToken.getUid());
-				
+        
 				Object rolesObject = decodedToken.getClaims().get("role");
 				if(rolesObject != null && rolesObject instanceof ArrayList) {
 					ArrayList<String> rolesList = (ArrayList<String>) rolesObject;
 					if(rolesList.contains("ROLE_ADMIN")) {
-						user.setAdmin(true);
+						user.setRole("ROLE_ADMIN");
 					}
 				}
 				request.setAttribute("user", user);

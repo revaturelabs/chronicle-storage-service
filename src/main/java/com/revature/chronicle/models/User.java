@@ -28,8 +28,13 @@ public class User {
 	@Column(name = "user_id")
     private String userID;
 	
-	@Column(name = "isAdmin")
-    private boolean admin;
+    private String role;
+    
+    private String email;
+    
+    public User(String userID) {
+    	this.userID = userID;
+    }
 	
 //    @ManyToMany(mappedBy = "whitelist", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 //    private List<Video> whitelistedVids;

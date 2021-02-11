@@ -116,7 +116,6 @@ public class NoteController {
         logger.info("Retrieving target note with ID: " + id + " ...");
         Note targetNote = noteService.findById(id);
         return targetNote;
-        //return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
     
     @PutMapping(path = "whitelist/{noteId}")
@@ -124,13 +123,6 @@ public class NoteController {
     	Note currentNote = this.noteService.findById(noteId);
     	currentNote.setWhitelist(users);
     	this.noteService.save(currentNote);
-    	return null;
-    }
-    
-    @GetMapping(path ="willsfuckup")
-    public ResponseEntity<List<Note>> willFail(){
-    	List<Note> notes = tagRepo.getNoteTagByValue(1);
-    	System.out.println(notes);
     	return null;
     }
 }
