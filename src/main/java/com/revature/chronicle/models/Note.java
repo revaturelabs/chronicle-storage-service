@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +50,7 @@ public class Note extends Media{
             joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     @ToString.Exclude
+    @JsonManagedReference
     private List<Tag> tags;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

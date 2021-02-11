@@ -4,10 +4,13 @@ package com.revature.chronicle.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * A model representing a tag on a video or note
@@ -29,13 +32,15 @@ public class Tag {
     @Column(name = "value")
     private String value;
     
-    @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Video> vids;
     
     @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Note> notes;
 
-    public Tag(String type, String value, List<Video> vids) {
+    public Tag(String type, String value) {
         this.type = type;
         this.value = value;
 //        this.vids = vids;
