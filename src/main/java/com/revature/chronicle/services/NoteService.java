@@ -3,6 +3,8 @@ package com.revature.chronicle.services;
 import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
 import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,4 +115,15 @@ public class NoteService {
             return false;
         }
     }
+    
+    //WHITELIST METHODS
+	public void addUserToWhitelist(Note note, List<User> users) {
+	  	for(User user : users) {
+	  		this.addUserToWhitelist(note, user);
+	  	}
+	}
+	public void addUserToWhitelist(Note note, User user) {
+	  	logger.info("Adding user to video whitelist" );
+	  	noteRepo.addUser(note.getId(), user.getUserID());
+	}
 }
