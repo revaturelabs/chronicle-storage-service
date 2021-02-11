@@ -119,7 +119,7 @@ public class VideoService {
     }
     public void addUserToWhitelist(Video video, User user) {
     	logger.info("Adding user to video whitelist" );
-    	videoRepo.addUser(video.getId(), user.getUserID());
+    	videoRepo.addUser(video.getId(), user.getUid());
     }
 
 //    //this method is to test the service method (use the repo method instead!)
