@@ -40,7 +40,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 			User user = new User();
 			try {
 				FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(bearerToken, true);
-				user.setUserID(decodedToken.getUid());
+				user.setUid(decodedToken.getUid());
         
 				Object rolesObject = decodedToken.getClaims().get("role");
 				if(rolesObject != null && rolesObject instanceof ArrayList) {

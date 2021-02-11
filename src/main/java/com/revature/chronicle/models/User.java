@@ -26,19 +26,16 @@ import lombok.NoArgsConstructor;
 public class User {
 	@Id
 	@Column(name = "user_id")
-    private String userID;
+    private String uid;
 	
     private String role;
     
     private String email;
     
+    private String displayName;
+    
     public User(String userID) {
-    	this.userID = userID;
+    	this.uid = userID;
     }
 	
-//    @ManyToMany(mappedBy = "whitelist", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-//    private List<Video> whitelistedVids;
-//    
-//    @ManyToMany(mappedBy = "whitelist", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-//    private List<Note> whitelistedNotes;
 }
