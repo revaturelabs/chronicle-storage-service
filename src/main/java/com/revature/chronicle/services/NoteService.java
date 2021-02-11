@@ -3,8 +3,6 @@ package com.revature.chronicle.services;
 import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.User;
-import com.revature.chronicle.models.Video;
 import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,18 +88,18 @@ public class NoteService {
         }
     }
 
-    public Optional<Note> findById(int id) {
+    public Note findById(int id) {
         // Changing method to return an Optional<Note> for consistency with the video service.
         //
         // Returning an Optional object instead of a Note object has been deemed the better option, since it reduces the
         // chance of null pointer exceptions and forces the programmer to actually check if the Note exists before
         // acting upon it.
         try{
-            return noteRepo.findById(id);
+            return noteRepo.findById(id).get();
         }
         catch (Exception e){
             logger.warn(e.getMessage());
-            return Optional.empty();
+            return null;
         }
     }
 
@@ -115,15 +113,4 @@ public class NoteService {
             return false;
         }
     }
-    
-    //WHITELIST METHODS
-	public void addUserToWhitelist(Note note, List<User> users) {
-	  	for(User user : users) {
-	  		this.addUserToWhitelist(note, user);
-	  	}
-	}
-	public void addUserToWhitelist(Note note, User user) {
-	  	logger.info("Adding user to video whitelist" );
-	  	noteRepo.addUser(note.getId(), user.getUserID());
-	}
 }
