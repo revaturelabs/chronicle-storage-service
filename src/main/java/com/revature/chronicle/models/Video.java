@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -45,6 +47,7 @@ public class Video extends Media{
     @JoinTable(name = "video_tag",
             joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
+    @ToString.Exclude
     private List<Tag> tags;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -62,5 +65,6 @@ public class Video extends Media{
         this.date = date;
         this.user = user;
         this.isPrivate = isPrivate;
+        this.tags = tags;
     }
 }
