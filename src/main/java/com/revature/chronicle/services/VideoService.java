@@ -77,13 +77,13 @@ public class VideoService {
         }
     }
 
-    public Optional<Video> findById(int id){
+    public Video findById(int id){
         try{
-            return videoRepo.findById(id);
+            return videoRepo.findById(id).get();
         }
         catch (Exception e){
             logger.warn(e.getMessage());
-            return Optional.empty();
+            return null;
         }
     }
 
