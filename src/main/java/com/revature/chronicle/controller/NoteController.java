@@ -126,4 +126,11 @@ public class NoteController {
     	this.noteService.save(currentNote);
     	return null;
     }
+    
+    @GetMapping(path ="willsfuckup")
+    public ResponseEntity<List<Note>> willFail(){
+    	List<Note> notes = tagRepo.getNoteTagByValue(1);
+    	System.out.println(notes);
+    	return null;
+    }
 }

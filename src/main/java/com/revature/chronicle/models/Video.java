@@ -8,6 +8,8 @@ import lombok.ToString;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +50,7 @@ public class Video extends Media{
             joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     @ToString.Exclude
+    @JsonManagedReference
     private List<Tag> tags;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -65,6 +68,5 @@ public class Video extends Media{
         this.date = date;
         this.user = user;
         this.isPrivate = isPrivate;
-        this.tags = tags;
     }
 }
