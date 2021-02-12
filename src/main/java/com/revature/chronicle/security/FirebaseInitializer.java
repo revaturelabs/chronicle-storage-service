@@ -62,6 +62,19 @@ public class FirebaseInitializer {
                     .build();
 
             FirebaseApp.initializeApp(options);
+            Map<String, Object> claims = new HashMap<>();
+            ArrayList<String> roles = new ArrayList<>();
+            roles.add("ROLE_ADMIN");
+            roles.add("ROLE_USER");
+            claims.put("role", roles);
+//            FirebaseAuth.getInstance().setCustomUserClaims("", claims); // insert a valid userId within the double quotes
+            ListUsersPage page = FirebaseAuth.getInstance().listUsers(null);
+            while (page != null) {
+            	for (ExportedUserRecord user : page.getValues()) {
+            		System.out.println("User: " + user.getUid() + " | " + user.getDisplayName() + " | " + user.getCustomClaims());
+            	}
+            	page = page.getNextPage();
+            }
         }
 
     }

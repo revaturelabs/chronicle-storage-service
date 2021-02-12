@@ -25,6 +25,8 @@ import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.VideoService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 //@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/videos")
