@@ -1,29 +1,44 @@
 package com.revature.chronicle.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 /**
  * Represents a user of Chronicle
  * -NOTE- may change depending on progress
  */
-@Deprecated
-
 @Entity
-@Table(name="user")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
-
-    @Column(name = "username")
-    private String username;
+	@Id
+	@Column(name = "user_id")
+    private String userID;
+	
+    private String role;
+    
+    private String email;
+    
+    public User(String userID) {
+    	this.userID = userID;
+    }
+	
+//    @ManyToMany(mappedBy = "whitelist", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+//    private List<Video> whitelistedVids;
+//    
+//    @ManyToMany(mappedBy = "whitelist", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+//    private List<Note> whitelistedNotes;
 }

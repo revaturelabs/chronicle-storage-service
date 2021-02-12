@@ -2,6 +2,7 @@ package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
@@ -76,13 +77,13 @@ public class VideoService {
         }
     }
 
-    public Optional<Video> findById(int id){
+    public Video findById(int id){
         try{
-            return videoRepo.findById(id);
+            return videoRepo.findById(id).get();
         }
         catch (Exception e){
             logger.warn(e.getMessage());
-            return Optional.empty();
+            return null;
         }
     }
 
@@ -108,6 +109,17 @@ public class VideoService {
             logger.warn(e.getMessage());
             return false;
         }
+    }
+    
+    //WHITELIST METHODS
+	public void addUserToWhitelist(Video video, List<User> users) {
+    	for(User user : users) {
+    		this.addUserToWhitelist(video, user);
+    	}
+    }
+    public void addUserToWhitelist(Video video, User user) {
+    	logger.info("Adding user to video whitelist" );
+    	videoRepo.addUser(video.getId(), user.getUserID());
     }
 
 //    //this method is to test the service method (use the repo method instead!)

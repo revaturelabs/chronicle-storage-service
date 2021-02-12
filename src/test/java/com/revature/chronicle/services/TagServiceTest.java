@@ -28,7 +28,7 @@ public class TagServiceTest {
     @Test
     public void shouldReturnAListOfAllTags(){
         List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag(1,"Technology","Java")); //is this a good tag to add? (id/name/value)
+        tags.add(new Tag("Technology","Java"));
         when(repo.findAll()).thenReturn(tags);
         List<Tag> result = service.findAll();
         Assertions.assertEquals(result, tags);
@@ -37,7 +37,7 @@ public class TagServiceTest {
 
     @Test
     public void shouldReturnATagById(){
-        Tag tag = new Tag(1,"Technology","Java");
+        Tag tag = new Tag("Technology","Java");
         Optional<Tag> optional = Optional.of(tag);
         when(repo.findById(1)).thenReturn(optional);
         Optional<Tag> result = service.findById(1);
@@ -55,7 +55,7 @@ public class TagServiceTest {
 
     @Test
     public void shouldSaveATagAndReturnTrue(){
-        Tag tag = new Tag(1,"Technology","Java");
+        Tag tag = new Tag("Technology","Java");
         when(repo.save(tag)).thenReturn(tag);
         boolean result = service.save(tag);
         Assertions.assertTrue(result);

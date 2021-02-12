@@ -9,13 +9,12 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.util.*;
-
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 public class VideoServiceTests {
@@ -28,7 +27,8 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAListOfAllVideos(){
-        Video video = new Video(1,"www.video.com","a title","A test video",new Date(),"",new ArrayList<Tag>());
+        //Video video = new Video(1,"www.video.com","a title","A test video",new Date(),"",new ArrayList<Tag>(), 0);
+        Video video = new Video("A test video",new Date(),"",new ArrayList<Tag>(),false);
         when(repo.findAll()).thenReturn(
                 new ArrayList<Video>(Arrays.asList(video))
         );
@@ -40,11 +40,12 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAVideoById(){
-        Video video = new Video(6, "www.video.com","a title", "A test video", new Date(), "", new ArrayList<Tag>());
+        //Video video = new Video(6, "www.video.com","a title", "A test video", new Date(), "", new ArrayList<Tag>(), 0);
+        Video video = new Video("A test video",new Date(),"",new ArrayList<Tag>(),false);
         when(repo.findById(6)).thenReturn(
                 Optional.of(video)
         );
-        Optional<Video> result = service.findById(6);
+        Optional<Video> result = Optional.ofNullable(service.findById(6));
         Assert.assertTrue(result.isPresent());
         if (result.isPresent()) {
             Assert.assertEquals(video, result.get());
@@ -55,7 +56,7 @@ public class VideoServiceTests {
     @Test
     public void shouldReturnNullIfNoVideoFound(){
         when(repo.findById(67)).thenReturn(Optional.empty());
-        Optional<Video> result = service.findById(67);
+        Optional<Video> result = Optional.ofNullable(service.findById(67));
         Assert.assertFalse(result.isPresent());
         verify(repo).findById(67);
     }
@@ -88,9 +89,9 @@ public class VideoServiceTests {
     @Test
     public void shouldReturnOnlyVideosThatMatchAllGivenTags(){
 
-        Tag tag1 = new Tag(1,"Technology","Angular");
-        Tag tag2 = new Tag(2,"Technology","Java");
-        Tag tag3 = new Tag(3,"Batch","1120-August");
+        Tag tag1 = new Tag("Technology","Angular");
+        Tag tag2 = new Tag("Technology","Java");
+        Tag tag3 = new Tag("Batch","1120-August");
 
         List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
@@ -100,8 +101,10 @@ public class VideoServiceTests {
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1);
-        Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2);
+        //Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1, 0);
+        //Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2, 0);
+        Video video1 = new Video("A description 1",new Date(),"",tags1,false);
+        Video video2 = new Video("A description 2",new Date(),"",tags2,false);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag1,tag3));
@@ -112,9 +115,9 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAnEmptyListIfNoTagsAreFound(){
-        Tag tag1 = new Tag(1,"Technology","Angular");
-        Tag tag2 = new Tag(2,"Technology","Java");
-        Tag tag3 = new Tag(3,"Batch","1120-August");
+        Tag tag1 = new Tag("Technology","Angular");
+        Tag tag2 = new Tag("Technology","Java");
+        Tag tag3 = new Tag("Batch","1120-August");
 
         List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
@@ -124,8 +127,10 @@ public class VideoServiceTests {
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1);
-        Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2);
+        //Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1, 0);
+        //Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2, 0);
+        Video video1 = new Video("A description 1",new Date(),"",tags1,false);
+        Video video2 = new Video("A description 2",new Date(),"",tags2,false);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag2,tag3));
@@ -135,9 +140,9 @@ public class VideoServiceTests {
 
     @Test
     public void shouldReturnAnEmptyListIfTagsAreEmpty(){
-        Tag tag1 = new Tag(1,"Technology","Angular");
-        Tag tag2 = new Tag(2,"Technology","Java");
-        Tag tag3 = new Tag(3,"Batch","1120-August");
+        Tag tag1 = new Tag("Technology","Angular");
+        Tag tag2 = new Tag("Technology","Java");
+        Tag tag3 = new Tag("Batch","1120-August");
 
         List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
@@ -147,8 +152,10 @@ public class VideoServiceTests {
         tags2.add(tag1);
         tags2.add(tag2);
 
-        Video video1 = new Video(1,"http://video.com","a title","A description",new Date(),"",tags1);
-        Video video2 = new Video(2,"http://video.com","a title","A description",new Date(),"",tags2);
+        //Video video1 = new Video(1,"http://video.com","a title","A description",new Date(),"",tags1, 0);
+        //Video video2 = new Video(2,"http://video.com","a title","A description",new Date(),"",tags2, 0);
+        Video video1 = new Video("A description 1",new Date(),"",tags1,false);
+        Video video2 = new Video("A description 2",new Date(),"",tags2,false);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>());
         List<Video> result = service.findAllVideosByTags(new ArrayList<Tag>());

@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,31 +29,44 @@ public class Video extends Media{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "url")
+    @Column(name = "url", nullable = false)
     private String url;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     @CreationTimestamp
     private Date date;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String user;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "video_tag",
             joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
+    @ToString.Exclude
+    @JsonManagedReference
     private List<Tag> tags;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "video_whitelist",
+    			joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
+    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    private List<User> whitelist;
+    
+    @Column(name = "private", nullable = false)
+    private boolean isPrivate;
 
-    public Video(String description, Date date, String user, List<Tag> tags) {
+    public Video(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
+    	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.isPrivate = isPrivate;
     }
 }

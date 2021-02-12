@@ -39,3 +39,7 @@ build/
 
 ## AWS Credentials ##
 aws.properties
+
+
+pom.xml
+lombok.jar

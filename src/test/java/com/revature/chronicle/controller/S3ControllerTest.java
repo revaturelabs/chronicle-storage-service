@@ -125,7 +125,7 @@ public class S3ControllerTest {
 	@Test
 	public void givenFormData_whenFileUpload_theReturnOKStatus() throws Exception {
 
-		//this multivalue map is mocking the passing of a file and json description as parameters into the servlet
+		//this multi value map is mocking the passing of a file and json description as parameters into the servlet
 
 		params.add("file", file1.getBytes().toString());
 		params.add("json", json.toString());
@@ -191,7 +191,7 @@ public class S3ControllerTest {
 	}
 
 	/**
-	 * This test is testing to see that when given a improper file type and a json that the controller should return
+	 * This test is testing to see that when given an improper file type and a json that the controller should return
 	 * a message saying "Unsupported file type. Please upload either a video or a text file."
 	 * @throws Exception
 	 */

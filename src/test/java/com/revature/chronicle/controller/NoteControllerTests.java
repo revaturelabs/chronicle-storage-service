@@ -1,11 +1,15 @@
 package com.revature.chronicle.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.models.Note;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.User;
-import com.revature.chronicle.services.NoteService;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.chronicle.daos.TagRepo;
+import com.revature.chronicle.models.Note;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.services.NoteService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -65,21 +67,20 @@ public class NoteControllerTests {
         mockSingleTag = new ArrayList<>();
 
         User user = new User();
-        user.setUsername("TESTUSER");
 
         Tag tag1 = new Tag();
         tag1.setTagID(1);
-        tag1.setName("Technology");
+        tag1.setType("Technology");
         tag1.setValue("Angular");
 
         Tag tag2 = new Tag();
         tag2.setTagID(2);
-        tag2.setName("Technology");
+        tag2.setType("Technology");
         tag2.setValue("Java");
 
         Tag tag3 = new Tag();
         tag3.setTagID(3);
-        tag3.setName("Batch");
+        tag3.setType("Batch");
         tag3.setValue("1120-August");
 
         List<Tag> tags1 = new ArrayList<>();
@@ -89,7 +90,6 @@ public class NoteControllerTests {
         Note note1 = new Note();
         note1.setId(1);
         note1.setUrl("http://note1.com/%22");
-        note1.setUser(user.getUsername());
         note1.setDescription("A description");
         note1.setTags(tags1);
         mockNote = note1;
@@ -101,7 +101,6 @@ public class NoteControllerTests {
         Note note2 = new Note();
         note2.setId(2);
         note2.setUrl("http://note2.com/%22");
-        note2.setUser(user.getUsername());
         note2.setDescription("A description");
         note2.setTags(tags2);
 
@@ -149,7 +148,8 @@ public class NoteControllerTests {
     public void shouldGetVideosByID() throws Exception {
         ObjectMapper om = new ObjectMapper();
 
-        Mockito.when(noteService.findById(1)).thenReturn(java.util.Optional.ofNullable(mockNote));
+        //Mockito.when(noteService.findById(1)).thenReturn(Optional.of(mockNote));
+        Mockito.when(noteService.findById(1)).thenReturn(mockNote);
         MvcResult result = mockMvc.perform(get("/notes/id/{noteId}","1")
                 .with(httpBasic("user","user")))//Assuming words separated by '+'
                 .andExpect(status().isOk())
@@ -168,7 +168,7 @@ public class NoteControllerTests {
         tagNames.add("Topic");
         tagNames.add("Batch");
 
-        Mockito.when(tagRepo.findByNameIn(tagNames)).thenReturn(mockTags);
+        Mockito.when(tagRepo.findByTypeIn(tagNames)).thenReturn(mockTags);
         MvcResult result = mockMvc.perform(get("/notes/available-tags")
                 .with(httpBasic("user","user")))//Assuming words separated by '+'
                 .andExpect(status().isOk())

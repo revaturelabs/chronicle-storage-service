@@ -3,7 +3,12 @@ package com.revature.chronicle.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,31 +29,45 @@ public class Note extends Media{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="url")
+    @Column(name="url", nullable = false)
     private String url;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     @CreationTimestamp
     private Date date;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String user;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
+    @ToString.Exclude
+    @JsonManagedReference
     private List<Tag> tags;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "note_whitelist",
+    			joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
+    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    private List<User> whitelist;
+    
+    @Column(name = "private", nullable = false)
+    private boolean isPrivate;
 
-    public Note(String description, Date date, String user, List<Tag> tags) {
+    public Note(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
+    	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.isPrivate = isPrivate;
     }
+    
 }
