@@ -65,7 +65,7 @@ public class Note extends Media{
     private boolean isPrivate;
     
 
-    public Note(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
+    public Note(String description, Date date, User user, List<Tag> tags, boolean isPrivate) {
     	super();
         this.description = description;
         this.date = date;
@@ -74,7 +74,7 @@ public class Note extends Media{
         this.isPrivate = isPrivate;
     }
     
-    public Note(String description, Date date, String user, List<Tag> tags, boolean isPrivate, List<User> users) {
+    public Note(String description, Date date, User user, List<Tag> tags, boolean isPrivate, List<User> users) {
     	super();
         this.description = description;
         this.date = date;
