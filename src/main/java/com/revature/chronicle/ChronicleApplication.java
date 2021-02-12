@@ -124,5 +124,4 @@ public class ChronicleApplication extends SpringBootServletInitializer{
 			}
 		};
 	}
-
 }

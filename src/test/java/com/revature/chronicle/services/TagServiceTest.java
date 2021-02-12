@@ -70,14 +70,3 @@ public class TagServiceTest {
         verify(repo).save(null);
     }
 
-//Test Delete? feel free to get rid of this if it's unnecessary
-
-//    @Test
-//    public void shouldDeleteATagAndReturnTrue(){
-//        Tag tag = new Tag(1,"Technology","Java"); //Should I add an @after?
-//        when(repo.save(tag)).thenReturn(tag);
-//        boolean result = service.deleteByID(1);
-//        Assertions.assertTrue(result);
-//        verify(repo).deleteById(1);
-//    }
-}

@@ -26,21 +26,22 @@ import com.revature.chronicle.models.User;
 import com.revature.chronicle.services.NoteService;
 
 @RestController
+//@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/notes")
 public class NoteController {
 
-    private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
+	private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
-    private final NoteService noteService;
-    private final NoteRepo noteRepo;
-    private final TagRepo tagRepo;
+	private final NoteService noteService;
+	private final NoteRepo noteRepo;
+	private final TagRepo tagRepo;
 
-    @Autowired
-    public NoteController (NoteService ns, NoteRepo nr, TagRepo tr) {
-        this.noteService = ns;
-        this.noteRepo = nr;
-        this.tagRepo = tr;
-    }
+	@Autowired
+	public NoteController(NoteService ns, NoteRepo nr, TagRepo tr) {
+		this.noteService = ns;
+		this.noteRepo = nr;
+		this.tagRepo = tr;
+	}
 
     /**
      * returns a list of <code>Note</code> objects in the response body, determined by the tags specified in the URI
@@ -67,8 +68,9 @@ public class NoteController {
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
+        User user = (User) request.getAttribute("user");
         logger.info("Retrieving target notes...");
-        List <Note> targetNotes = noteService.findAllNotesByTags(targetTags);
+        List <Note> targetNotes = noteService.findAllNotesByTags(targetTags, user);
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
@@ -81,7 +83,8 @@ public class NoteController {
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getAllNotes(HttpServletRequest request) {
         logger.info("Retrieving all notes...");
-        List<Note> targetNotes = noteService.findAll();
+        User user = (User) request.getAttribute("user");
+        List<Note> targetNotes = noteService.findAll(user);
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
@@ -116,21 +119,14 @@ public class NoteController {
         logger.info("Retrieving target note with ID: " + id + " ...");
         Note targetNote = noteService.findById(id);
         return targetNote;
-        //return targetNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
     
     @PutMapping(path = "whitelist/{noteId}")
     public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="noteId") int noteId, @RequestBody List<User> users){
     	Note currentNote = this.noteService.findById(noteId);
     	currentNote.setWhitelist(users);
-    	this.noteService.save(currentNote);
-    	return null;
-    }
-    
-    @GetMapping(path ="willsfuckup")
-    public ResponseEntity<List<Note>> willFail(){
-    	List<Note> notes = tagRepo.getNoteTagByValue(1);
-    	System.out.println(notes);
+    	User user = (User) request.getAttribute("user");
+    	this.noteService.update(currentNote, user);
     	return null;
     }
 }

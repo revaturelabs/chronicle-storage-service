@@ -3,6 +3,7 @@ package com.revature.chronicle.services;
 import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
 import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class NoteService {
      * @param tags the tags provided by the user
      * @return a list of videos that have all tags
      */
-    public List<Note> findAllNotesByTags(List<Tag> tags){
+    public List<Note> findAllNotesByTags(List<Tag> tags, User user){
         System.out.println("Entered service method");
         List<Note> desiredNotes = new ArrayList<>();
         int offset = 0;
@@ -48,8 +49,19 @@ public class NoteService {
                 for(Note note:notes){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(note.getTags().containsAll(tags)){
-                        logger.info("Adding note");
-                        desiredNotes.add(note);
+                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    		logger.info("Adding note");
+                    		desiredNotes.add(note);
+                    	} else {
+                    		for(User u : note.getWhitelist()) {
+                    			if(u.getUid().equals(user.getUid())) {
+	                    			logger.info("Adding note");
+	                        		desiredNotes.add(note);
+	                        		break;
+	                    		}
+                    		}
+                    		logger.warn("Not on note whitelist");
+                    	}
                     }
                     else{
                         logger.warn("Note not found");
@@ -77,10 +89,64 @@ public class NoteService {
             return false;
         }
     }
-
-    public List<Note> findAll() {
+    
+    public boolean update(Note note, User user) {
         try {
-            return noteRepo.findAll();
+        	if(user.getRole().equals("ROLE_ADMIN")) {
+	            noteRepo.save(note);
+	            return true;
+        	} else if(user.getUid().equals(note.getUser())) {
+        		noteRepo.save(note);
+	            return true;
+        	} else {
+        		return false;
+        	}
+        }
+        catch(Exception e) {
+            logger.warn(e.getMessage());
+            return false;
+        }
+    }
+
+    public List<Note> findAll(User user) {
+        try {
+        	List<Note> desiredNotes = new ArrayList<>();
+            int offset = 0;
+            final int LIMIT = 50;
+            do{
+                //Query database for first 50 most recent results
+                //Since date is a timestamp it should account for hours, mins, secs as well ensuring the order of the list
+                List<Note> notes = noteRepo.findNotesWithOffsetAndLimit(offset, LIMIT);
+
+                //Check if notes is empty as no more records exist
+                if(notes.size()>0){
+                    //Iterate through 50 results
+                    for(Note note:notes){
+                        //Check to see if result has all passed in tags,if so add to desiredVideos
+                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    		logger.info("Adding note");
+                    		desiredNotes.add(note);
+                    	} else {
+                    		for(User u : note.getWhitelist()) {
+                    			if(u.getUid().equals(user.getUid())) {
+	                    			logger.info("Adding note");
+	                        		desiredNotes.add(note);
+	                        		break;
+	                    		}
+                    		}
+                    		logger.warn("Not on note whitelist");
+                    	}
+                    }
+                }
+                else{
+                    break;
+                }
+                offset+= notes.size();
+            }
+            while(desiredNotes.size() < 50 && desiredNotes.size()>0);
+
+            //Find way to sort by return if it doesn't keep by recent order
+            return desiredNotes;
         }
         catch (Exception e) {
             logger.warn(e.getMessage());
@@ -103,10 +169,17 @@ public class NoteService {
         }
     }
 
-    public boolean deleteNote(Note note) {
+    public boolean deleteNote(Note note, User user) {
         try {
-            noteRepo.delete(note);
-            return true;
+        	if(user.getRole().equals("ROLE_ADMIN")) {
+	            noteRepo.save(note);
+	            return true;
+        	} else if(user.getUid().equals(note.getUser())) {
+        		noteRepo.save(note);
+	            return true;
+        	} else {
+        		return false;
+        	}
         }
         catch (Exception e) {
             logger.warn(e.getMessage());
