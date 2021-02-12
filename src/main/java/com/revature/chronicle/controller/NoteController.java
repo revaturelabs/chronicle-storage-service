@@ -34,19 +34,19 @@ import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
 
 @RestController
+//@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/notes")
 public class NoteController {
 
-    private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
+	private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
-    private final NoteService noteService;
-    private final TagRepo tagRepo;
+	private final NoteService noteService;
+	private TagRepo tagRepo;
 
-    @Autowired
-    public NoteController (NoteService ns, NoteRepo nr, TagRepo tr) {
-        this.noteService = ns;
-        this.tagRepo = tr;
-    }
+	@Autowired
+	public NoteController(NoteService ns) {
+		this.noteService = ns;
+	}
 
     /**
      * returns a list of <code>Note</code> objects in the response body, determined by the tags specified in the URI
