@@ -1,6 +1,7 @@
 package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.VideoRepo;
+import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
@@ -31,7 +32,7 @@ public class VideoService {
      * @param tags the tags provided by the user
      * @return a list of videos that have all tags
      */
-    public List<Video> findAllVideosByTags(List<Tag> tags){
+    public List<Video> findAllVideosByTags(List<Tag> tags, User user){
         System.out.println("Entered service method");
         List<Video> desiredVideos = new ArrayList<>();
         int offset = 0;
@@ -49,8 +50,19 @@ public class VideoService {
                 for(Video video:videos){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(video.getTags().containsAll(tags)){
-                        logger.info("Adding video");
-                        desiredVideos.add(video);
+                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    		logger.info("Adding video");
+                    		desiredVideos.add(video);
+                    	} else {
+                    		for(User u : video.getWhitelist()) {
+                    			if(u.getUid().equals(user.getUid())) {
+                    				logger.info("Adding video");
+                            		desiredVideos.add(video);
+                            		break;
+                    			}
+                    		}
+                    		logger.warn("Not on note whitelist");
+                    	}
                     }
                     else{
                         logger.warn("Video not found");
@@ -68,9 +80,46 @@ public class VideoService {
         return desiredVideos;
     }
 
-    public List<Video> findAll() {
+    public List<Video> findAll(User user) {
         try{
-            return videoRepo.findAll();
+        	List<Video> desiredVideos = new ArrayList<>();
+            int offset = 0;
+            final int LIMIT = 50;
+            do{
+                //Query database for first 50 most recent results
+                //Since date is a timestamp it should account for hours, mins, secs as well ensuring the order of the list
+                List<Video> videos = videoRepo.findVideosWithOffsetAndLimit(offset,LIMIT);
+                System.out.println(videos.size());
+
+                //Check if videos is empty as no more records exist
+                if(videos.size()>0){
+                    //Iterate through 50 results
+                    for(Video video:videos){
+                        //Check to see if result has all passed in tags,if so add to desiredVideos
+                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    		logger.info("Adding video");
+                    		desiredVideos.add(video);
+                    	} else {
+                    		for(User u : video.getWhitelist()) {
+                    			if(u.getUid().equals(user.getUid())) {
+                    				logger.info("Adding video");
+                            		desiredVideos.add(video);
+                            		break;
+                    			}
+                    		}
+                    		logger.warn("Not on note whitelist");
+                    	}
+                    }
+                }
+                else{
+                    break;
+                }
+                offset+= videos.size();
+            }
+            while(desiredVideos.size() < 50 && desiredVideos.size()>0);
+
+            //Find way to sort by return if it doesn't keep by recent order
+            return desiredVideos;
         }
         catch(Exception e) {
             logger.warn(e.getMessage());
@@ -100,11 +149,36 @@ public class VideoService {
             return false;
         }
     }
+    
+    public boolean update(Video video, User user) {
+        try {
+        	if(user.getRole().equals("ROLE_ADMIN")) {
+	            videoRepo.save(video);
+	            return true;
+        	} else if(user.getUid().equals(video.getUser())) {
+        		videoRepo.save(video);
+	            return true;
+        	} else {
+        		return false;
+        	}
+        }
+        catch(Exception e) {
+            logger.warn(e.getMessage());
+            return false;
+        }
+    }
 
-    public boolean deleteVideo(Video video) {
+    public boolean deleteVideo(Video video, User user) {
         try{
-            videoRepo.delete(video);
-            return true;
+        	if(user.getRole().equals("ROLE_ADMIN")) {
+	            videoRepo.save(video);
+	            return true;
+        	} else if(user.getUid().equals(video.getUser())) {
+        		videoRepo.save(video);
+	            return true;
+        	} else {
+        		return false;
+        	}
         }
         catch(Exception e) {
             logger.warn(e.getMessage());
@@ -113,15 +187,15 @@ public class VideoService {
     }
     
     //WHITELIST METHODS
-	public void addUserToWhitelist(Video video, List<User> users) {
-    	for(User user : users) {
-    		this.addUserToWhitelist(video, user);
-    	}
-    }
-    public void addUserToWhitelist(Video video, User user) {
-    	logger.info("Adding user to video whitelist" );
-    	videoRepo.addUser(video.getId(), user.getUid());
-    }
+//	public void addUserToWhitelist(Video video, List<User> users) {
+//    	for(User user : users) {
+//    		this.addUserToWhitelist(video, user);
+//    	}
+//    }
+//    public void addUserToWhitelist(Video video, User user) {
+//    	logger.info("Adding user to video whitelist" );
+//    	videoRepo.addUser(video.getId(), user.getUid());
+//    }
 
 //    //this method is to test the service method (use the repo method instead!)
 //    public List<Video> findVideosByTagService(Tag tag) { //HQL (hibernate should have mapped the relationships!)

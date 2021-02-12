@@ -68,8 +68,9 @@ public class NoteController {
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
+        User user = (User) request.getAttribute("user");
         logger.info("Retrieving target notes...");
-        List <Note> targetNotes = noteService.findAllNotesByTags(targetTags);
+        List <Note> targetNotes = noteService.findAllNotesByTags(targetTags, user);
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
@@ -82,7 +83,8 @@ public class NoteController {
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getAllNotes(HttpServletRequest request) {
         logger.info("Retrieving all notes...");
-        List<Note> targetNotes = noteService.findAll();
+        User user = (User) request.getAttribute("user");
+        List<Note> targetNotes = noteService.findAll(user);
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
@@ -123,7 +125,8 @@ public class NoteController {
     public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="noteId") int noteId, @RequestBody List<User> users){
     	Note currentNote = this.noteService.findById(noteId);
     	currentNote.setWhitelist(users);
-    	this.noteService.save(currentNote);
+    	User user = (User) request.getAttribute("user");
+    	this.noteService.update(currentNote, user);
     	return null;
     }
 }
