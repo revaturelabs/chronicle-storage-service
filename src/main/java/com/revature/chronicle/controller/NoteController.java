@@ -13,25 +13,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.chronicle.daos.NoteRepo;
-import com.revature.chronicle.daos.TagRepo;
 
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NoteService;
+import com.revature.chronicle.services.TagService;
 
 @RestController
 //@CrossOrigin(origins = "*", allowCredentials = "true")
@@ -41,11 +32,12 @@ public class NoteController {
 	private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
 	private final NoteService noteService;
-	private TagRepo tagRepo;
+	private TagService tagService;
 
 	@Autowired
-	public NoteController(NoteService ns) {
+	public NoteController(NoteService ns, TagService ts) {
 		this.noteService = ns;
+		this.tagService = ts;
 	}
 
     /**
@@ -73,8 +65,9 @@ public class NoteController {
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
+        User user = (User) request.getAttribute("user");
         logger.info("Retrieving target notes...");
-        List <Note> targetNotes = noteService.findAllNotesByTags(targetTags);
+        List <Note> targetNotes = noteService.findAllNotesByTags(targetTags, user);
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
@@ -87,7 +80,8 @@ public class NoteController {
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Note>> getAllNotes(HttpServletRequest request) {
         logger.info("Retrieving all notes...");
-        List<Note> targetNotes = noteService.findAll();
+        User user = (User) request.getAttribute("user");
+        List<Note> targetNotes = noteService.findAll(user);
         return new ResponseEntity<>(targetNotes, HttpStatus.OK);
     }
 
@@ -104,7 +98,7 @@ public class NoteController {
         tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all note tags with keys: " + tagNames +" ...");
-        List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
+        List<Tag> availableTags = tagService.findByTypeIn(tagNames);
         logger.info("Tags retrieved: " + availableTags);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
@@ -128,7 +122,8 @@ public class NoteController {
     public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="noteId") int noteId, @RequestBody List<User> users){
     	Note currentNote = this.noteService.findById(noteId);
     	currentNote.setWhitelist(users);
-    	this.noteService.save(currentNote);
+    	User user = (User) request.getAttribute("user");
+    	this.noteService.update(currentNote, user);
     	return null;
     }
 }

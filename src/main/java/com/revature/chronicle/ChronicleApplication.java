@@ -113,16 +113,15 @@ public class ChronicleApplication extends SpringBootServletInitializer{
 			input.add(tag1);
 			input.add(tag2);
 
-			List<Video> result = videoService.findAllVideosByTags(input);
-			for(Video r:result){
-				System.out.println(r.toString());
-			}
-
-			List<Note> result2 = noteService.findAllNotesByTags(input);
-			for(Note n:result2){
-				System.out.println(n.toString());
-			}
+//			List<Video> result = videoService.findAllVideosByTags(input);
+//			for(Video r:result){
+//				System.out.println(r.toString());
+//			}
+//
+//			List<Note> result2 = noteService.findAllNotesByTags(input);
+//			for(Note n:result2){
+//				System.out.println(n.toString());
+//			}
 		};
 	}
-
 }

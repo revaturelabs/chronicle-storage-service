@@ -25,7 +25,7 @@ public interface VideoRepo extends JpaRepository<Video, Integer> {
        * @return the videos
        */
 	//VIDEO QUERIES
-    @Query(value = "select * from video v order by v.date asc offset ?1 fetch next ?2 rows only",nativeQuery = true)
+    @Query(value = "SELECT * FROM video v order by v.date asc offset ?1 fetch next ?2 rows only",nativeQuery = true)
     List<Video> findVideosWithOffsetAndLimit(int offset,int limit);
       
     //WHITELIST QUERIES

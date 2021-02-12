@@ -37,5 +37,4 @@ public class User {
     public User(String userID) {
     	this.uid = userID;
     }
-	
 }
