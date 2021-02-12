@@ -45,7 +45,10 @@ public class Note extends Media{
     private Date date;
 
     @Column(name = "user_id", nullable = false)
-    private User user;
+    private String user;
+    
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "note_tag",
@@ -65,20 +68,22 @@ public class Note extends Media{
     private boolean isPrivate;
     
 
-    public Note(String description, Date date, User user, List<Tag> tags, boolean isPrivate) {
+    public Note(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate) {
     	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.displayName = displayName;
         this.whitelist = new ArrayList<>();
         this.isPrivate = isPrivate;
     }
     
-    public Note(String description, Date date, User user, List<Tag> tags, boolean isPrivate, List<User> users) {
+    public Note(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate, List<User> users) {
     	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.displayName = displayName;
         this.whitelist = users;
         this.isPrivate = isPrivate;
     }

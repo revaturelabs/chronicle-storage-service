@@ -32,7 +32,7 @@ public class VideoServiceTests {
     @Test
     public void shouldReturnAListOfAllVideos(){
         //Video video = new Video(1,"www.video.com","a title","A test video",new Date(),"",new ArrayList<Tag>(), 0);
-        Video video = new Video("A test video",new Date(),"",new ArrayList<Tag>(),false);
+        Video video = new Video("A test video",new Date(),"", "", new ArrayList<Tag>(),false);
         when(repo.findAll()).thenReturn(
                 new ArrayList<Video>(Arrays.asList(video))
         );
@@ -45,7 +45,7 @@ public class VideoServiceTests {
     @Test
     public void shouldReturnAVideoById(){
         //Video video = new Video(6, "www.video.com","a title", "A test video", new Date(), "", new ArrayList<Tag>(), 0);
-        Video video = new Video("A test video",new Date(),"",new ArrayList<Tag>(),false);
+        Video video = new Video("A test video",new Date(),"", "", new ArrayList<Tag>(),false);
         when(repo.findById(6)).thenReturn(
                 Optional.of(video)
         );
@@ -107,8 +107,8 @@ public class VideoServiceTests {
 
         //Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1, 0);
         //Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2, 0);
-        Video video1 = new Video("A description 1",new Date(),"",tags1,false);
-        Video video2 = new Video("A description 2",new Date(),"",tags2,false);
+        Video video1 = new Video("A description 1",new Date(),"", "", tags1,false);
+        Video video2 = new Video("A description 2",new Date(),"", "",tags2,false);
 
         video1.setTags(tags1);
         video2.setTags(tags2);
@@ -136,8 +136,8 @@ public class VideoServiceTests {
 
         //Video video1 = new Video(1,"http://video1.com","a title","A description",new Date(),"",tags1, 0);
         //Video video2 = new Video(2,"http://video2.com","a title","A description",new Date(),"",tags2, 0);
-        Video video1 = new Video("A description 1",new Date(),"",tags1,false);
-        Video video2 = new Video("A description 2",new Date(),"",tags2,false);
+        Video video1 = new Video("A description 1",new Date(),"", "", tags1,false);
+        Video video2 = new Video("A description 2",new Date(),"", "", tags2,false);
 
         video1.setTags(tags1);
         video2.setTags(tags2);
@@ -164,8 +164,8 @@ public class VideoServiceTests {
 
         //Video video1 = new Video(1,"http://video.com","a title","A description",new Date(),"",tags1, 0);
         //Video video2 = new Video(2,"http://video.com","a title","A description",new Date(),"",tags2, 0);
-        Video video1 = new Video("A description 1",new Date(),"",tags1,false);
-        Video video2 = new Video("A description 2",new Date(),"",tags2,false);
+        Video video1 = new Video("A description 1",new Date(),"", "", tags1,false);
+        Video video2 = new Video("A description 2",new Date(),"", "", tags2,false);
 
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>());
         List<Video> result = service.findAllVideosByTags(new ArrayList<Tag>(), mockUser);

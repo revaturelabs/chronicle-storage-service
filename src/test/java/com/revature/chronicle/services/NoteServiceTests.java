@@ -35,7 +35,7 @@ public class NoteServiceTests {
     public void shouldReturnAListOfAllNotes(){
         List<Note> notes = new ArrayList<Note>();
         //notes.add(new Note(1,"www.note.com","a title","A description",new Date(), "", new ArrayList<Tag>(), 0));
-        notes.add(new Note("A description",new Date(), "", new ArrayList<Tag>(),false));
+        notes.add(new Note("A description",new Date(), "", "", new ArrayList<Tag>(),false));
 
         when(repo.findAll()).thenReturn(notes);
 
@@ -50,7 +50,7 @@ public class NoteServiceTests {
     @Test
     public void shouldReturnANoteById(){
         //Note note = new Note(1,"www.note.com","a title","a description",new Date(),"", new ArrayList<Tag>(), 0);
-        Note note = new Note("A description",new Date(),"", new ArrayList<Tag>(),false);
+        Note note = new Note("A description",new Date(),"", "", new ArrayList<Tag>(),false);
         when(repo.findById(1).get()).thenReturn(note);
         Note result = service.findById(1);
         Assert.assertNotNull(result);
@@ -68,7 +68,7 @@ public class NoteServiceTests {
     @Test
     public void shouldSaveANoteAndReturnTrue(){
         //Note note = new Note(1,"www.note.com","a title","a description",new Date(),"", new ArrayList<Tag>(), 0);
-        Note note = new Note("A description",new Date(),"", new ArrayList<Tag>(),false);
+        Note note = new Note("A description",new Date(),"", "", new ArrayList<Tag>(),false);
         when(repo.save(note)).thenReturn(note);
         boolean result = service.save(note);
         Assert.assertTrue(result);
@@ -99,8 +99,8 @@ public class NoteServiceTests {
 
         //Note note1 = new Note(1,"http://note.com","a title","A description",new Date(),"",tags1, 0);
         //Note note2 = new Note(2,"http://note.com","a title","A description",new Date(),"",tags2, 0);
-        Note note1 = new Note("A description 1",new Date(),"",tags1,false);
-        Note note2 = new Note("A description 2",new Date(),"",tags2,false);
+        Note note1 = new Note("A description 1",new Date(),"", "", tags1,false);
+        Note note2 = new Note("A description 2",new Date(),"", "", tags2,false);
         
         note1.setTags(tags1);
         note2.setTags(tags2);
@@ -128,8 +128,8 @@ public class NoteServiceTests {
 
         //Note note1 = new Note(1,"http://note.com","a title","A description",new Date(),"",tags1);
         //Note note2 = new Note(2,"http://note.com","a title","A description",new Date(),"",tags2);
-        Note note1 = new Note("A description 1",new Date(),"",tags1,false);
-        Note note2 = new Note("A description 2",new Date(),"",tags2,false);
+        Note note1 = new Note("A description 1",new Date(),"", "", tags1,false);
+        Note note2 = new Note("A description 2",new Date(),"", "", tags2,false);
 
         note1.setTags(tags1);
         note2.setTags(tags2);
@@ -155,8 +155,8 @@ public class NoteServiceTests {
         tags2.add(tag2);
         //Note note1 = new Note(1,"http://note.com","a title","A description",new Date(),"",tags1, 0);
         //Note note2 = new Note(2,"http://note.com","a title","A description",new Date(),"",tags2, 0);
-        Note note1 = new Note("A description 1",new Date(),"",tags1,false);
-        Note note2 = new Note("A description 2",new Date(),"",tags2,false);
+        Note note1 = new Note("A description 1",new Date(),"", "", tags1,false);
+        Note note2 = new Note("A description 2",new Date(),"", "", tags2,false);
 
         when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>());
         List<Note> result = service.findAllNotesByTags(new ArrayList<Tag>(), mockUser);
