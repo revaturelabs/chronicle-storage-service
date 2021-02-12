@@ -40,7 +40,7 @@ public class VideoService {
         do{
             //Query database for first 50 most recent results
             //Since date is a timestamp it should account for hours, mins, secs as well ensuring the order of the list
-            List<Video> videos = videoRepo.findVideosWithOffsetAndLimit("qwetqrww", offset,LIMIT);
+            List<Video> videos = videoRepo.findVideosWithOffsetAndLimit(offset,LIMIT);
             System.out.println(videos.size());
 
             //Check if videos is empty as no more records exist

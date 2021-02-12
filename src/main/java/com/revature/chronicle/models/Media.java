@@ -25,4 +25,7 @@ public abstract class Media {
 
     public abstract List<Tag> getTags();
     public abstract void setTags(List<Tag> tags);
+    
+    public abstract List<User> getWhitelist();
+    public abstract void setWhitelist(List<User> users);
 }

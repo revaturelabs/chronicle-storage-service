@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,6 +29,7 @@ import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.services.NoteService;
+import com.revature.chronicle.services.TagService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,19 +39,23 @@ public class NoteControllerTests {
     private List<Note> mockNotes;
     private List<Tag> mockTags;
     private Note mockNote;
+    private User mockUser;
     private List<Tag> mockSingleTag;
 
     @Autowired
     private WebApplicationContext wac;
-
-    @MockBean
-    private TagRepo tagRepo;
 
     private MockMvc mockMvc;
 
     @MockBean
     private NoteService noteService;
 
+    @MockBean
+    private TagRepo tagRepo;
+    
+    @MockBean
+    private TagService tagService;
+    
     @Before
     public void security(){
         this.mockMvc = webAppContextSetup(wac)
@@ -66,7 +70,8 @@ public class NoteControllerTests {
         mockNote = new Note();
         mockSingleTag = new ArrayList<>();
 
-        User user = new User();
+        mockUser = new User();
+        mockUser.setUid("wwdewer");
 
         Tag tag1 = new Tag();
         tag1.setTagID(1);
@@ -92,6 +97,7 @@ public class NoteControllerTests {
         note1.setUrl("http://note1.com/%22");
         note1.setDescription("A description");
         note1.setTags(tags1);
+        note1.setUser(mockUser.getUid());
         mockNote = note1;
 
         List<Tag> tags2 = new ArrayList<>();
@@ -102,6 +108,7 @@ public class NoteControllerTests {
         note2.setId(2);
         note2.setUrl("http://note2.com/%22");
         note2.setDescription("A description");
+        note2.setUser(mockUser.getUid());
         note2.setTags(tags2);
 
         mockNotes.add(note1);
@@ -116,7 +123,7 @@ public class NoteControllerTests {
     public void shouldGetAllNotes() throws Exception {
         ObjectMapper om = new ObjectMapper();
 
-        Mockito.when(noteService.findAll()).thenReturn(mockNotes);
+        Mockito.when(noteService.findAll(mockUser)).thenReturn(mockNotes);
         MvcResult result = mockMvc.perform(get("/notes/all").with(httpBasic("user","user")))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -132,7 +139,7 @@ public class NoteControllerTests {
     public void shouldGetNotesByTag() throws Exception {
         ObjectMapper om = new ObjectMapper();
 
-        Mockito.when(noteService.findAllNotesByTags(mockSingleTag)).thenReturn(mockNotes);
+        Mockito.when(noteService.findAllNotesByTags(mockSingleTag, mockUser)).thenReturn(mockNotes);
         MvcResult result = mockMvc.perform(get("/notes/tags/{noteTags}","1:Technology:Angular")
                 .with(httpBasic("user","user")))//Assuming words separated by '+'
                 .andExpect(status().isOk())
@@ -168,7 +175,7 @@ public class NoteControllerTests {
         tagNames.add("Topic");
         tagNames.add("Batch");
 
-        Mockito.when(tagRepo.findByTypeIn(tagNames)).thenReturn(mockTags);
+        Mockito.when(tagService.findByTypeIn(tagNames)).thenReturn(mockTags);
         MvcResult result = mockMvc.perform(get("/notes/available-tags")
                 .with(httpBasic("user","user")))//Assuming words separated by '+'
                 .andExpect(status().isOk())

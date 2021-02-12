@@ -1,11 +1,14 @@
 package com.revature.chronicle.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.User;
-import com.revature.chronicle.models.Video;
-import com.revature.chronicle.services.VideoService;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +23,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.chronicle.daos.TagRepo;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.TagService;
+import com.revature.chronicle.services.VideoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,7 +46,13 @@ public class VideoControllerTests {
 
 	@MockBean
 	private TagRepo tagRepo;
+	
+	@MockBean
+	private TagService tagService;
 
+	@MockBean
+	private User mockUser;
+	
 	private MockMvc mockMvc;
 
 	@MockBean
@@ -64,7 +72,8 @@ public class VideoControllerTests {
 		mockVideo = new Video();
 		mockSingleTag = new ArrayList<>();
 
-		User user = new User();
+		mockUser = new User();
+		mockUser.setUid("qwerty");
 
 		Tag tag1 = new Tag();
 		tag1.setTagID(1);
@@ -90,6 +99,7 @@ public class VideoControllerTests {
 		video1.setDescription("A description");
 		video1.setTags(tags1);
 		video1.setId(1);
+		video1.setUser(mockUser.getUid());
 		mockVideo = video1;
 
 		List<Tag> tags2 = new ArrayList<>();
@@ -101,6 +111,7 @@ public class VideoControllerTests {
 		video2.setDescription("A description");
 		video2.setTags(tags2);
 		video2.setId(2);
+		video2.setUser(mockUser.getUid());
 
 		mockVideos.add(video1);
 		mockVideos.add(video2);
@@ -114,7 +125,7 @@ public class VideoControllerTests {
 	public void shouldGetAllVideos() throws Exception {
 		ObjectMapper om = new ObjectMapper();
 
-		Mockito.when(videoService.findAll()).thenReturn(mockVideos);
+		Mockito.when(videoService.findAll(mockUser)).thenReturn(mockVideos);
 		MvcResult result = this.mockMvc.perform(get("/videos/all").with(httpBasic("user","user")))
 				.andDo(print())
 				.andExpect(status().isOk())
@@ -130,7 +141,7 @@ public class VideoControllerTests {
 	public void shouldGetVideosByTag() throws Exception {
 		ObjectMapper om = new ObjectMapper();
 
-		Mockito.when(videoService.findAllVideosByTags(mockSingleTag)).thenReturn(mockVideos);
+		Mockito.when(videoService.findAllVideosByTags(mockSingleTag, mockUser)).thenReturn(mockVideos);
 		MvcResult result = mockMvc.perform(get("/videos/tags/{videoTags}","1:Technology:Angular")
 				.with(httpBasic("user","user")))//Assuming words separated by '+'
 				.andExpect(status().isOk())

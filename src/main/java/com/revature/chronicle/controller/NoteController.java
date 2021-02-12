@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.chronicle.daos.NoteRepo;
-import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.services.NoteService;
+import com.revature.chronicle.services.TagService;
 
 @RestController
 //@CrossOrigin(origins = "*", allowCredentials = "true")
@@ -33,14 +32,12 @@ public class NoteController {
 	private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
 	private final NoteService noteService;
-	private final NoteRepo noteRepo;
-	private final TagRepo tagRepo;
+	private TagService tagService;
 
 	@Autowired
-	public NoteController(NoteService ns, NoteRepo nr, TagRepo tr) {
+	public NoteController(NoteService ns, TagService ts) {
 		this.noteService = ns;
-		this.noteRepo = nr;
-		this.tagRepo = tr;
+		this.tagService = ts;
 	}
 
     /**
@@ -101,7 +98,7 @@ public class NoteController {
         tagNames.add("Topic");
         tagNames.add("Batch");
         logger.info("Retrieving all note tags with keys: " + tagNames +" ...");
-        List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
+        List<Tag> availableTags = tagService.findByTypeIn(tagNames);
         logger.info("Tags retrieved: " + availableTags);
         return new ResponseEntity<>(availableTags, HttpStatus.OK);
     }
