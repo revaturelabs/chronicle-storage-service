@@ -68,8 +68,9 @@ public class VideoController {
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
+        User user = (User) request.getAttribute("user");
         logger.info("Retrieving target videos...");
-        List <Video> targetVideos = videoService.findAllVideosByTags(targetTags);
+        List <Video> targetVideos = videoService.findAllVideosByTags(targetTags, user);
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
@@ -83,7 +84,8 @@ public class VideoController {
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Video>> getAllVideos(HttpServletRequest request) {
         logger.info("Retrieving all videos...");
-        List<Video> targetVideos = videoService.findAll();
+        User user = (User) request.getAttribute("user");
+        List<Video> targetVideos = videoService.findAll(user);
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
@@ -123,7 +125,8 @@ public class VideoController {
     public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="videoId") int videoId, @RequestBody List<User> users){
     	Video currentVideo = this.videoService.findById(videoId);
     	currentVideo.setWhitelist(users);
-    	this.videoService.save(currentVideo);
+    	User user = (User) request.getAttribute("user");
+    	this.videoService.update(currentVideo, user);
 		return null;
     }
     
