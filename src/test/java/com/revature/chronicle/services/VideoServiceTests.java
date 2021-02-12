@@ -106,7 +106,10 @@ public class VideoServiceTests {
         Video video1 = new Video("A description 1",new Date(),"",tags1,false);
         Video video2 = new Video("A description 2",new Date(),"",tags2,false);
 
-        when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
+        video1.setTags(tags1);
+        video2.setTags(tags2);
+        
+       when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag1,tag3));
         Assert.assertFalse(result.isEmpty());
         Assert.assertTrue(result.contains(video1) && !result.contains(video2));
@@ -132,6 +135,9 @@ public class VideoServiceTests {
         Video video1 = new Video("A description 1",new Date(),"",tags1,false);
         Video video2 = new Video("A description 2",new Date(),"",tags2,false);
 
+        video1.setTags(tags1);
+        video2.setTags(tags2);
+        
         when(repo.findVideosWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Video>(Arrays.asList(video1,video2)));
         List<Video> result = service.findAllVideosByTags(Arrays.asList(tag2,tag3));
         Assert.assertTrue(result.isEmpty());

@@ -95,6 +95,9 @@ public class NoteServiceTests {
         //Note note2 = new Note(2,"http://note.com","a title","A description",new Date(),"",tags2, 0);
         Note note1 = new Note("A description 1",new Date(),"",tags1,false);
         Note note2 = new Note("A description 2",new Date(),"",tags2,false);
+        
+        note1.setTags(tags1);
+        note2.setTags(tags2);
 
         when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>(Arrays.asList(note1,note2)));
         List<Note> result = service.findAllNotesByTags(Arrays.asList(tag1,tag3));
@@ -121,6 +124,9 @@ public class NoteServiceTests {
         //Note note2 = new Note(2,"http://note.com","a title","A description",new Date(),"",tags2);
         Note note1 = new Note("A description 1",new Date(),"",tags1,false);
         Note note2 = new Note("A description 2",new Date(),"",tags2,false);
+
+        note1.setTags(tags1);
+        note2.setTags(tags2);
 
         when(repo.findNotesWithOffsetAndLimit(0,50)).thenReturn(new ArrayList<Note>(Arrays.asList(note1,note2)));
         List<Note> result = service.findAllNotesByTags(Arrays.asList(tag2,tag3));
