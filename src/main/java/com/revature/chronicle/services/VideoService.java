@@ -39,12 +39,13 @@ public class VideoService {
         do{
             //Query database for first 50 most recent results
             //Since date is a timestamp it should account for hours, mins, secs as well ensuring the order of the list
-            List<Video> videos = videoRepo.findVideosWithOffsetAndLimit(offset,LIMIT);
+            List<Video> videos = videoRepo.findVideosWithOffsetAndLimit("qwetqrww", offset,LIMIT);
             System.out.println(videos.size());
 
             //Check if videos is empty as no more records exist
             if(videos.size()>0){
                 //Iterate through 50 results
+            	System.out.println(videos);
                 for(Video video:videos){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(video.getTags().containsAll(tags)){
