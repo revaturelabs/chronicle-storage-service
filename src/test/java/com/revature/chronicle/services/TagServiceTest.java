@@ -40,15 +40,15 @@ public class TagServiceTest {
         Tag tag = new Tag("Technology","Java");
         Optional<Tag> optional = Optional.of(tag);
         when(repo.findById(1)).thenReturn(optional);
-        Optional<Tag> result = service.findById(1);
-        Assertions.assertEquals(result, optional);
+        Tag result = service.findById(1);
+        Assertions.assertEquals(result, tag);
         verify(repo).findById(1);
     }
 
     @Test
     public void shouldReturnNullIfNoTagFound(){
-        when(repo.findById(2)).thenReturn(Optional.empty());
-        Optional<Tag> result = service.findById(2);
+    	when(repo.findById(2)).thenReturn(Optional.empty());
+        Optional<Tag> result = Optional.ofNullable(service.findById(2));
         Assertions.assertNotNull(result);
         verify(repo).findById(2);
     }
@@ -69,4 +69,5 @@ public class TagServiceTest {
         Assertions.assertFalse(result);
         verify(repo).save(null);
     }
+}
 

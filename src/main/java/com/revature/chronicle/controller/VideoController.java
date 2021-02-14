@@ -18,14 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.VideoService;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 //@CrossOrigin(origins = "*", allowCredentials = "true")
@@ -35,14 +32,12 @@ public class VideoController {
 	private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
 	private final VideoService videoService;
-	private final TagRepo tagRepo;
-	private final VideoRepo videoRepo;
-
+	private TagService tagService;
+	
 	@Autowired
-	public VideoController(VideoService vs, TagRepo tr, VideoRepo vr) {
+	public VideoController(VideoService vs, TagService ts) {
 		this.videoService = vs;
-		this.tagRepo = tr;
-		this.videoRepo = vr;
+		this.tagService = ts;
 	}
 
     /**
@@ -107,7 +102,7 @@ public class VideoController {
 		tagNames.add("Topic");
 		tagNames.add("Batch");
 		logger.info("Retrieving all video tags with keys: " + tagNames + " ...");
-		List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
+		List<Tag> availableTags = tagService.findByTypeIn(tagNames);
 		return new ResponseEntity<>(availableTags, HttpStatus.OK);
 	}
 

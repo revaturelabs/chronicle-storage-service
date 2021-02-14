@@ -11,6 +11,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,8 +44,12 @@ public class Video extends Media{
     @CreationTimestamp
     private Date date;
 
+
     @Column(name = "user_id", nullable = false)
     private String user;
+    
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "video_tag",
@@ -62,11 +68,23 @@ public class Video extends Media{
     @Column(name = "private", nullable = false)
     private boolean isPrivate;
 
-    public Video(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
+    public Video(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate) {
     	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.displayName = displayName;
+        this.whitelist = new ArrayList<>();
         this.isPrivate = isPrivate;
+    }
+    
+    public Video(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate, List<User> users) {
+    	super();
+        this.description = description;
+        this.date = date;
+        this.user = user;
+        this.displayName = displayName;
+        this.isPrivate = isPrivate;
+        this.whitelist = users;
     }
 }
