@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +32,7 @@ import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.services.NoteService;
+import com.revature.chronicle.services.TagService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -45,13 +45,11 @@ public class NoteControllerTests {
     private List<Note> mockNotes;
     private List<Tag> mockTags;
     private Note mockNote;
+    private User mockUser;
     private List<Tag> mockSingleTag;
 
     @Autowired
     private WebApplicationContext wac;
-
-    @MockBean
-    private TagRepo tagRepo;
 
     private MockMvc mockMvc;
     
@@ -60,19 +58,19 @@ public class NoteControllerTests {
     @MockBean
     private NoteService noteService;
 
-	@MockBean
-	AuthenticationInterceptor interceptor;
+    @MockBean
+    AuthenticationInterceptor interceptor;
 
 
-	@BeforeEach
-	void initTest() {
-	    try {
-			when(interceptor.preHandle(any(), any(), any())).thenReturn(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+    @BeforeEach
+    void initTest() {
+        try {
+        when(interceptor.preHandle(any(), any(), any())).thenReturn(true);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  
     @Before
     public void security(){
         this.mockMvc = webAppContextSetup(wac)
@@ -87,7 +85,8 @@ public class NoteControllerTests {
         mockNote = new Note();
         mockSingleTag = new ArrayList<>();
 
-        User user = new User();
+        mockUser = new User();
+        mockUser.setUid("wwdewer");
 
         Tag tag1 = new Tag();
         //tag1.setTagID(1);
@@ -189,7 +188,7 @@ public class NoteControllerTests {
         tagNames.add("Topic");
         tagNames.add("Batch");
 
-        Mockito.when(tagRepo.findByTypeIn(tagNames)).thenReturn(mockTags);
+        Mockito.when(tagService.findByTypeIn(tagNames)).thenReturn(mockTags);
         MvcResult result = mockMvc.perform(get("/notes/available-tags")
                 .with(httpBasic("user","user")))//Assuming words separated by '+'
                 .andExpect(status().isOk())

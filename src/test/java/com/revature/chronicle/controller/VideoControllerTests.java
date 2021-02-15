@@ -50,7 +50,13 @@ public class VideoControllerTests {
 
 	@MockBean
 	private TagRepo tagRepo;
+	
+	@MockBean
+	private TagService tagService;
 
+	@MockBean
+	private User mockUser;
+	
 	private MockMvc mockMvc;
 	
 	private User mockUser;
@@ -85,7 +91,8 @@ public class VideoControllerTests {
 		mockVideo = new Video();
 		mockSingleTag = new ArrayList<>();
 
-		User user = new User();
+		mockUser = new User();
+		mockUser.setUid("qwerty");
 
 		Tag tag1 = new Tag();
 		//tag1.setTagID(1);
