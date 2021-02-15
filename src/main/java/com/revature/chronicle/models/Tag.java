@@ -4,8 +4,6 @@ package com.revature.chronicle.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Synchronized;
-import lombok.ToString;
 
 import java.util.List;
 
