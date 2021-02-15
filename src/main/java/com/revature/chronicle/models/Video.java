@@ -57,11 +57,13 @@ public class Video extends Media{
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     private List<Tag> tags;
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "video_whitelist",
-    			joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
-    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
-    private List<User> whitelist;
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinTable(name = "video_whitelist",
+//    			joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
+//    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    @Column
+    @ElementCollection(targetClass = String.class)
+    private List<String> whitelist;
     
     @Column(name = "private", nullable = false)
     private boolean isPrivate;
@@ -76,7 +78,7 @@ public class Video extends Media{
         this.isPrivate = isPrivate;
     }
     
-    public Video(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate, List<User> users) {
+    public Video(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate, List<String> users) {
     	super();
         this.description = description;
         this.date = date;
@@ -85,4 +87,6 @@ public class Video extends Media{
         this.isPrivate = isPrivate;
         this.whitelist = users;
     }
+    
+    
 }

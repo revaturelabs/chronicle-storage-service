@@ -122,7 +122,7 @@ public class VideoController {
     }
     
     @PutMapping(path = "whitelist/{videoId}")
-    public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="videoId") int videoId, @RequestBody List<User> users){
+    public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="videoId") int videoId, @RequestBody List<String> users){
     	Video currentVideo = this.videoService.findById(videoId);
     	currentVideo.setWhitelist(users);
     	User user = (User) request.getAttribute("user");

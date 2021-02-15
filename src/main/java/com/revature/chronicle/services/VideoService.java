@@ -56,8 +56,8 @@ public class VideoService {
                     			logger.info("Adding video");
                         		desiredVideos.add(video);
                     		} else {
-	                    		for(User u : video.getWhitelist()) {
-	                    			if(u.getUid().equals(user.getUid())) {
+	                    		for(String u : video.getWhitelist()) {
+	                    			if(u.equals(user.getUid())) {
 	                    				logger.info("Adding video");
 	                            		desiredVideos.add(video);
 	                            		break;
@@ -108,8 +108,8 @@ public class VideoService {
                     			logger.info("Adding video");
                         		desiredVideos.add(video);
                     		} else {
-	                    		for(User u : video.getWhitelist()) {
-	                    			if(u.getUid().equals(user.getUid())) {
+	                    		for(String u : video.getWhitelist()) {
+	                    			if(u.equals(user.getUid())) {
 	                    				logger.info("Adding video");
 	                            		desiredVideos.add(video);
 	                            		break;
