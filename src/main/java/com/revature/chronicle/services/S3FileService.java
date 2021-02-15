@@ -45,13 +45,11 @@ public class S3FileService {
     @PostConstruct
     private void initializeAws() {
         AWSCredentials awsCredentials = new BasicAWSCredentials(this.awsAccessKey, this.awsSecretKey);
-        AmazonS3 s3Client = AmazonS3ClientBuilder
+        this.s3Client = AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .withRegion(this.awsRegion)
                 .build();
-
-        this.s3Client = s3Client;
     }
 
     public void setAwsBucket(String awsBucket) {
@@ -76,9 +74,7 @@ public class S3FileService {
             Upload upload = tm.upload(req);
             UploadResult result = upload.waitForUploadResult();
 
-        } catch (AmazonClientException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (AmazonClientException | InterruptedException e) {
             e.printStackTrace();
         }
 
