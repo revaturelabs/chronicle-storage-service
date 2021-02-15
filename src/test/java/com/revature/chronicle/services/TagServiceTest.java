@@ -38,7 +38,8 @@ public class TagServiceTest {
     @Test
     public void shouldReturnATagById(){
         Tag tag = new Tag("Technology","Java");
-        when(repo.findById(1).get()).thenReturn(tag);
+        Optional<Tag> optional = Optional.of(tag);
+        when(repo.findById(1)).thenReturn(optional);
         Tag result = service.findById(1);
         Assertions.assertEquals(result, tag);
         verify(repo).findById(1);
@@ -46,8 +47,8 @@ public class TagServiceTest {
 
     @Test
     public void shouldReturnNullIfNoTagFound(){
-        when(repo.findById(2).get()).thenReturn(null);
-        Tag result = service.findById(2);
+    	when(repo.findById(2)).thenReturn(Optional.empty());
+        Optional<Tag> result = Optional.ofNullable(service.findById(2));
         Assertions.assertNotNull(result);
         verify(repo).findById(2);
     }
