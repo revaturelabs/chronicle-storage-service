@@ -74,7 +74,7 @@ public class FileUploadController {
 
         //Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
         try {
-            if (Objects.requireNonNull(file.getContentType()).contains("text") || file.getContentType().contains("pdf")) {
+            if (!file.isEmpty() && file.getContentType() != null && ( file.getContentType().contains("text") || file.getContentType().contains("pdf") ) ) {
                 newFile = mapper.readValue(json, Note.class);
                 fileType = "note";
             } else if (file.getContentType().contains("video")) {
