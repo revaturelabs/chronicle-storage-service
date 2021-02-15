@@ -1,11 +1,9 @@
 package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.VideoRepo;
-import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
-import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ import java.util.*;
 
 @Service
 public class VideoService {
-    private static final Logger logger = LoggerFactory.getLogger(FirebaseInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(VideoService.class);
     @Autowired
     private VideoRepo videoRepo;
 
@@ -44,7 +42,7 @@ public class VideoService {
             System.out.println(videos.size());
 
             //Check if videos is empty as no more records exist
-            if(videos.size()>0){
+            if(!videos.isEmpty()){
                 //Iterate through 50 results
             	System.out.println(videos);
                 for(Video video:videos){
@@ -79,7 +77,7 @@ public class VideoService {
             }
             offset+= videos.size();
         }
-        while(desiredVideos.size() < 50 && desiredVideos.size()>0);
+        while(desiredVideos.size() < 50 && !desiredVideos.isEmpty());
 
         //Find way to sort by return if it doesn't keep by recent order
         return desiredVideos;
@@ -97,7 +95,7 @@ public class VideoService {
                 System.out.println(videos.size());
 
                 //Check if videos is empty as no more records exist
-                if(videos.size()>0){
+                if(!videos.isEmpty()){
                     //Iterate through 50 results
                     for(Video video:videos){
                         //Check to see if result has all passed in tags,if so add to desiredVideos
@@ -127,7 +125,7 @@ public class VideoService {
                 }
                 offset+= videos.size();
             }
-            while(desiredVideos.size() < 50 && desiredVideos.size()>0);
+            while(desiredVideos.size() < 50 && !desiredVideos.isEmpty());
 
             //Find way to sort by return if it doesn't keep by recent order
             return desiredVideos;
@@ -163,11 +161,8 @@ public class VideoService {
     
     public boolean update(Video video, User user) {
         try {
-        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(video.getUser())) {
 	            videoRepo.save(video);
-	            return true;
-        	} else if(user.getUid().equals(video.getUser())) {
-        		videoRepo.save(video);
 	            return true;
         	} else {
         		return false;
@@ -181,11 +176,8 @@ public class VideoService {
 
     public boolean deleteVideo(Video video, User user) {
         try{
-        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(video.getUser())) {
 	            videoRepo.save(video);
-	            return true;
-        	} else if(user.getUid().equals(video.getUser())) {
-        		videoRepo.save(video);
 	            return true;
         	} else {
         		return false;

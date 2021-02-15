@@ -114,8 +114,7 @@ public class NoteController {
     @GetMapping(path = "id/{noteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Note getNoteById(HttpServletRequest request, @PathVariable(name="noteId") int id) {
         logger.info("Retrieving target note with ID: " + id + " ...");
-        Note targetNote = noteService.findById(id);
-        return targetNote;
+        return noteService.findById(id);
     }
     
     @PutMapping(path = "whitelist/{noteId}")

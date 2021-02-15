@@ -4,7 +4,6 @@ import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +11,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Service to handle business logic surrounding data access layer for notes
  */
 @Service
 public class NoteService {
-    private static final Logger logger = LoggerFactory.getLogger(FirebaseInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
     @Autowired
     private NoteRepo noteRepo;
 
@@ -44,7 +42,7 @@ public class NoteService {
             System.out.println(notes.size());
 
             //Check if notes is empty as no more records exist
-            if(notes.size()>0){
+            if(!notes.isEmpty()){
                 //Iterate through 50 results
                 for(Note note:notes){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
@@ -78,7 +76,7 @@ public class NoteService {
             }
             offset+= notes.size();
         }
-        while(desiredNotes.size() < 50 && desiredNotes.size()>0);
+        while(desiredNotes.size() < 50 && !desiredNotes.isEmpty());
 
         //Find way to sort by return if it doesn't keep by recent order
         return desiredNotes;
@@ -97,11 +95,8 @@ public class NoteService {
     
     public boolean update(Note note, User user) {
         try {
-        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(note.getUser())) {
 	            noteRepo.save(note);
-	            return true;
-        	} else if(user.getUid().equals(note.getUser())) {
-        		noteRepo.save(note);
 	            return true;
         	} else {
         		return false;
@@ -124,7 +119,7 @@ public class NoteService {
                 List<Note> notes = noteRepo.findNotesWithOffsetAndLimit(offset, LIMIT);
 
                 //Check if notes is empty as no more records exist
-                if(notes.size()>0){
+                if(!notes.isEmpty()){
                     //Iterate through 50 results
                     for(Note note:notes){
                         //Check to see if result has all passed in tags,if so add to desiredVideos
@@ -153,7 +148,7 @@ public class NoteService {
                 }
                 offset+= notes.size();
             }
-            while(desiredNotes.size() < 50 && desiredNotes.size()>0);
+            while(desiredNotes.size() < 50 && !desiredNotes.isEmpty());
 
             //Find way to sort by return if it doesn't keep by recent order
             return desiredNotes;
@@ -181,11 +176,8 @@ public class NoteService {
 
     public boolean deleteNote(Note note, User user) {
         try {
-        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(note.getUser())) {
 	            noteRepo.save(note);
-	            return true;
-        	} else if(user.getUid().equals(note.getUser())) {
-        		noteRepo.save(note);
 	            return true;
         	} else {
         		return false;
