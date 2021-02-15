@@ -1,11 +1,9 @@
 package com.revature.chronicle.services;
 
 import com.revature.chronicle.daos.VideoRepo;
-import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
-import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
