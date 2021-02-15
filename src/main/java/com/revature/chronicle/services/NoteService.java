@@ -49,7 +49,7 @@ public class NoteService {
                 for(Note note:notes){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(note.getTags().containsAll(tags)){
-                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
                     		logger.info("Adding note");
                     		desiredNotes.add(note);
                     	} else {
@@ -97,7 +97,7 @@ public class NoteService {
     
     public boolean update(Note note, User user) {
         try {
-        	if(user.getRole().equals("ROLE_ADMIN")) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
 	            noteRepo.save(note);
 	            return true;
         	} else if(user.getUid().equals(note.getUser())) {
@@ -128,7 +128,7 @@ public class NoteService {
                     //Iterate through 50 results
                     for(Note note:notes){
                         //Check to see if result has all passed in tags,if so add to desiredVideos
-                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
                     		logger.info("Adding note");
                     		desiredNotes.add(note);
                     	} else {
@@ -181,7 +181,7 @@ public class NoteService {
 
     public boolean deleteNote(Note note, User user) {
         try {
-        	if(user.getRole().equals("ROLE_ADMIN")) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
 	            noteRepo.save(note);
 	            return true;
         	} else if(user.getUid().equals(note.getUser())) {
