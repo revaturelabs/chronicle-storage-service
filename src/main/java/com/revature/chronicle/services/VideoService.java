@@ -50,7 +50,7 @@ public class VideoService {
                 for(Video video:videos){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(video.getTags().containsAll(tags)){
-                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
                     		logger.info("Adding video");
                     		desiredVideos.add(video);
                     	} else {
