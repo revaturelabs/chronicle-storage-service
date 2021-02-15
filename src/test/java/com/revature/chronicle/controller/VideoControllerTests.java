@@ -6,6 +6,7 @@ import com.revature.chronicle.interceptors.AuthenticationInterceptor;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.VideoService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,8 +60,6 @@ public class VideoControllerTests {
 	
 	private MockMvc mockMvc;
 	
-	private User mockUser;
-
 	@MockBean
 	private VideoService videoService;
 	

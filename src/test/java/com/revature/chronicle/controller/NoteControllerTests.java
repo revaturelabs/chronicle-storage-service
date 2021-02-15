@@ -45,7 +45,7 @@ public class NoteControllerTests {
     private List<Note> mockNotes;
     private List<Tag> mockTags;
     private Note mockNote;
-    private User mockUser;
+//    private User mockUser;
     private List<Tag> mockSingleTag;
 
     @Autowired
@@ -53,6 +53,7 @@ public class NoteControllerTests {
 
     private MockMvc mockMvc;
     
+    @MockBean
     private User mockUser;
 
     @MockBean
@@ -60,6 +61,9 @@ public class NoteControllerTests {
 
     @MockBean
     AuthenticationInterceptor interceptor;
+    
+    @MockBean
+    private TagService tagService;
 
 
     @BeforeEach
