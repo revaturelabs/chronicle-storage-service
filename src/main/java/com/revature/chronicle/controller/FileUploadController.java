@@ -74,12 +74,14 @@ public class FileUploadController {
 
         //Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
         try {
-            if (!file.isEmpty() && file.getContentType() != null && ( file.getContentType().contains("text") || file.getContentType().contains("pdf") ) ) {
-                newFile = mapper.readValue(json, Note.class);
-                fileType = "note";
-            } else if (file.getContentType().contains("video")) {
-                newFile = mapper.readValue(json, Video.class);
-                fileType = "video";
+            if (!file.isEmpty() && file.getContentType() != null) {
+            	if(file.getContentType().contains("text") || file.getContentType().contains("pdf")) {            		
+            		newFile = mapper.readValue(json, Note.class);
+            		fileType = "note";
+            	} else if (file.getContentType().contains("video")) {            		
+            		newFile = mapper.readValue(json, Video.class);
+            		fileType = "video";
+            	}
             } else {
                 responseBody = "Unsupported file type. Please upload either a video or a text file.";
                 return new ResponseEntity<>(mapper.writeValueAsString(responseBody), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
