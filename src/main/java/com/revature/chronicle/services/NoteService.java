@@ -53,14 +53,19 @@ public class NoteService {
                     		logger.info("Adding note");
                     		desiredNotes.add(note);
                     	} else {
-                    		for(User u : note.getWhitelist()) {
-                    			if(u.getUid().equals(user.getUid())) {
-	                    			logger.info("Adding note");
-	                        		desiredNotes.add(note);
-	                        		break;
+                    		if(!note.isPrivate()) {
+                    			logger.info("Adding note");
+                        		desiredNotes.add(note);
+                    		} else {
+	                    		for(User u : note.getWhitelist()) {
+	                    			if(u.getUid().equals(user.getUid())) {
+		                    			logger.info("Adding note");
+		                        		desiredNotes.add(note);
+		                        		break;
+		                    		}
 	                    		}
+	                    		logger.warn("Not on note whitelist");
                     		}
-                    		logger.warn("Not on note whitelist");
                     	}
                     }
                     else{
@@ -127,14 +132,19 @@ public class NoteService {
                     		logger.info("Adding note");
                     		desiredNotes.add(note);
                     	} else {
-                    		for(User u : note.getWhitelist()) {
-                    			if(u.getUid().equals(user.getUid())) {
-	                    			logger.info("Adding note");
-	                        		desiredNotes.add(note);
-	                        		break;
+                    		if(!note.isPrivate()) {
+                    			logger.info("Adding note");
+                        		desiredNotes.add(note);
+                    		} else {
+                    			for(User u : note.getWhitelist()) {
+	                    			if(u.getUid().equals(user.getUid())) {
+		                    			logger.info("Adding note");
+		                        		desiredNotes.add(note);
+		                        		break;
+		                    		}
 	                    		}
+	                    		logger.warn("Not on note whitelist");
                     		}
-                    		logger.warn("Not on note whitelist");
                     	}
                     }
                 }

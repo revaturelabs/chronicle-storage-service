@@ -54,14 +54,19 @@ public class VideoService {
                     		logger.info("Adding video");
                     		desiredVideos.add(video);
                     	} else {
-                    		for(User u : video.getWhitelist()) {
-                    			if(u.getUid().equals(user.getUid())) {
-                    				logger.info("Adding video");
-                            		desiredVideos.add(video);
-                            		break;
-                    			}
+                    		if(!video.isPrivate()) {
+                    			logger.info("Adding video");
+                        		desiredVideos.add(video);
+                    		} else {
+	                    		for(User u : video.getWhitelist()) {
+	                    			if(u.getUid().equals(user.getUid())) {
+	                    				logger.info("Adding video");
+	                            		desiredVideos.add(video);
+	                            		break;
+	                    			}
+	                    		}
+	                    		logger.warn("Not on video whitelist");
                     		}
-                    		logger.warn("Not on note whitelist");
                     	}
                     }
                     else{
@@ -100,14 +105,19 @@ public class VideoService {
                     		logger.info("Adding video");
                     		desiredVideos.add(video);
                     	} else {
-                    		for(User u : video.getWhitelist()) {
-                    			if(u.getUid().equals(user.getUid())) {
-                    				logger.info("Adding video");
-                            		desiredVideos.add(video);
-                            		break;
-                    			}
+                    		if(!video.isPrivate()) {
+                    			logger.info("Adding video");
+                        		desiredVideos.add(video);
+                    		} else {
+	                    		for(User u : video.getWhitelist()) {
+	                    			if(u.getUid().equals(user.getUid())) {
+	                    				logger.info("Adding video");
+	                            		desiredVideos.add(video);
+	                            		break;
+	                    			}
+	                    		}
+	                    		logger.warn("Not on video whitelist");
                     		}
-                    		logger.warn("Not on note whitelist");
                     	}
                     }
                 }
@@ -185,32 +195,4 @@ public class VideoService {
             return false;
         }
     }
-    
-    //WHITELIST METHODS
-//	public void addUserToWhitelist(Video video, List<User> users) {
-//    	for(User user : users) {
-//    		this.addUserToWhitelist(video, user);
-//    	}
-//    }
-//    public void addUserToWhitelist(Video video, User user) {
-//    	logger.info("Adding user to video whitelist" );
-//    	videoRepo.addUser(video.getId(), user.getUid());
-//    }
-
-//    //this method is to test the service method (use the repo method instead!)
-//    public List<Video> findVideosByTagService(Tag tag) { //HQL (hibernate should have mapped the relationships!)
-//        try{
-//            return videoRepo.findVideosByTag(tag); //update uses the jpa repo method as save
-//        }
-//        catch(Exception e) {
-//            System.out.println(e.getMessage());
-//            return new ArrayList<>();
-//        }
-//    }
-
-//    List<Video> findByTags(Set<Tag> tags) {
-//        List<Video> videoList;
-//        videoList = new ArrayList<>();
-//        return videoList;
-//    }
 }
