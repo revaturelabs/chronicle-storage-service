@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 @Service
 public class TagService {
-    private static final Logger logger = LoggerFactory.getLogger(FirebaseInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(TagService.class);
     @Autowired
     private TagRepo tagRepo;
 

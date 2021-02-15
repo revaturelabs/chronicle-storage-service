@@ -19,7 +19,7 @@ import java.util.*;
 
 @Service
 public class VideoService {
-    private static final Logger logger = LoggerFactory.getLogger(FirebaseInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(VideoService.class);
     @Autowired
     private VideoRepo videoRepo;
 
