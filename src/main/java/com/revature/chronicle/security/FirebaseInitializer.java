@@ -1,6 +1,5 @@
 package com.revature.chronicle.security;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.ExportedUserRecord;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.ListUsersPage;
 
 import lombok.extern.slf4j.Slf4j;
