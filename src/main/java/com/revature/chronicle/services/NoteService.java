@@ -4,7 +4,6 @@ import com.revature.chronicle.daos.NoteRepo;
 import com.revature.chronicle.models.Note;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.security.FirebaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +47,23 @@ public class NoteService {
                 for(Note note:notes){
                     //Check to see if result has all passed in tags,if so add to desiredVideos
                     if(note.getTags().containsAll(tags)){
-                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
                     		logger.info("Adding note");
                     		desiredNotes.add(note);
                     	} else {
-                    		for(User u : note.getWhitelist()) {
-                    			if(u.getUid().equals(user.getUid())) {
-	                    			logger.info("Adding note");
-	                        		desiredNotes.add(note);
-	                        		break;
+                    		if(!note.isPrivate()) {
+                    			logger.info("Adding note");
+                        		desiredNotes.add(note);
+                    		} else {
+	                    		for(User u : note.getWhitelist()) {
+	                    			if(u.getUid().equals(user.getUid())) {
+		                    			logger.info("Adding note");
+		                        		desiredNotes.add(note);
+		                        		break;
+		                    		}
 	                    		}
+	                    		logger.warn("Not on note whitelist");
                     		}
-                    		logger.warn("Not on note whitelist");
                     	}
                     }
                     else{
@@ -91,7 +95,7 @@ public class NoteService {
     
     public boolean update(Note note, User user) {
         try {
-        	if(user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(note.getUser())) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(note.getUser())) {
 	            noteRepo.save(note);
 	            return true;
         	} else {
@@ -119,18 +123,23 @@ public class NoteService {
                     //Iterate through 50 results
                     for(Note note:notes){
                         //Check to see if result has all passed in tags,if so add to desiredVideos
-                    	if(user.getRole().equals("ROLE_ADMIN")) {
+                    	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN")) {
                     		logger.info("Adding note");
                     		desiredNotes.add(note);
                     	} else {
-                    		for(User u : note.getWhitelist()) {
-                    			if(u.getUid().equals(user.getUid())) {
-	                    			logger.info("Adding note");
-	                        		desiredNotes.add(note);
-	                        		break;
+                    		if(!note.isPrivate()) {
+                    			logger.info("Adding note");
+                        		desiredNotes.add(note);
+                    		} else {
+                    			for(User u : note.getWhitelist()) {
+	                    			if(u.getUid().equals(user.getUid())) {
+		                    			logger.info("Adding note");
+		                        		desiredNotes.add(note);
+		                        		break;
+		                    		}
 	                    		}
+	                    		logger.warn("Not on note whitelist");
                     		}
-                    		logger.warn("Not on note whitelist");
                     	}
                     }
                 }
@@ -167,7 +176,7 @@ public class NoteService {
 
     public boolean deleteNote(Note note, User user) {
         try {
-        	if(user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(note.getUser())) {
+        	if(user.getRole() != null && user.getRole().equals("ROLE_ADMIN") || user.getUid().equals(note.getUser())) {
 	            noteRepo.save(note);
 	            return true;
         	} else {
