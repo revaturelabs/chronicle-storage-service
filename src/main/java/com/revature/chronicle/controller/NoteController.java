@@ -119,7 +119,7 @@ public class NoteController {
     }
     
     @PutMapping(path = "whitelist/{noteId}")
-    public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="noteId") int noteId, @RequestBody List<User> users){
+    public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="noteId") int noteId, @RequestBody List<String> users){
     	Note currentNote = this.noteService.findById(noteId);
     	currentNote.setWhitelist(users);
     	User user = (User) request.getAttribute("user");

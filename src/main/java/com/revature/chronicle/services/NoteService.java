@@ -57,8 +57,8 @@ public class NoteService {
                     			logger.info("Adding note");
                         		desiredNotes.add(note);
                     		} else {
-	                    		for(User u : note.getWhitelist()) {
-	                    			if(u.getUid().equals(user.getUid())) {
+	                    		for(String u : note.getWhitelist()) {
+	                    			if(u.equals(user.getUid())) {
 		                    			logger.info("Adding note");
 		                        		desiredNotes.add(note);
 		                        		break;
@@ -136,8 +136,8 @@ public class NoteService {
                     			logger.info("Adding note");
                         		desiredNotes.add(note);
                     		} else {
-                    			for(User u : note.getWhitelist()) {
-	                    			if(u.getUid().equals(user.getUid())) {
+                    			for(String u : note.getWhitelist()) {
+	                    			if(u.equals(user.getUid())) {
 		                    			logger.info("Adding note");
 		                        		desiredNotes.add(note);
 		                        		break;
