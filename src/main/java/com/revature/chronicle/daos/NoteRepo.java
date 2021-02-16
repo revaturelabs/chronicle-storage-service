@@ -13,11 +13,7 @@ import java.util.List;
  * Repository interface for note data
  */
 @Repository
-public interface NoteRepo extends JpaRepository<Note, Integer> {
-	//WHITELIST QUERY STRINGS
-	public static final String ADD_USER = "INSERT INTO note_whitelist VALUES ? ?";
-	public static final String GET_USERS = "SELECT * FROM note_whitelist WHERE note_id = ?";
-	
+public interface NoteRepo extends JpaRepository<Note, Integer> {	
     /**
      * Finds notes with an offset and limit used for paging
      * @param offset where to begin
@@ -27,12 +23,5 @@ public interface NoteRepo extends JpaRepository<Note, Integer> {
 	//NOTE QUERIES
     @Query(value = "select * from note n order by n.date asc offset ?1 fetch next ?2 rows only",nativeQuery = true)
     List<Note> findNotesWithOffsetAndLimit(int offset, int limit);
-    
-    //WHITELIST QUERIES
-    @Query(value = ADD_USER, nativeQuery = true)
-    void addUser(int noteId, String userId);
-	
-	@Query(value = GET_USERS, nativeQuery = true)
-    List<Video> getUsers(int noteId);
 
 }

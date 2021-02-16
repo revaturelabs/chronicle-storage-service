@@ -52,10 +52,6 @@ public class Note extends Media{
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     private List<Tag> tags;
     
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-//    @JoinTable(name = "note_whitelist",
-//    			joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
-//    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     @Column
     @ElementCollection(targetClass = String.class)
     private List<String> whitelist;
