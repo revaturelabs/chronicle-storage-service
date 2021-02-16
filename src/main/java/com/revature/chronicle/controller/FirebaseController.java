@@ -1,10 +1,19 @@
 package com.revature.chronicle.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,10 +22,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.ListUsersPage;
+import com.revature.chronicle.models.User;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/firebase")
 public class FirebaseController {	
+//	
+//	private FirebaseAuth firebaseAuth;
+//	
+//	public FirebaseController() {
+//		firebaseAuth = FirebaseAuth.getInstance();
+//	}
 	
 	@GetMapping(value = "/authenticate")
 	public void authenticateUser(HttpServletRequest req, HttpServletResponse resp) throws FirebaseAuthException {
@@ -54,10 +72,36 @@ public class FirebaseController {
         		item.put("email", user.getEmail());
         		item.put("displayName", user.getDisplayName());
         		response.add(item);
+        		System.out.println("User: " + user.getEmail());
+        		System.out.println("Role: " + user.getCustomClaims().get("role").toString());
         	}
         	page = page.getNextPage();
         }
 		
 		return response;
 	}
+	
+	/**
+	 * Assigns a role to a newly registered user
+	 * @param req
+	 * @param userId
+	 * @param resp
+	 * @throws FirebaseAuthException
+	 */
+	@PutMapping(path="/register/{userId}")
+	public void setUser(HttpServletRequest req, @PathVariable(name="userId") String userId, HttpServletResponse resp) throws FirebaseAuthException {
+		Object rolesObject = FirebaseAuth.getInstance().getUser(userId).getCustomClaims().get("role");
+		if(Objects.isNull(rolesObject)) {
+			ArrayList<String> rolesList = new ArrayList<>();
+			rolesList.add("ROLE_USER");
+			Map<String, Object> claims = new HashMap<>();
+			claims.put("role", rolesList);
+			FirebaseAuth.getInstance().setCustomUserClaims(userId, claims);
+		}
+	}
+	
+//	@PutMapping(path="/set}")
+//	public void setUsers(HttpServletRequest req, HttpServletResponse resp, @RequestBody List<String> users) throws FirebaseAuthException {
+//		
+//	}
 }
