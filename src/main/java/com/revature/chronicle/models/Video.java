@@ -54,10 +54,6 @@ public class Video extends Media{
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     private List<Tag> tags;
     
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable(name = "video_whitelist",
-//    			joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "video_id", columnDefinition = "INT"),
-//    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     @Column
     @ElementCollection(targetClass = String.class)
     private List<String> whitelist;
