@@ -23,12 +23,12 @@ import com.revature.chronicle.services.VideoService;
 
 @SpringBootApplication
 public class ChronicleApplication extends SpringBootServletInitializer{
-	@Autowired
-	public TagService tagService;
-	@Autowired
-	public VideoService videoService;
-	@Autowired
-	public NoteService noteService;
+//	@Autowired
+//	public TagService tagService;
+//	@Autowired
+//	public VideoService videoService;
+//	@Autowired
+//	public NoteService noteService;
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder){
@@ -80,8 +80,7 @@ public class ChronicleApplication extends SpringBootServletInitializer{
 //			video1.setDescription("Created a basic Angular application and went over TypeScript OOP, data types, and Basics. Introduced data interpolation and NodeJS.");
 //			video1.setTags(tags1);
 //			videoService.save(video1);
-//			
-//			
+//
 //			List<Tag> tags2 = new ArrayList<>();
 //			tags2.add(tag2);
 //			tags2.add(tag4);
@@ -113,7 +112,7 @@ public class ChronicleApplication extends SpringBootServletInitializer{
 //			List<Tag> input = new ArrayList<>();
 //			input.add(tag1);
 //			input.add(tag2);
-//
+
 //			List<Video> result = videoService.findAllVideosByTags(input);
 //			for(Video r:result){
 //				System.out.println(r.toString());
@@ -125,5 +124,4 @@ public class ChronicleApplication extends SpringBootServletInitializer{
 //			}
 //		};
 //	}
-
 }

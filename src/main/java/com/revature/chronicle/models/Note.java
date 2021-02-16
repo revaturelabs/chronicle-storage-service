@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +46,9 @@ public class Note extends Media{
 
     @Column(name = "user_id", nullable = false)
     private String user;
+    
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "note_tag",
@@ -51,20 +56,36 @@ public class Note extends Media{
             inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id", columnDefinition = "INT"))
     private List<Tag> tags;
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "note_whitelist",
-    			joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
-    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
-    private List<User> whitelist;
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+//    @JoinTable(name = "note_whitelist",
+//    			joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "note_id", columnDefinition = "INT"),
+//    			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    @Column
+    @ElementCollection(targetClass = String.class)
+    private List<String> whitelist;
     
     @Column(name = "private", nullable = false)
     private boolean isPrivate;
+    
 
-    public Note(String description, Date date, String user, List<Tag> tags, boolean isPrivate) {
+    public Note(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate) {
     	super();
         this.description = description;
         this.date = date;
         this.user = user;
+        this.displayName = displayName;
+        this.whitelist = new ArrayList<>();
         this.isPrivate = isPrivate;
     }
+    
+    public Note(String description, Date date, String user, String displayName, List<Tag> tags, boolean isPrivate, List<String> users) {
+    	super();
+        this.description = description;
+        this.date = date;
+        this.user = user;
+        this.displayName = displayName;
+        this.whitelist = users;
+        this.isPrivate = isPrivate;
+    }
+    
 }

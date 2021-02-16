@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 !**/src/main/resources/.json
+target/*
+FirebaseInitializer.java
 
 ### STS ###
 .apt_generated
@@ -40,7 +42,9 @@ build/
 ## AWS Credentials ##
 aws.properties
 
-
+/secrets/*
+/secrets/firebase-service-credentials.json
+/secrets/firebase-client-config.dms
 pom.xml
 lombok.jar
 
