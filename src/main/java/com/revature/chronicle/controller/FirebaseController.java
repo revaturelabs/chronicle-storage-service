@@ -28,14 +28,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/firebase")
-public class FirebaseController {	
-//	
-//	private FirebaseAuth firebaseAuth;
-//	
-//	public FirebaseController() {
-//		firebaseAuth = FirebaseAuth.getInstance();
-//	}
-	
+public class FirebaseController {		
 	@GetMapping(value = "/authenticate")
 	public void authenticateUser(HttpServletRequest req, HttpServletResponse resp) throws FirebaseAuthException {
 		String idToken = "";
@@ -59,7 +52,6 @@ public class FirebaseController {
 	 * Method to get all users from firebase to send to front end for display purposes.
 	 * @return a JSON Element that contains the UID, Email, and Display Name from firebase.
 	 */
-	
 	@GetMapping(path = "")
 	public JSONArray getUsers() throws FirebaseAuthException {
 		ListUsersPage page = FirebaseAuth.getInstance().listUsers(null);
@@ -72,8 +64,6 @@ public class FirebaseController {
         		item.put("email", user.getEmail());
         		item.put("displayName", user.getDisplayName());
         		response.add(item);
-        		System.out.println("User: " + user.getEmail());
-        		System.out.println("Role: " + user.getCustomClaims().get("role").toString());
         	}
         	page = page.getNextPage();
         }
@@ -99,9 +89,4 @@ public class FirebaseController {
 			FirebaseAuth.getInstance().setCustomUserClaims(userId, claims);
 		}
 	}
-	
-//	@PutMapping(path="/set}")
-//	public void setUsers(HttpServletRequest req, HttpServletResponse resp, @RequestBody List<String> users) throws FirebaseAuthException {
-//		
-//	}
 }
