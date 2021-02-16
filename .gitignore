@@ -47,3 +47,5 @@ aws.properties
 /secrets/firebase-client-config.dms
 pom.xml
 lombok.jar
+
+george.txt
