@@ -6,6 +6,8 @@ Please review README.md included in this repository for information on how to ge
 
 To start your application, ensure you have the latest repo for [chronicle-front](https://github.com/919-BenAraythel-Chronicle/chronicle-front) and [chronicle-storage-service](https://github.com/919-BenAraythel-Chronicle/chronicle-storage-service)
 
+_You'll need to ensure that you have both an **aws.properties** file as well as a **firebase-service-credentials.json** file in your resources folder. Since those files are referenced in the .gitignore file, you'll need to receive them from your instructor._
+
 Then follow the README.md for each of the separate repositories to set up your IDE.
 NOTE: Both the java application and the angular application must be running for the application to properly work.
 
