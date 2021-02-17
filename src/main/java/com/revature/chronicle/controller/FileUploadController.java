@@ -1,5 +1,22 @@
 package com.revature.chronicle.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
@@ -11,23 +28,13 @@ import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
 import com.revature.chronicle.services.TagService;
 import com.revature.chronicle.services.VideoService;
+
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Log4j2
 @RestController
-@RequestMapping(path="/file", method = {RequestMethod.GET, RequestMethod.POST})
+//@CrossOrigin(origins = "*", allowCredentials = "true")
+@RequestMapping(path = "/file", method = { RequestMethod.GET, RequestMethod.POST })
 public class FileUploadController {
 
     private final S3FileService s3FileService;
@@ -49,7 +56,7 @@ public class FileUploadController {
      * @param file The multipart file to be saved to the s3 bucket using S3FileService
      * @return An HTTP Status code whether the media sent back is of the proper type or not
      * @throws IOException
-     */
+     */    
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> uploadFile(@RequestParam("json") String json,
                                              @RequestParam("file") MultipartFile file) throws IOException {
@@ -66,12 +73,14 @@ public class FileUploadController {
 
         //Determine what type of file has been uploaded: [VIDEO or TEXT] and create the appropriate model object
         try {
-            if (Objects.requireNonNull(file.getContentType()).contains("text") || file.getContentType().contains("pdf")) {
-                newFile = mapper.readValue(json, Note.class);
-                fileType = "note";
-            } else if (file.getContentType().contains("video")) {
-                newFile = mapper.readValue(json, Video.class);
-                fileType = "video";
+            if (!file.isEmpty() && file.getContentType() != null) {
+            	if(file.getContentType().contains("text") || file.getContentType().contains("pdf")) {            		
+            		newFile = mapper.readValue(json, Note.class);
+            		fileType = "note";
+            	} else if (file.getContentType().contains("video")) {            		
+            		newFile = mapper.readValue(json, Video.class);
+            		fileType = "video";
+            	}
             } else {
                 responseBody = "Unsupported file type. Please upload either a video or a text file.";
                 return new ResponseEntity<>(mapper.writeValueAsString(responseBody), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
@@ -101,12 +110,15 @@ public class FileUploadController {
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
             log.error("Unable to access the AWS S3 bucket!");
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         } catch (IOException e) {
             e.printStackTrace();
             log.error("Failed to write to file");
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error("Service was interrupted!");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             if(compiledFile.delete())
                 log.info("Temporary compiled file successfully deleted.");

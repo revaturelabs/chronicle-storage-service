@@ -1,5 +1,6 @@
 package com.revature.chronicle.controller;
 
+import com.revature.chronicle.interceptors.AuthenticationInterceptor;
 import com.revature.chronicle.services.NoteService;
 import com.revature.chronicle.services.S3FileService;
 import com.revature.chronicle.services.TagService;
@@ -7,6 +8,7 @@ import com.revature.chronicle.services.VideoService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,20 +22,26 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class S3ControllerTest {
+
+    @Autowired
+    private WebApplicationContext wac;
 
 	@Autowired
 	private  MockMvc mock;
@@ -56,6 +64,25 @@ public class S3ControllerTest {
 	private  MockMultipartFile file4;
 	private  JSONObject json;
 	private  MultiValueMap<String, String> params;
+
+	@MockBean
+	AuthenticationInterceptor interceptor;
+
+
+	@BeforeEach
+	void initTest() {
+	    try {
+			when(interceptor.preHandle(any(), any(), any())).thenReturn(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+		
+    @Before
+    public void security(){
+        this.mock = webAppContextSetup(wac)
+                .build();
+    }
 
 	/**
 	 * The method is setting up the test environment for the S3 controller tests
@@ -105,7 +132,7 @@ public class S3ControllerTest {
 				"Hello, World!".getBytes()
 		);
 
-		//mocking a json
+		//mocking a JSON
 
 		json = new JSONObject();
 		json.put("testing", "123");
@@ -167,7 +194,6 @@ public class S3ControllerTest {
 		result.andExpect(mvcResult -> Assert.assertTrue("The file did contain content",file2.getSize() > 0));
 	}
 
-
 	/**
 	 * This test is testing to see that when given a nonexistent file and a json that the controller should return
 	 * client error
@@ -191,7 +217,7 @@ public class S3ControllerTest {
 	}
 
 	/**
-	 * This test is testing to see that when given a improper file type and a json that the controller should return
+	 * This test is testing to see that when given an improper file type and a json that the controller should return
 	 * a message saying "Unsupported file type. Please upload either a video or a text file."
 	 * @throws Exception
 	 */

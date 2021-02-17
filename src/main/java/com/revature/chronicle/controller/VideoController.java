@@ -1,10 +1,10 @@
 package com.revature.chronicle.controller;
 
-import com.revature.chronicle.daos.TagRepo;
-import com.revature.chronicle.daos.VideoRepo;
-import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.Video;
-import com.revature.chronicle.services.VideoService;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,29 +13,32 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
+import com.revature.chronicle.services.TagService;
+import com.revature.chronicle.services.VideoService;
 
 @RestController
+//@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/videos")
 public class VideoController {
 
-    private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
+	private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
-    private final VideoService videoService;
-    private final TagRepo tagRepo;
-    private final VideoRepo videoRepo;
-
-    @Autowired
-    public VideoController (VideoService vs, TagRepo tr, VideoRepo vr) {
-        this.videoService = vs;
-        this.tagRepo = tr;
-        this.videoRepo = vr;
-    }
+	private final VideoService videoService;
+	private TagService tagService;
+	
+	@Autowired
+	public VideoController(VideoService vs, TagService ts) {
+		this.videoService = vs;
+		this.tagService = ts;
+	}
 
     /**
      * returns a list of <code>Video</code> objects in the response body, determined by the tags specified in the URI
@@ -50,7 +53,7 @@ public class VideoController {
      */
     // Can convert the path variable formatting clause into a service method which can be called in both controllers to reduce clutter
     @GetMapping(path = "tags/{videoTags}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Video>> getVideosByTag(@PathVariable(name="videoTags") String crudeTags){
+    public ResponseEntity<List<Video>> getVideosByTag(HttpServletRequest request, @PathVariable(name="videoTags") String crudeTags){
         logger.info("Received request for videos with tags: " + crudeTags);
         String[] arrTags = crudeTags.split("\\+");
         List<Tag> targetTags = new ArrayList<>();
@@ -62,8 +65,9 @@ public class VideoController {
             tempTag.setValue(tagComponents[2]);
             targetTags.add(tempTag);
         }
+        User user = (User) request.getAttribute("user");
         logger.info("Retrieving target videos...");
-        List <Video> targetVideos = videoService.findAllVideosByTags(targetTags);
+        List <Video> targetVideos = videoService.findAllVideosByTags(targetTags, user);
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
@@ -75,28 +79,32 @@ public class VideoController {
      */
     //future iterations can add pagination to backend or front end
     @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Video>> getAllVideos() {
+    public ResponseEntity<List<Video>> getAllVideos(HttpServletRequest request) {
         logger.info("Retrieving all videos...");
-        List<Video> targetVideos = videoService.findAll();
+        User user = (User) request.getAttribute("user");
+        List<Video> targetVideos = videoService.findAll(user);
         return new ResponseEntity<>(targetVideos, HttpStatus.OK);
     }
 
-    /**
-     * returns a list of all <code>Tag</code> objects in the database linked to a <code>Video</code> in the response
-     * body. The handler method is mapped to the URI '/videos/available-tags/' and produces media type of application-json.
-     * The handler retrieves the list through the <code>TagRepo</code> <code>findByNameIn</code> method. The tag keys are
-     * determined by a list tagNames which cn be updated based on what keys exist in the database.
-     * @return list of all <code>Video</code> objects
-     */
-    @GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Tag>> getAllVideoTags() {
-        List<String> tagNames = new ArrayList<>();
-        tagNames.add("Topic");
-        tagNames.add("Batch");
-        logger.info("Retrieving all video tags with keys: " + tagNames +" ...");
-        List<Tag> availableTags = tagRepo.findByTypeIn(tagNames);
-        return new ResponseEntity<>(availableTags, HttpStatus.OK);
-    }
+	/**
+	 * returns a list of all <code>Tag</code> objects in the database linked to a
+	 * <code>Video</code> in the response body. The handler method is mapped to the
+	 * URI '/videos/available-tags/' and produces media type of application-json.
+	 * The handler retrieves the list through the <code>TagRepo</code>
+	 * <code>findByNameIn</code> method. The tag keys are determined by a list
+	 * tagNames which cn be updated based on what keys exist in the database.
+	 * 
+	 * @return list of all <code>Video</code> objects
+	 */
+	@GetMapping(path = "available-tags", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Tag>> getAllVideoTags(HttpServletRequest request) {
+		List<String> tagNames = new ArrayList<>();
+		tagNames.add("Topic");
+		tagNames.add("Batch");
+		logger.info("Retrieving all video tags with keys: " + tagNames + " ...");
+		List<Tag> availableTags = tagService.findByTypeIn(tagNames);
+		return new ResponseEntity<>(availableTags, HttpStatus.OK);
+	}
 
     /**
      * returns a <code>Video</code> object in the response body, determined by the specified videoID in the URI path.
@@ -107,9 +115,19 @@ public class VideoController {
      * @return target <code>Video</code> object
      */
     @GetMapping(path = "id/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Video> getVideoById(@PathVariable(name="videoId") int id) {
+    public ResponseEntity<Video> getVideoById(HttpServletRequest request, @PathVariable(name="videoId") int id) {
         logger.info("Retrieving target video with ID: " + id + " ...");
-        Optional<Video> targetVideo = videoService.findById(id);
-        return targetVideo.map(video -> new ResponseEntity<>(video, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        Video targetVideo = videoService.findById(id);
+        return new ResponseEntity<>(targetVideo, HttpStatus.OK);
     }
+    
+    @PutMapping(path = "whitelist/{videoId}")
+    public ResponseEntity<Void> updateWhitelist(HttpServletRequest request, @PathVariable(name="videoId") int videoId, @RequestBody List<String> users){
+    	Video currentVideo = this.videoService.findById(videoId);
+    	currentVideo.setWhitelist(users);
+    	User user = (User) request.getAttribute("user");
+    	this.videoService.update(currentVideo, user);
+		  return null;
+	  }
+
 }

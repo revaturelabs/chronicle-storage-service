@@ -28,7 +28,7 @@ public class TagServiceTest {
     @Test
     public void shouldReturnAListOfAllTags(){
         List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag(1,"Technology","Java")); //is this a good tag to add? (id/name/value)
+        tags.add(new Tag("Technology","Java"));
         when(repo.findAll()).thenReturn(tags);
         List<Tag> result = service.findAll();
         Assertions.assertEquals(result, tags);
@@ -37,25 +37,25 @@ public class TagServiceTest {
 
     @Test
     public void shouldReturnATagById(){
-        Tag tag = new Tag(1,"Technology","Java");
+        Tag tag = new Tag("Technology","Java");
         Optional<Tag> optional = Optional.of(tag);
         when(repo.findById(1)).thenReturn(optional);
-        Optional<Tag> result = service.findById(1);
-        Assertions.assertEquals(result, optional);
+        Tag result = service.findById(1);
+        Assertions.assertEquals(result, tag);
         verify(repo).findById(1);
     }
 
     @Test
     public void shouldReturnNullIfNoTagFound(){
-        when(repo.findById(2)).thenReturn(Optional.empty());
-        Optional<Tag> result = service.findById(2);
+    	when(repo.findById(2)).thenReturn(Optional.empty());
+        Optional<Tag> result = Optional.ofNullable(service.findById(2));
         Assertions.assertNotNull(result);
         verify(repo).findById(2);
     }
 
     @Test
     public void shouldSaveATagAndReturnTrue(){
-        Tag tag = new Tag(1,"Technology","Java");
+        Tag tag = new Tag("Technology","Java");
         when(repo.save(tag)).thenReturn(tag);
         boolean result = service.save(tag);
         Assertions.assertTrue(result);
@@ -69,15 +69,5 @@ public class TagServiceTest {
         Assertions.assertFalse(result);
         verify(repo).save(null);
     }
-
-//Test Delete? feel free to get rid of this if it's unnecessary
-
-//    @Test
-//    public void shouldDeleteATagAndReturnTrue(){
-//        Tag tag = new Tag(1,"Technology","Java"); //Should I add an @after?
-//        when(repo.save(tag)).thenReturn(tag);
-//        boolean result = service.deleteByID(1);
-//        Assertions.assertTrue(result);
-//        verify(repo).deleteById(1);
-//    }
 }
+
