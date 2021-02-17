@@ -110,12 +110,15 @@ public class FileUploadController {
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
             log.error("Unable to access the AWS S3 bucket!");
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         } catch (IOException e) {
             e.printStackTrace();
             log.error("Failed to write to file");
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error("Service was interrupted!");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             if(compiledFile.delete())
                 log.info("Temporary compiled file successfully deleted.");
