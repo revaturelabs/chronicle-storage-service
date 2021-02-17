@@ -1,7 +1,7 @@
 # Chronicle Storage Service
 Back end storage service for Chronicle. Includes data access to H2 Database and media storage and retrieval to S3 bucket.
 
-***Documentation is WIP***
+***Documentation is in the Wiki***
 
 ## Technologies
 - [Project Lombok 1.8.16](https://projectlombok.org/features/all)
