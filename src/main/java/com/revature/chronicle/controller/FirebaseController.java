@@ -26,13 +26,6 @@ import java.util.Objects;
 @RestController
 @RequestMapping(value = "/firebase")
 public class FirebaseController {		
-	@GetMapping(value = "/authenticate")
-	public void authenticateUser(HttpServletRequest req, HttpServletResponse resp) throws FirebaseAuthException {
-		String idToken = "";
-		FirebaseToken token = FirebaseAuth.getInstance().verifyIdToken(idToken);
-		
-	}
-	
 	//Developer Testing Only
 	@GetMapping(value ="/user")
 	public void getUsers(HttpServletRequest req, HttpServletResponse resp) throws FirebaseAuthException {
