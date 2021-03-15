@@ -5,13 +5,14 @@ import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuthException;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * service class used to initialize the connection between the server and firebase when the server starts up
@@ -30,6 +31,8 @@ public class FirebaseInitializer {
             this.initializeFirebaseApp();
         } catch (IOException e) {
             log.error("Initializing Firebase App {}", e);
+        } catch (FirebaseAuthException e) {
+        	
         }
     }
 
@@ -38,13 +41,14 @@ public class FirebaseInitializer {
      * the credentials in firebase-service-credentials.json
      * @throws IOException - could be thrown if google credentials cannot read the credentials file as a stream
      */
-    private void initializeFirebaseApp() throws IOException {
+    private void initializeFirebaseApp() throws IOException, FirebaseAuthException{
 
         if (FirebaseApp.getApps() == null || FirebaseApp.getApps().isEmpty()) {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(
                             GoogleCredentials.fromStream(
-                                    returnResourceAsStream("/firebase-service-credentials.json")
+                                    //new FileInputStream(System.getenv("FIREBASE_ACCOUNT"))
+                            		returnResourceAsStream("/firebase-service-credentials.json")
                             )
                     )
                     .build();
