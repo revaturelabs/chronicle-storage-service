@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Note extends Media{
+
     @Id
     @Column(name="note_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,101 +79,5 @@ public class Note extends Media{
         this.whitelist = users;
         this.isPrivate = isPrivate;
     }
-
-	@Override
-	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setId(int id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getUrl() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUrl(String url) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setTitle(String title) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Date getDate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setDate(Date date) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getUser() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUser(String user) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<Tag> getTags() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setTags(List<Tag> tags) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<String> getWhitelist() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setWhitelist(List<String> users) {
-		// TODO Auto-generated method stub
-		
-	}
     
 }

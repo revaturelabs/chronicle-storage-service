@@ -70,6 +70,7 @@ public class FirebaseController {
 	 */
 	@PutMapping(path="/register/{userId}")
 	public void setUser(HttpServletRequest req, @PathVariable(name="userId") String userId, HttpServletResponse resp) throws FirebaseAuthException {
+		System.out.println(userId);
 		Object rolesObject = FirebaseAuth.getInstance().getUser(userId).getCustomClaims().get("role");
 		if(Objects.isNull(rolesObject)) {
 			ArrayList<String> rolesList = new ArrayList<>();

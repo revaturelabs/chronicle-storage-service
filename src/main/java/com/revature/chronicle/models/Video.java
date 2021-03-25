@@ -30,7 +30,7 @@ public class Video extends Media{
 
     @Column(name = "url", nullable = false)
     private String url;
-
+    
     @Column(name = "title", nullable = false)
     private String title;
 
