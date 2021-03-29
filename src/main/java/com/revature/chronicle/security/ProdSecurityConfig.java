@@ -13,9 +13,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 /**
  * configuration for Spring Security.
  */
-@Profile("dev")
+@Profile("prod")
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class ProdSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * the bean used which will hold all of the CORS configuration properties
@@ -28,16 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @param corsConfigurationProperties - the new CorsConfigurationProperties to
 	 *                                    be set
 	 */
-	public SecurityConfig(CorsConfigurationProperties corsConfigurationProperties) {
+	public ProdSecurityConfig(CorsConfigurationProperties corsConfigurationProperties) {
 		this.corsConfigurationProperties = corsConfigurationProperties;
 	}
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web
-		  .ignoring()
-			.antMatchers("/h2-console/**");
-	}
 
 	/**
 	 * configures spring security

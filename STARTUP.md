@@ -8,6 +8,14 @@ To start your application, ensure you have the latest repo for [chronicle-front]
 
 _You'll need to ensure that you have both an **aws.properties** file as well as a **firebase-service-credentials.json** file in your resources folder. Since those files are referenced in the .gitignore file, you'll need to receive them from your instructor._
 
+The aws.properties file should have the following fields. Please replace the question marks with the actual keys that you receive from the product owner. You may need to create your own aws.properties file.
+aws.access_key_id = ?
+aws.secret_access_key = ?
+aws.s3.region = us-east-1
+aws.s3.bucket = s3://chronicle-p3
+
+The firebase-service-credentials.json file may be called something different when you receive it from the product owner.
+
 Then follow the README.md for each of the separate repositories to set up your IDE.
 NOTE: Both the java application and the angular application must be running for the application to properly work.
 

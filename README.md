@@ -26,7 +26,7 @@ Please ensure you have the following installed prior to cloneing this repository
 ### Setting up your workspace
 Clone the repo with:
 
-`git clone https://github.com/Batch-908-AugustDuet/chronicle-storage-service.git`
+`git clone https://github.com/Batch-908-AugustDuet/chronicle-storage-service.git` (please replace this address with the address of your batch's specific repository)
 
 Once cloned, be sure to checkout the base branch your team will be working off of using
 
@@ -65,11 +65,13 @@ and check 'Enable annoation processing'
 8) If all else fails, please reach out.
 
 #### For Eclipse Users
-1) Find the Java jar on Maven Central
+1) Find the Java jar on Maven Central (go to www.mvnrepository.com and search for Lombok. Click on Project Lombok. Choose a popular version or the newest version. On the next page you will find a "Files" field. Click on the "jar" link to download the Lombok jar file. You may need to copy the code also if you are using a different version than what is in the current POM file.)
 2) Run the jar and a UI for your installation should appear
 3) Under IDEs, make sure that Eclipse is recognized. If not, specify a location.
 4) After your IDE is selected, click the 'Install/Update' button.
-5) Restart Eclipse if you have it open and you should be good to go!
+5) Place this jar file in "target" folder.
+6) Restart Eclipse if you have it open.
+7) Update the project by right-clicking on the project ("chronicle [boot] [P3 Back-End master]) and going to Maven -> Update Project.
 
 ### Requirements
 Tests first, push to the remote repo, and and Open a Pull Request adding @RevatureGentry or @KennethDavis391.
