@@ -102,13 +102,33 @@ public class TicketController {
 			// Setting the note field for the notification object.
 			notification.setNote(ticket.getTicketStatus());
 			
-			// Send the newly created Notification to the service layer to create a new notification record
-			this.notificationService.createNotification(notification);
 			
-			if(ticket.getTicketStatus() == "acknowledged") {
+			String status = ticket.getTicketStatus();
+			
+			switch(status) {
+			case "pending": 
+				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is pending");
+				break;
+			case "acknowledged": 
 				ticket.setDateAccepted(new Date(System.currentTimeMillis()));
+				notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been accepted");
+				break;
+			case "in progress":
+				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is in progress");
+				break;
+			case "under review":
+				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is available for you review");
+				break;
+			case "closed":
+				notification.setNote("Video associated with ticket number "+ ticket.getTicketID()+ " has been closed");
+				break;
+			case "deactivated":
+				notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been deactivated");
+				break;
+			default: System.out.println("status is invalid");
 			}
 			
+			this.notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
 
