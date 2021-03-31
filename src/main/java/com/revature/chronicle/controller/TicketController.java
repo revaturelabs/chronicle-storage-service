@@ -41,11 +41,11 @@ public class TicketController {
 	}
 	
 	//this endpoint saves or updates a ticket
-	@PostMapping(path="save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> save(@RequestBody Ticket ticket) {
-		Ticket ticket1 = this.ticketService.save(ticket);
-		return new ResponseEntity<>(ticket1, HttpStatus.OK);
-	}
+//	@PostMapping(path="save", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<?> save(@RequestBody Ticket ticket) {
+//		Ticket ticket1 = this.ticketService.save(ticket);
+//		return new ResponseEntity<>(ticket1, HttpStatus.OK);
+//	}
 	
 	//this endpoint saves array of tickets
 		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -55,13 +55,13 @@ public class TicketController {
 	
 	//this endpoint saves or updates a ticket
 		@PostMapping(path="update", consumes = MediaType.APPLICATION_JSON_VALUE)
-		void update(@RequestBody Ticket ticket, HttpServletRequest req) {
+		public boolean update(@RequestBody Ticket ticket, HttpServletRequest req) {
 			// Grab the current User id (editor)
 			User user = (User) req.getAttribute("user");
 			// Set editor id to the current user id
 			ticket.setEditorID(user.getUid());
 			// Send the ticket through the update method in the ticket service layer
-			this.ticketService.update(ticket);
+			//this.ticketService.update(ticket);
 			// Create a new Notification object
 			Notification notification = new Notification();
 			// Set the sender id to the current user id (editor id)
@@ -105,6 +105,8 @@ public class TicketController {
 			
 			// Send the newly created Notification to the service layer to create a new notification record
 			this.notificationService.createNotification(notification);
+			
+			return this.ticketService.update(ticket);
 		}
 
 }
