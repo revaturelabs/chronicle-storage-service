@@ -56,6 +56,7 @@ class TicketControllerTest {
 	private Notification mockNotification;
 	private MediaType APPLICATION_JSON_VALUE;
 	private String requestJson;
+	private ObjectMapper mapper;
 	
 	
 	@Autowired
@@ -118,20 +119,10 @@ class TicketControllerTest {
 		mockNotification = new Notification(1, "1", "1", mockTicket1,
 				new Date(20210101), "test note" );
 		
-		APPLICATION_JSON_VALUE = MediaType.APPLICATION_JSON;
-//				new MediaType(MediaType.APPLICATION_JSON.getType(), 
-//						MediaType.APPLICATION_JSON.getSubtype());
-		
-		ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    requestJson=ow.writeValueAsString(json);
     }
 
 	@Test
 	void testFindAll() throws Exception{
-		
-		ObjectMapper om = new ObjectMapper();
 		Mockito.when(ticketService.findAll()).thenReturn(mockMyList);
 		MvcResult result = mockMvc.perform(get("/ticket/all"))
 			.andDo(print())
@@ -142,20 +133,23 @@ class TicketControllerTest {
 		
 	}
 
-//	@Test
-//	void testSave() {
-//		
-//	}
 
 	@Test
 	public void testSaveAll() throws Exception{
 	
+		APPLICATION_JSON_VALUE = 
+				new MediaType(MediaType.APPLICATION_JSON.getType(), 
+						MediaType.APPLICATION_JSON.getSubtype());
 		
+		mapper = new ObjectMapper();
+		 mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+		    requestJson=ow.writeValueAsString(json);
 	    
 	    
 		Mockito.when(ticketService.saveAll(mockMyList)).thenReturn(true);
 		MvcResult result = mockMvc.perform(post("/ticket/saveall")
-				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
+			.contentType(APPLICATION_JSON_VALUE).content(requestJson))
 				.andReturn();
 		
 		Assert.assertNotNull(result);
@@ -163,6 +157,16 @@ class TicketControllerTest {
 
 	@Test
 	void testUpdate() throws Exception {
+		
+		APPLICATION_JSON_VALUE = 
+				new MediaType(MediaType.APPLICATION_JSON.getType(), 
+						MediaType.APPLICATION_JSON.getSubtype());
+		
+		mapper = new ObjectMapper();
+		 mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+		    requestJson=ow.writeValueAsString(json);
+		
 		Mockito.when(ticketService.update(mockTicket1)).thenReturn(true);
 		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
 		MvcResult result = mockMvc.perform(post("/ticket/update")

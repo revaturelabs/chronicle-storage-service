@@ -40,12 +40,6 @@ public class TicketController {
 		return new ResponseEntity<>(ticket2, HttpStatus.OK);
 	}
 	
-	//this endpoint saves or updates a ticket
-//	@PostMapping(path="save", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<?> save(@RequestBody Ticket ticket) {
-//		Ticket ticket1 = this.ticketService.save(ticket);
-//		return new ResponseEntity<>(ticket1, HttpStatus.OK);
-//	}
 	
 	//this endpoint saves array of tickets
 		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
