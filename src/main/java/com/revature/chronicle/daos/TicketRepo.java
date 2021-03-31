@@ -14,5 +14,6 @@ public interface TicketRepo extends JpaRepository<Ticket, Integer>{
 	
 	Ticket save(Ticket ticket);
 	
-
-}
+	Ticket findByTicketID(int TicketID);
+	
+	}

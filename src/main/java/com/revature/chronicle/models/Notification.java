@@ -39,7 +39,7 @@ public class Notification {
         
     @ManyToOne
     @JoinColumn(name="ticket_id")
-    private Ticket tickeid;
+    private Ticket ticketid;
     
     @Column(name="send_date")
     private Date senddate;
