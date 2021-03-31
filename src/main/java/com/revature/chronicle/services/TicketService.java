@@ -13,6 +13,8 @@ public class TicketService {
 	@Autowired
 	private TicketRepo ticketRepo;
 	
+//-----------------------------------------------------------------	
+	
 	//this method will return all tickets from the Ticket table
 	public List<Ticket> findAll(){
 		return this.ticketRepo.findAll();
@@ -23,10 +25,13 @@ public class TicketService {
 	}
 	
 	//this method will call the save method in the ticketRepository for each ticket in the list
-	public void saveAll(Ticket[] tickets) {
+	public boolean saveAll(List<Ticket> tickets) {
 		for(Ticket t: tickets) {
-		this.ticketRepo.save(t);
+		if(this.ticketRepo.save(t) == null) {
+			return false;
 		}
+		}
+		return true;
 	}
 	
 	//this method will check if the ticket already exists in the Ticket table and update the ticket if there is a match

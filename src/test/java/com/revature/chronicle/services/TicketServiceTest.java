@@ -2,8 +2,10 @@ package com.revature.chronicle.services;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +40,9 @@ public class TicketServiceTest {
 	@Test
 	public void testFindAll() {
 		
-		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
-		Ticket ticket2 =  new Ticket(2,"10","10","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
-		Ticket ticket3 =  new Ticket(3,"100","100","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
+		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
+		Ticket ticket2 =  new Ticket(2,"10","10","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
+		Ticket ticket3 =  new Ticket(3,"100","100","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
 		List<Ticket> myList= new ArrayList<>();
 		myList.add(ticket1);
 		myList.add(ticket2);
@@ -56,7 +58,7 @@ public class TicketServiceTest {
 
 	@Test
 	public void testSave() {
-		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
+		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
 				
 		when(ticketRepo.save(ticket1)).thenReturn(ticket1);
 		
@@ -67,7 +69,7 @@ public class TicketServiceTest {
 
 	@Test
 	public void testUpdate() {
-		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
+		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
 		
 		when(ticketRepo.findByTicketID(1)).thenReturn(ticket1);
 		when(ticketRepo.save(ticket1)).thenReturn(ticket1);
@@ -75,6 +77,21 @@ public class TicketServiceTest {
 		boolean result = ticketService.update(ticket1);
 		
 		assertEquals(true, result);
+	}
+	
+	@Test
+	public void saveAll() {
+		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
+		Ticket ticket2 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
+		List<Ticket> tickets = new ArrayList<>();
+		tickets.add(ticket1);
+		tickets.add(ticket2);
+		
+		when(ticketRepo.save(ticket1)).thenReturn(ticket1);
+		boolean result = ticketService.saveAll(tickets);
+		
+		assertTrue(result);
+		
 	}
 
 }

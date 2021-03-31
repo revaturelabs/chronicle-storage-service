@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ NoteControllerTests.class, S3ControllerTest.class, VideoControllerTests.class })
+@SuiteClasses({ NoteControllerTests.class, S3ControllerTest.class, VideoControllerTests.class, TicketControllerTest.class })
 public class ControllerTestSuite {
 
 }

@@ -34,7 +34,7 @@ class NotificationServiceTest {
 	@Test
 	void testGetNotified() {
 		
-		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
+		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
 		Notification notification = new Notification(1, "me", "you", ticket, new Date(03302021), "First ticket");
 		
 		when(notificationRepo.findByTicket(1)).thenReturn(notification);
@@ -47,7 +47,7 @@ class NotificationServiceTest {
 	@Test
 	void testCreateNotification() {
 		
-		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
+		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
 		Notification notification = new Notification(1, "me", "you", ticket, new Date(03302021), "First ticket");
 
 		when(notificationRepo.save(notification)).thenReturn(notification);

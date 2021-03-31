@@ -6,13 +6,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 
 import com.revature.chronicle.models.Notification;
@@ -34,32 +35,32 @@ public class TicketController {
 	
 	//this endpoint returns a list of all tickets
 	@GetMapping(path="all")
-	List<Ticket> findAll(){
-		return this.ticketService.findAll();
+	ResponseEntity <List<Ticket>> findAll(){
+		List<Ticket> ticket2 =  this.ticketService.findAll();
+		return new ResponseEntity<>(ticket2, HttpStatus.OK);
 	}
 	
-	//this endpoint saves or updates a ticket
-	@PostMapping(path="save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	Ticket save(@RequestBody Ticket ticket) {
-		return this.ticketService.save(ticket);
-	}
 	
 	//this endpoint saves array of tickets
 		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
-		void saveAll(@RequestBody Ticket[] tickets) {
-			this.ticketService.saveAll(tickets);
+		public boolean saveAll(@RequestBody List<Ticket> tickets) {
+			Date dateIssued =new Date(System.currentTimeMillis());
 			
+			for(Ticket t: tickets) {
+				t.setDateIssued(dateIssued);
+			}
+			return this.ticketService.saveAll(tickets);
 		}
 	
 	//this endpoint saves or updates a ticket
 		@PostMapping(path="update", consumes = MediaType.APPLICATION_JSON_VALUE)
-		void update(@RequestBody Ticket ticket, HttpServletRequest req) {
+		public boolean update(@RequestBody Ticket ticket, HttpServletRequest req) {
 			// Grab the current User id (editor)
 			User user = (User) req.getAttribute("user");
 			// Set editor id to the current user id
 			ticket.setEditorID(user.getUid());
 			// Send the ticket through the update method in the ticket service layer
-			this.ticketService.update(ticket);
+			//this.ticketService.update(ticket);
 			// Create a new Notification object
 			Notification notification = new Notification();
 			// Set the sender id to the current user id (editor id)
@@ -103,6 +104,12 @@ public class TicketController {
 			
 			// Send the newly created Notification to the service layer to create a new notification record
 			this.notificationService.createNotification(notification);
+			
+			if(ticket.getTicketStatus() == "acknowledged") {
+				ticket.setDateAccepted(new Date(System.currentTimeMillis()));
+			}
+			
+			return this.ticketService.update(ticket);
 		}
 
 }
