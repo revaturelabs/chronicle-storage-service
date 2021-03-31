@@ -67,8 +67,11 @@ public class Ticket {
 	@Column(name="reject_comment", nullable = true)
 	private String rejectcomment;
 
+	@Column(name="date_issued", nullable = false)
+	private Date dateIssued;
 	
-
+	@Column(name="date_accepted", nullable = true)
+	private Date dateAccepted;
 
 	
 

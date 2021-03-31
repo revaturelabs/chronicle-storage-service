@@ -92,9 +92,9 @@ class TicketControllerTest {
     @Before
     public void setup() throws JSONException, IOException {
     	MockitoAnnotations.openMocks(this);
-    	mockTicket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
-		mockTicket2 =  new Ticket(2,"10","10","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
-		mockTicket3 =  new Ticket(3,"100","100","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments");
+    	mockTicket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
+		mockTicket2 =  new Ticket(2,"10","10","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
+		mockTicket3 =  new Ticket(3,"100","100","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
 		mockMyList= new ArrayList<>();
 		mockMyList.add(mockTicket1);
 		mockMyList.add(mockTicket2);
