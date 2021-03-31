@@ -44,6 +44,11 @@ public class TicketController {
 	//this endpoint saves array of tickets
 		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public boolean saveAll(@RequestBody List<Ticket> tickets) {
+			Date dateIssued =new Date(System.currentTimeMillis());
+			
+			for(Ticket t: tickets) {
+				t.setDateIssued(dateIssued);
+			}
 			return this.ticketService.saveAll(tickets);
 		}
 	
@@ -99,6 +104,10 @@ public class TicketController {
 			
 			// Send the newly created Notification to the service layer to create a new notification record
 			this.notificationService.createNotification(notification);
+			
+			if(ticket.getTicketStatus() == "acknowledged") {
+				ticket.setDateAccepted(new Date(System.currentTimeMillis()));
+			}
 			
 			return this.ticketService.update(ticket);
 		}
