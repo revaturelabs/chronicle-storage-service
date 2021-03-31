@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.chronicle.models.Ticket;
 import com.revature.chronicle.services.TicketService;
 
-@RestController
+@RestController(value="ticketController")
 @RequestMapping(path="/ticket")
 public class TicketController {
 	
@@ -33,10 +33,17 @@ public class TicketController {
 		return this.ticketService.save(ticket);
 	}
 	
+	//this endpoint saves array of tickets
+		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
+		void saveAll(@RequestBody Ticket[] tickets) {
+			this.ticketService.saveAll(tickets);
+			
+		}
+	
 	//this endpoint saves or updates a ticket
 		@PostMapping(path="update", consumes = MediaType.APPLICATION_JSON_VALUE)
-		Ticket update(@RequestBody Ticket ticket) {
-			return this.ticketService.update(ticket);
+		void update(@RequestBody Ticket ticket) {
+			this.ticketService.update(ticket);
 		}
 
 }
