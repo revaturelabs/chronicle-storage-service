@@ -66,18 +66,12 @@ and check 'Enable annoation processing'
 
 #### For Eclipse Users
 1) Find the Java jar on Maven Central (go to www.mvnrepository.com and search for Lombok. Click on Project Lombok. Choose a popular version or the newest version. On the next page you will find a "Files" field. Click on the "jar" link to download the Lombok jar file. You may need to copy the code also if you are using a different version than what is in the current POM file.)
-
 2) Run the jar and a UI for your installation should appear
-
 3) Under IDEs, make sure that Eclipse is recognized. If not, specify a location.
-
 4) After your IDE is selected, click the 'Install/Update' button.
-
 5) Place this jar file in "target" folder.
-
 6) Restart Eclipse if you have it open.
-
-7) Update the project by right-clicking on the project and going to Maven -> Update Project.
+7) Update the project by right-clicking on the project ("chronicle [boot] [P3 Back-End master]) and going to Maven -> Update Project.
 
 ### Requirements
 Tests first, push to the remote repo, and and Open a Pull Request adding @RevatureGentry or @KennethDavis391.
@@ -85,17 +79,11 @@ Tests first, push to the remote repo, and and Open a Pull Request adding @Revatu
 ### How Do I Open a Pull Request?
 If you haven't opened a pull request before on Github follow the below instructions:
 1) In the secondary navbar click 'Pull Requests'.
-
 2) Click the green 'Open Pull Request' button
-
 3) The Repo should be Batch-908-AugustDuet/... not revature labs!
-
 4) Select your base branch (default is main)
-
 5) Then select your feature branch
-
 6) Add @RevatureGentry and @KennethDavis391 as approvers to your request
-
 7) Select open pull request and viola pull request in progress! Will and Kenneth will comment once they review and merge it in if there are no issues.
 
 * * *
