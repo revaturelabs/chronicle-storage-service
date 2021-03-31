@@ -6,13 +6,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 
 import com.revature.chronicle.models.Notification;
@@ -34,21 +35,22 @@ public class TicketController {
 	
 	//this endpoint returns a list of all tickets
 	@GetMapping(path="all")
-	List<Ticket> findAll(){
-		return this.ticketService.findAll();
+	ResponseEntity <List<Ticket>> findAll(){
+		List<Ticket> ticket2 =  this.ticketService.findAll();
+		return new ResponseEntity<>(ticket2, HttpStatus.OK);
 	}
 	
 	//this endpoint saves or updates a ticket
 	@PostMapping(path="save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	Ticket save(@RequestBody Ticket ticket) {
-		return this.ticketService.save(ticket);
+	public ResponseEntity<?> save(@RequestBody Ticket ticket) {
+		Ticket ticket1 = this.ticketService.save(ticket);
+		return new ResponseEntity<>(ticket1, HttpStatus.OK);
 	}
 	
 	//this endpoint saves array of tickets
 		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
-		void saveAll(@RequestBody Ticket[] tickets) {
-			this.ticketService.saveAll(tickets);
-			
+		public boolean saveAll(@RequestBody List<Ticket> tickets) {
+			return this.ticketService.saveAll(tickets);
 		}
 	
 	//this endpoint saves or updates a ticket
