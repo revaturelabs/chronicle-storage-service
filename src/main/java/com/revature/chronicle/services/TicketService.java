@@ -45,7 +45,11 @@ public class TicketService {
 		return false;	
 	}
 	
-	
+	/**
+	 * Find all tickets that with specific status 
+	 * @param status
+	 * @return List of tickets
+	 */
 	public List<Ticket> ticketsByStatus(String status){
 		List<Ticket> tickets = this.ticketRepo.findAll();
 		tickets.removeIf(t -> !(t.getTicketStatus().equals(status)));
