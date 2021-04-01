@@ -1,10 +1,12 @@
 package com.revature.chronicle.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
+
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,9 @@ import com.revature.chronicle.models.Ticket;
 @SpringBootTest
 class NotificationServiceTest {
 	
+	private Ticket ticket;
+	private Notification notification;
+	
 	@Mock
 	private NotificationRepo notificationRepo;
 	
@@ -29,27 +34,27 @@ class NotificationServiceTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
+		ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
+		notification = new Notification(1, "1", "1", ticket, new Date(03302021), "First ticket");
 	}
 
 	@Test
 	void testGetNotified() {
 		
-		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
-		Notification notification = new Notification(1, "me", "you", ticket, new Date(03302021), "First ticket");
 		
-		when(notificationRepo.findByTicket(1)).thenReturn(notification);
+		List<Notification> notificationList = new ArrayList<>();
+		notificationList.add(notification);
 		
-		Notification result = notificationService.getNotified(1);
+		when(notificationRepo.findByReceiverId("1")).thenReturn(notificationList);
 		
-		assertEquals(notification,result);
+		List<Notification> result = notificationService.getNotified("1");
+		
+		assertEquals(notificationList,result);
 	}
 
 	@Test
 	void testCreateNotification() {
 		
-		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
-		Notification notification = new Notification(1, "me", "you", ticket, new Date(03302021), "First ticket");
-
 		when(notificationRepo.save(notification)).thenReturn(notification);
 		
 		Notification result = notificationService.createNotification(notification);

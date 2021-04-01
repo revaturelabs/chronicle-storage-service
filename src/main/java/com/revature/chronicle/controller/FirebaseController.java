@@ -72,39 +72,6 @@ public class FirebaseController {
 	 * @param resp
 	 * @throws FirebaseAuthException
 	 */
-	
-	@PutMapping(path="/newRegister")
-	public void setUser(@RequestParam("userId") String userId, @RequestParam("role") String role) throws FirebaseAuthException {
-		Object rolesObject = FirebaseAuth.getInstance().getUser(userId).getCustomClaims().get("role");
-		if(Objects.isNull(rolesObject)) {
-			//Firebase already has the userID in it's user table
-			//the following update the user with role or roles
-			ArrayList<String> rolesList = new ArrayList<>();
-			switch(role) {
-				case "trainer":
-					rolesList.add("ROLE_TRAINER");
-					break;
-				case "editor":
-					rolesList.add("ROLE_EDITOR");
-				default:
-					rolesList.add("ROLE_TRAINER");	
-					break;
-			}
-			Map<String, Object> claims = new HashMap<>();
-			claims.put("role", rolesList);
-			//Update done with this line
-			FirebaseAuth.getInstance().setCustomUserClaims(userId, claims);			
-		}
-	}	
-	
-	
-	/**
-	 * Assigns a role to a newly registered user
-	 * @param req
-	 * @param userId
-	 * @param resp
-	 * @throws FirebaseAuthException
-	 */
 	@PutMapping(path="/register/{userId}")
 	public void setUser(HttpServletRequest req, @PathVariable(name="userId") String userId, HttpServletResponse resp) throws FirebaseAuthException {
 		System.out.println(userId);

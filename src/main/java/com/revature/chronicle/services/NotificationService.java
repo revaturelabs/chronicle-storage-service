@@ -1,5 +1,7 @@
 package com.revature.chronicle.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,8 @@ public class NotificationService {
 	private NotificationRepo notificationRepository;
 	
 	// Get a notification
-	public Notification getNotified(int ticketID) {
-		return this.notificationRepository.findByTicket(ticketID);
+	public List<Notification> getNotified(String receiverId) {
+		return this.notificationRepository.findByReceiverId(receiverId);
 	}
 	
 	// Create a new Notification
