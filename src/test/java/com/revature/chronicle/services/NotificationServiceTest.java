@@ -22,6 +22,9 @@ import com.revature.chronicle.models.Ticket;
 @SpringBootTest
 class NotificationServiceTest {
 	
+	private Ticket ticket;
+	private Notification notification;
+	
 	@Mock
 	private NotificationRepo notificationRepo;
 	
@@ -31,13 +34,14 @@ class NotificationServiceTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
+		ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
+		notification = new Notification(1, "1", "1", ticket, new Date(03302021), "First ticket");
 	}
 
 	@Test
 	void testGetNotified() {
 		
-		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
-		Notification notification = new Notification(1, "1", "1", ticket, new Date(03302021), "First ticket");
+		
 		List<Notification> notificationList = new ArrayList<>();
 		notificationList.add(notification);
 		
@@ -51,9 +55,6 @@ class NotificationServiceTest {
 	@Test
 	void testCreateNotification() {
 		
-		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
-		Notification notification = new Notification(1, "me", "you", ticket, new Date(03302021), "First ticket");
-
 		when(notificationRepo.save(notification)).thenReturn(notification);
 		
 		Notification result = notificationService.createNotification(notification);

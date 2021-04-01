@@ -40,22 +40,22 @@ public class TicketController {
 	}
 
 	
-	//this endpoint returns a list of all tickets
-	@GetMapping(path="all")
+	//this endpoint returns a list of submitted tickets
+	@GetMapping(path="submitted")
 	public ResponseEntity <List<Ticket>> findAllSubmittedTickets(){
 		List<Ticket> tickets =  this.ticketService.findAll();
 		return new ResponseEntity<>(tickets, HttpStatus.OK);
 	}
 	
 	//this endpoint returns a list of all pending tickets
-	@GetMapping(path="pendingTickets")
+	@GetMapping(path="pending")
 	public ResponseEntity <List<Ticket>> findAllPending(){
 		 List<Ticket> tickets = ticketService.ticketsByStatus("PENDING");
 		 return new ResponseEntity<>(tickets, HttpStatus.OK);
 	}
 	
 	//this endpoint returns a list of all under review tickets
-	@GetMapping(path="underReviewTickets")
+	@GetMapping(path="underreview")
 	public ResponseEntity <List<Ticket>> findAllUderReview(){
 		
 			 List<Ticket> tickets = ticketService.ticketsByStatus("UNDER_REVIEW");
@@ -64,7 +64,7 @@ public class TicketController {
 			
 	
 	//this endpoint returns a list of all under review tickets
-		@GetMapping(path="ticketsForEditor")
+		@GetMapping(path="ticketsforeditor")
 		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
 			
 				 User user =  (User) req.getAttribute("user");
@@ -102,34 +102,6 @@ public class TicketController {
 			notification.setSenderId(user.getUid());
 			// Set the reciever id to the trainer's id (issuer id in the ticket object)
 			notification.setReceiverId(ticket.getIssuerID());
-
-			// Get the current local date and time
-//			LocalDateTime date = LocalDateTime.now();
-			
-			// Get the integer values of the day, month, year, hour, minute, and second for the current date
-//			int dayOfYear = date.getDayOfYear();
-//			int monthOfYear = date.getMonthValue();
-//			int year = date.getYear();
-//			int hour = date.getHour();
-//			int minute = date.getMinute();
-//			int second = date.getSecond();
-			
-			// Convert the integer values of each aspect of the current date into string variables
-//			String day = String.valueOf(dayOfYear);
-//			String month = String.valueOf(monthOfYear);
-//			String year2 = String.valueOf(year);
-//			String hour2 = String.valueOf(hour);
-//			String minute2 = String.valueOf(minute);
-//			String second2 = String.valueOf(second);
-			
-			// Concatinate the string type versions of the numbers
-			//String stringDate = month + day + year2 + hour2 + minute2 + second2;
-			
-			// Convert the concatinated string into a long type
-			//long intDate = Long.parseLong(stringDate);
-			
-			// Create a new SQL Date object 
-			//Date today = new Date(intDate);
 			
 			// Set the Date object to the Senddate field in the notification table
 			notification.setSenddate(new Date(System.currentTimeMillis()));
