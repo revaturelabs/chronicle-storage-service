@@ -73,6 +73,7 @@ public class FirebaseController {
 	 * @throws FirebaseAuthException
 	 */
 	
+	//this method may want to be used for the next batch to assign roles to users
 	@PutMapping(path="/newRegister")
 	public void setUser(@RequestParam("userId") String userId, @RequestParam("role") String role) throws FirebaseAuthException {
 		Object rolesObject = FirebaseAuth.getInstance().getUser(userId).getCustomClaims().get("role");
@@ -86,6 +87,7 @@ public class FirebaseController {
 					break;
 				case "editor":
 					rolesList.add("ROLE_EDITOR");
+					break;
 				default:
 					rolesList.add("ROLE_TRAINER");	
 					break;

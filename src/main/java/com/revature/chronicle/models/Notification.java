@@ -32,10 +32,10 @@ public class Notification {
     
     
     @Column(name="sender_id")
-    private String senderid;
+    private String senderId;
     
     @Column(name="receiver_id")
-    private String receiverid;
+    private String receiverId;
         
     @ManyToOne
     @JoinColumn(name="ticket_id")

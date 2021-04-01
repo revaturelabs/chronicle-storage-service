@@ -1,10 +1,12 @@
 package com.revature.chronicle.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
+
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
@@ -35,13 +37,15 @@ class NotificationServiceTest {
 	void testGetNotified() {
 		
 		Ticket ticket =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments", new Date(20200101), new Date(20200104));
-		Notification notification = new Notification(1, "me", "you", ticket, new Date(03302021), "First ticket");
+		Notification notification = new Notification(1, "1", "1", ticket, new Date(03302021), "First ticket");
+		List<Notification> notificationList = new ArrayList<>();
+		notificationList.add(notification);
 		
-		when(notificationRepo.findByTicket(1)).thenReturn(notification);
+		when(notificationRepo.findByReceiverId("1")).thenReturn(notificationList);
 		
-		Notification result = notificationService.getNotified(1);
+		List<Notification> result = notificationService.getNotified("1");
 		
-		assertEquals(notification,result);
+		assertEquals(notificationList,result);
 	}
 
 	@Test
