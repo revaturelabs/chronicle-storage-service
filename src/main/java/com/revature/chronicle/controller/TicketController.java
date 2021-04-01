@@ -139,7 +139,7 @@ public class TicketController {
 		@PostMapping(path="reject")
 		public boolean reject(@RequestBody Ticket ticket) {
 			Notification notification = new Notification();
-			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been rejected");
+			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been sent back for review.");
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
