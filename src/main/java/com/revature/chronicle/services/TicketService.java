@@ -44,6 +44,12 @@ public class TicketService {
 		return false;	
 	}
 	
+	public List<Ticket> ticketsByStatus(String status){
+		List<Ticket> tickets = this.ticketRepo.findAll();
+		tickets.removeIf(t -> !(t.getTicketStatus().equals(status)));
+		return tickets;
+	}
+	
 	//this method will create a new record in the notification table
 	
 	

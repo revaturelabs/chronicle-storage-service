@@ -35,10 +35,27 @@ public class TicketController {
 	
 	//this endpoint returns a list of all tickets
 	@GetMapping(path="all")
-	ResponseEntity <List<Ticket>> findAll(){
+	ResponseEntity <List<Ticket>> findAllSubmittedTickets(){
 		List<Ticket> ticket2 =  this.ticketService.findAll();
 		return new ResponseEntity<>(ticket2, HttpStatus.OK);
 	}
+	
+	//this endpoint returns a list of all pending tickets
+	@GetMapping(path="pendingTickets")
+	ResponseEntity <List<Ticket>> findAllPending(){
+		 List<Ticket> ticket3 = ticketService.ticketsByStatus("PENDING");
+		 return new ResponseEntity<>(ticket3, HttpStatus.OK);
+	}
+	
+	//this endpoint returns a list of all pending tickets
+		@GetMapping(path="underReviewTickets")
+		ResponseEntity <List<Ticket>> findAllTicketsByEditor(){
+			 List<Ticket> ticket3 = ticketService.ticketsByStatus("UNDER REVIEW");
+			 return new ResponseEntity<>(ticket3, HttpStatus.OK);
+		}
+			
+		
+	
 	
 	
 	//this endpoint saves array of tickets
@@ -52,15 +69,16 @@ public class TicketController {
 			return this.ticketService.saveAll(tickets);
 		}
 	
+		
+		
+		
 	//this endpoint saves or updates a ticket
 		@PostMapping(path="update", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public boolean update(@RequestBody Ticket ticket, HttpServletRequest req) {
+			
 			// Grab the current User id (editor)
 			User user = (User) req.getAttribute("user");
-			// Set editor id to the current user id
-			ticket.setEditorID(user.getUid());
-			// Send the ticket through the update method in the ticket service layer
-			//this.ticketService.update(ticket);
+			
 			// Create a new Notification object
 			Notification notification = new Notification();
 			// Set the sender id to the current user id (editor id)
@@ -106,13 +124,21 @@ public class TicketController {
 			String status = ticket.getTicketStatus();
 			
 			switch(status) {
+			//trainer initiatates this endpoint
 			case "pending": 
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is pending");
 				break;
+			//editor initiatates this endpoint
 			case "acknowledged": 
+			
+				// Set editor id to the current user id
+				ticket.setEditorID(user.getUid());
+				//get current time for date accepted
 				ticket.setDateAccepted(new Date(System.currentTimeMillis()));
+				//make a message for the trainer
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been accepted");
 				break;
+			//editor initiatates this endpoint	
 			case "in progress":
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is in progress");
 				break;
@@ -131,5 +157,43 @@ public class TicketController {
 			this.notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
+		
+		@PostMapping(path="reject")
+		public boolean reject(@RequestBody Ticket ticket) {
+			ticket.setTicketStatus("in progress");
+			Notification notification = new Notification();
+			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been rejected");
+			notification.setReceiverid(ticket.getEditorID());
+			notification.setSenderid(ticket.getIssuerID());
+			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notificationService.createNotification(notification);
+			return this.ticketService.update(ticket);
+		}
+		
+		@PostMapping(path="accept")
+		public boolean accept(@RequestBody Ticket ticket) {
+			ticket.setTicketStatus("closed");
+			Notification notification = new Notification();
+			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been accepted");
+			notification.setReceiverid(ticket.getEditorID());
+			notification.setSenderid(ticket.getIssuerID());
+			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notificationService.createNotification(notification);
+			return this.ticketService.update(ticket);
+		}
+		
+		@PostMapping(path="deactivate")
+		public boolean deactivate(@RequestBody Ticket ticket) {
+			ticket.setTicketStatus("closed");
+			Notification notification = new Notification();
+			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been deactivated");
+			notification.setReceiverid(ticket.getEditorID());
+			notification.setSenderid(ticket.getIssuerID());
+			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notificationService.createNotification(notification);
+			return this.ticketService.update(ticket);
+		}
+		
+		
 
 }
