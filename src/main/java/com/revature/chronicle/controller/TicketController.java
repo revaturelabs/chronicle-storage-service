@@ -57,7 +57,7 @@ public class TicketController {
 			
 	
 	//this endpoint returns a list of all under review tickets
-		@GetMapping(path="ticketsForeditor")
+		@GetMapping(path="ticketsForEditor")
 		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
 			
 				 User user =  (User) req.getAttribute("user");
@@ -72,7 +72,7 @@ public class TicketController {
 		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public boolean saveAll(@RequestBody List<Ticket> tickets) {
 			Date dateIssued =new Date(System.currentTimeMillis());
-			
+			System.out.println("save all method");
 			for(Ticket t: tickets) {
 				t.setDateIssued(dateIssued);
 			}
@@ -146,7 +146,7 @@ public class TicketController {
 				//get current time for date accepted
 				ticket.setDateAccepted(new Date(System.currentTimeMillis()));
 				//make a message for the trainer
-				notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been accepted");
+				notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been acknowledged");
 				break;
 			//editor initiatates this endpoint	
 			case "IN_PROGRESS":
@@ -180,6 +180,7 @@ public class TicketController {
 			return this.ticketService.update(ticket);
 		}
 		
+		//trainer accepted the clip and closes the ticket
 		@PostMapping(path="accept")
 		public boolean accept(@RequestBody Ticket ticket) {
 			ticket.setTicketStatus("closed");
@@ -192,6 +193,7 @@ public class TicketController {
 			return this.ticketService.update(ticket);
 		}
 		
+		//trainer deactivates the ticket
 		@PostMapping(path="deactivate")
 		public boolean deactivate(@RequestBody Ticket ticket) {
 			ticket.setTicketStatus("closed");
