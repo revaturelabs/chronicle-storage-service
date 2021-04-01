@@ -133,13 +133,14 @@ class TicketControllerTest {
 		
 		mockUser = new User();		
 		mockUser.setUid("TYYTUREIOWPQ");		
+				
     }
 
 	@Test
 	//testFindAll()
 	void testFindAllSubmittedTickets() throws Exception{
 		Mockito.when(ticketService.findAll()).thenReturn(mockMyList);
-		MvcResult result = mockMvc.perform(get("/ticket/all"))
+		MvcResult result = mockMvc.perform(get("/ticket/submitted"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andReturn();
@@ -152,7 +153,7 @@ class TicketControllerTest {
 	@Test
 	void testFindAllPending() throws Exception{
 		Mockito.when(ticketService.ticketsByStatus("PENDING")).thenReturn(mockMyList);
-		MvcResult result = mockMvc.perform(get("/ticket/pendingTickets"))
+		MvcResult result = mockMvc.perform(get("/ticket/pending"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andReturn();
@@ -164,7 +165,7 @@ class TicketControllerTest {
 	@Test
 	void testFindAllUderReview() throws Exception{
 		Mockito.when(ticketService.ticketsByStatus("UNDER_REVIEW")).thenReturn(mockMyList);
-		MvcResult result = mockMvc.perform(get("/ticket/underReviewTickets"))
+		MvcResult result = mockMvc.perform(get("/ticket/underreview"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andReturn();
@@ -176,7 +177,7 @@ class TicketControllerTest {
 	@Test
 	void testFindAllTicketsByEditor() throws Exception{
 		Mockito.when(ticketService.ticketsByEditor(mockUser)).thenReturn(mockMyList);		
-		MvcResult result = mockMvc.perform(get("/ticket/ticketsForEditor"))
+		MvcResult result = mockMvc.perform(get("/ticket/ticketsforeditor"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andReturn();		
