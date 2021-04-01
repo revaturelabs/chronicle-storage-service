@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.revature.chronicle.daos.TicketRepo;
 import com.revature.chronicle.models.Ticket;
+import com.revature.chronicle.models.User;
 
 @Service(value="ticketService")
 public class TicketService {
@@ -44,9 +45,22 @@ public class TicketService {
 		return false;	
 	}
 	
+	
 	public List<Ticket> ticketsByStatus(String status){
 		List<Ticket> tickets = this.ticketRepo.findAll();
 		tickets.removeIf(t -> !(t.getTicketStatus().equals(status)));
+		return tickets;
+	}
+	
+	
+	/**
+	 * This method will return all the tickets that were handled by a editor 
+	 * @param editor
+	 * @return List of tickets 
+	 */
+	public List<Ticket> ticketsByEditor(User editor){
+		List<Ticket> tickets = this.ticketRepo.findAll();
+		tickets.removeIf(t -> t.getEditorID()!= editor.getUid());
 		return tickets;
 	}
 	

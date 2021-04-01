@@ -35,26 +35,36 @@ public class TicketController {
 	
 	//this endpoint returns a list of all tickets
 	@GetMapping(path="all")
-	ResponseEntity <List<Ticket>> findAllSubmittedTickets(){
-		List<Ticket> ticket2 =  this.ticketService.findAll();
-		return new ResponseEntity<>(ticket2, HttpStatus.OK);
+	public ResponseEntity <List<Ticket>> findAllSubmittedTickets(){
+		List<Ticket> tickets =  this.ticketService.findAll();
+		return new ResponseEntity<>(tickets, HttpStatus.OK);
 	}
 	
 	//this endpoint returns a list of all pending tickets
 	@GetMapping(path="pendingTickets")
-	ResponseEntity <List<Ticket>> findAllPending(){
-		 List<Ticket> ticket3 = ticketService.ticketsByStatus("PENDING");
-		 return new ResponseEntity<>(ticket3, HttpStatus.OK);
+	public ResponseEntity <List<Ticket>> findAllPending(){
+		 List<Ticket> tickets = ticketService.ticketsByStatus("PENDING");
+		 return new ResponseEntity<>(tickets, HttpStatus.OK);
 	}
 	
-	//this endpoint returns a list of all pending tickets
-		@GetMapping(path="underReviewTickets")
-		ResponseEntity <List<Ticket>> findAllTicketsByEditor(){
-			 List<Ticket> ticket3 = ticketService.ticketsByStatus("UNDER REVIEW");
-			 return new ResponseEntity<>(ticket3, HttpStatus.OK);
+	//this endpoint returns a list of all under review tickets
+	@GetMapping(path="underReviewTickets")
+	public ResponseEntity <List<Ticket>> findAllUderReview(){
+		
+			 List<Ticket> tickets = ticketService.ticketsByStatus("UNDER_REVIEW");
+			 return new ResponseEntity<>(tickets, HttpStatus.OK);
 		}
 			
-		
+	
+	//this endpoint returns a list of all under review tickets
+		@GetMapping(path="ticketsForeditor")
+		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
+			
+				 User user =  (User) req.getAttribute("user");
+				 List<Ticket> tickets = ticketService.ticketsByEditor(user);
+				 return new ResponseEntity<>(tickets, HttpStatus.OK);
+			}
+	
 	
 	
 	
@@ -125,11 +135,11 @@ public class TicketController {
 			
 			switch(status) {
 			//trainer initiatates this endpoint
-			case "pending": 
+			case "PENDING": 
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is pending");
 				break;
 			//editor initiatates this endpoint
-			case "acknowledged": 
+			case "ACKNOWLEDGED": 
 			
 				// Set editor id to the current user id
 				ticket.setEditorID(user.getUid());
@@ -139,16 +149,16 @@ public class TicketController {
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been accepted");
 				break;
 			//editor initiatates this endpoint	
-			case "in progress":
+			case "IN_PROGRESS":
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is in progress");
 				break;
-			case "under review":
+			case "UNDER_REVIEW":
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is available for you review");
 				break;
 			case "closed":
 				notification.setNote("Video associated with ticket number "+ ticket.getTicketID()+ " has been closed");
 				break;
-			case "deactivated":
+			case "DEACTIVATED":
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been deactivated");
 				break;
 			default: System.out.println("status is invalid");
