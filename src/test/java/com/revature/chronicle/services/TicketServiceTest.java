@@ -46,6 +46,8 @@ public class TicketServiceTest {
 		myList.add(ticket2);
 		myList.add(ticket3);
 		when(ticketRepo.findAll()).thenReturn(myList);
+		when(ticketRepo.save(new Ticket())).thenReturn(ticket1);
+		when(ticketRepo.findByTicketID(1)).thenReturn(ticket1);
 	}
 
 
@@ -97,38 +99,25 @@ public class TicketServiceTest {
 	
 	@Test
 	public void testSave() {
-		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
-				
-		when(ticketRepo.save(ticket1)).thenReturn(ticket1);
 		
-		Ticket result = ticketService.save(ticket1);
-		
-		assertEquals(ticket1, result);
+		Ticket result = ticketService.save(new Ticket());
+		assertEquals(1, result.getTicketID());
 	}
 
 	@Test
 	public void testUpdate() {
-		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
 		
-		when(ticketRepo.findByTicketID(1)).thenReturn(ticket1);
-		when(ticketRepo.save(ticket1)).thenReturn(ticket1);
-		
-		boolean result = ticketService.update(ticket1);
-		
+		Ticket ticket = new Ticket();
+		ticket.setTicketID(1);
+		boolean result = ticketService.update(ticket);
 		assertEquals(true, result);
+		
 	}
 	
 	@Test
 	public void saveAll() {
-		Ticket ticket1 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
-		Ticket ticket2 =  new Ticket(1,"1","1","core java", "a","time","endTime","link1","pass1",10,"url1","status1","Id1","comments",  new Date(20200101), new Date(20200104));
-		List<Ticket> tickets = new ArrayList<>();
-		tickets.add(ticket1);
-		tickets.add(ticket2);
 		
-		when(ticketRepo.save(ticket1)).thenReturn(ticket1);
-		boolean result = ticketService.saveAll(tickets);
-		
+		boolean result = ticketService.saveAll(new ArrayList());
 		assertTrue(result);
 		
 	}
