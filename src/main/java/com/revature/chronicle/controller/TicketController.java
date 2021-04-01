@@ -205,7 +205,5 @@ public class TicketController {
 			notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
-		
-		
 
 }
