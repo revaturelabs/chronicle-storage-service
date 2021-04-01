@@ -73,6 +73,5 @@ public class Ticket {
 	@Column(name="date_accepted", nullable = true)
 	private Date dateAccepted;
 
-	
-
 }
+

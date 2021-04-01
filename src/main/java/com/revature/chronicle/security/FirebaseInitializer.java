@@ -5,12 +5,15 @@ import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.revature.chronicle.controller.FileUploadController;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class FirebaseInitializer {
+	private static final Logger log = LoggerFactory.getLogger(FirebaseInitializer.class);
 
     /**
      * runs immediately after the service is initialized. tries to call initializeFirebaseApp
