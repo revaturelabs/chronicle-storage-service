@@ -147,6 +147,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
@@ -159,6 +160,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			
 			//Make the clips public after the trainer accepted the clips 
@@ -180,6 +182,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
