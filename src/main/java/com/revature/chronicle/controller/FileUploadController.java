@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,7 +38,6 @@ import lombok.extern.log4j.Log4j2;
 //@CrossOrigin(origins = "*", allowCredentials = "true")
 @RequestMapping(path = "/file", method = { RequestMethod.GET, RequestMethod.POST })
 public class FileUploadController {
-
     private final S3FileService s3FileService;
     private final TagService tagService;
     private final VideoService videoService;
