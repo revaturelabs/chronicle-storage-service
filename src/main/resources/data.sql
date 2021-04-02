@@ -48,11 +48,11 @@ insert into ticket values (10,20,'https://zoom.us/','2021-03-04', '2020-01-04','
 
 --Insert some dummy notifications for testing
 --NOTIFICATION_ID  	NOTE  	RECEIVER_ID  	SEND_DATE  	SENDER_ID  	TICKET_ID  
-insert into notification values (1,'note1','receiverId','2021-03-20','senderId',1);
-insert into notification values (2,'note2','2','2021-03-20','3',2);
-insert into notification values (3,'note3','2','2021-03-20','3',3);
-insert into notification values (4,'note4','2','2021-03-20','3',4);
-insert into notification values (5,'note5','2','2021-03-20','3',5);
+insert into notification values (1,'note1','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','senderId',1);
+insert into notification values (2,'note2','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',2);
+insert into notification values (3,'note3','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',3);
+insert into notification values (4,'note4','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',4);
+insert into notification values (5,'note5','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',5);
 insert into notification values (6,'note6','2','2021-03-20','3',6);
 insert into notification values (7,'note7','2','2021-03-20','3',7);
 insert into notification values (8,'note8','2','2021-03-20','3',8);
