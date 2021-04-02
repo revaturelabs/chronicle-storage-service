@@ -40,6 +40,7 @@ public class TicketController {
 	@GetMapping(path="notifications")
 	public ResponseEntity <List<Notification>> getNotifications(HttpServletRequest req){
 		 User user =  (User) req.getAttribute("user");
+		 System.out.println("user is: "+user.getUid());
 		 List<Notification> notifications = notificationService.getNotified(user.getUid());
 		 return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
@@ -73,7 +74,7 @@ public class TicketController {
 		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
 			
 				 User user =  (User) req.getAttribute("user");
-				 List<Ticket> tickets = ticketService.ticketsByEditor(user);
+				 List<Ticket> tickets = ticketService.ticketsByEditorAndStatus(user);
 				 return new ResponseEntity<>(tickets, HttpStatus.OK);
 			}
 	
@@ -131,8 +132,10 @@ public class TicketController {
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is available for you review");
 				break;
 			default: System.out.println("status is invalid");
+				break;
 			}
 			
+			notification.setTicket(ticket);
 			this.notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
