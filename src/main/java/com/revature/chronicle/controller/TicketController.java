@@ -33,10 +33,10 @@ public class TicketController {
 	
 	//this endpoint returns all notifications for the trainer
 	@GetMapping(path="notifications")
-	public ResponseEntity <List<Ticket>> getNotifications(HttpServletRequest req){
+	public ResponseEntity <List<Notification>> getNotifications(HttpServletRequest req){
 		 User user =  (User) req.getAttribute("user");
-		 List<Ticket> tickets = ticketService.ticketsByEditor(user);
-		 return new ResponseEntity<>(tickets, HttpStatus.OK);
+		 List<Notification> notifications = notificationService.getNotified(user.getUid());
+		 return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
 
 	
@@ -55,7 +55,7 @@ public class TicketController {
 	}
 	
 	//this endpoint returns a list of all under review tickets
-	@GetMapping(path="underreview")
+	@GetMapping(path="under-review")
 	public ResponseEntity <List<Ticket>> findAllUderReview(){
 		
 			 List<Ticket> tickets = ticketService.ticketsByStatus("UNDER_REVIEW");
@@ -64,7 +64,7 @@ public class TicketController {
 			
 	
 	//this endpoint returns a list of all under review tickets
-		@GetMapping(path="ticketsforeditor")
+		@GetMapping(path="for-editor")
 		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
 			
 				 User user =  (User) req.getAttribute("user");
@@ -76,7 +76,7 @@ public class TicketController {
 	
 	
 	//this endpoint saves array of tickets
-		@PostMapping(path="saveall", consumes = MediaType.APPLICATION_JSON_VALUE)
+		@PostMapping(path="saved", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public boolean saveAll(@RequestBody List<Ticket> tickets) {
 			Date dateIssued =new Date(System.currentTimeMillis());
 			System.out.println("save all method");
@@ -90,7 +90,7 @@ public class TicketController {
 		
 		
 	//this endpoint updates a ticket by the editor
-		@PostMapping(path="update", consumes = MediaType.APPLICATION_JSON_VALUE)
+		@PostMapping(path="updated", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public boolean update(@RequestBody Ticket ticket, HttpServletRequest req) {
 			
 			// Grab the current User id (editor)
@@ -136,7 +136,7 @@ public class TicketController {
 			return this.ticketService.update(ticket);
 		}
 		
-		@PostMapping(path="reject")
+		@PostMapping(path="rejected")
 		public boolean reject(@RequestBody Ticket ticket) {
 			Notification notification = new Notification();
 			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been sent back for review.");
@@ -148,7 +148,7 @@ public class TicketController {
 		}
 		
 		//trainer accepted the clip and closes the ticket
-		@PostMapping(path="accept")
+		@PostMapping(path="accepted")
 		public boolean accept(@RequestBody Ticket ticket) {
 			Notification notification = new Notification();
 			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been accepted");
@@ -160,7 +160,7 @@ public class TicketController {
 		}
 		
 		//trainer deactivates the ticket
-		@PostMapping(path="deactivate")
+		@PostMapping(path="deactivated")
 		public boolean deactivate(@RequestBody Ticket ticket) {
 			Notification notification = new Notification();
 			notification.setNote("Ticket number "+ ticket.getTicketID()+ " has been deactivated");
