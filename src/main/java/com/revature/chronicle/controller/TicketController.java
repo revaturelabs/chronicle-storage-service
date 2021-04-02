@@ -40,6 +40,7 @@ public class TicketController {
 	@GetMapping(path="notifications")
 	public ResponseEntity <List<Notification>> getNotifications(HttpServletRequest req){
 		 User user =  (User) req.getAttribute("user");
+		 System.out.println("user is: "+user.getUid());
 		 List<Notification> notifications = notificationService.getNotified(user.getUid());
 		 return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
@@ -111,10 +112,6 @@ public class TicketController {
 			// Set the Date object to the Senddate field in the notification table
 			notification.setSenddate(new Date(System.currentTimeMillis()));
 			
-			// Setting the note field for the notification object.
-			notification.setNote(ticket.getTicketStatus());
-			
-			
 			String status = ticket.getTicketStatus();
 			
 			switch(status) {
@@ -137,6 +134,7 @@ public class TicketController {
 			default: System.out.println("status is invalid");
 			}
 			
+			notification.setTicket(ticket);
 			this.notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
