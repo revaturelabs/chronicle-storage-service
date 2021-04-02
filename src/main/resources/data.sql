@@ -34,28 +34,27 @@ insert into note_tag values (9, 4);
 insert into ticket values (1,11,'https://zoom.us/','2021-03-04', '2020-01-04','Description1','editorId','end_time','identifier','issuerId','reject_comment','start_time','PENDING','topic', 'https://zoom.us/', 'passcode1');
 insert into ticket values (2,12,'https://zoom.us/','2021-03-04', '2020-01-04','Description2','editorId','end_time','identifier','issuerId','reject_comment','start_time','PENDING','topic', 'https://zoom.us/', 'passcode1');
 
-insert into ticket values (3,13,'https://zoom.us/','2021-03-04', '2020-01-04','Description3','editorId','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','topic', 'https://zoom.us/', 'passcode1');
-insert into ticket values (4,14,'https://zoom.us/','2021-03-04', '2020-01-04','Description4','editorId','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','topic', 'https://zoom.us/', 'passcode1');
+insert into ticket values (3,13,'https://zoom.us/','2021-03-04', '2020-01-04','Description3','x75N8SSZFSTdjEt4H4HI7gfoC603','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','topic', 'https://zoom.us/', 'passcode1');
+insert into ticket values (4,14,'https://zoom.us/','2021-03-04', '2020-01-04','Description4','x75N8SSZFSTdjEt4H4HI7gfoC603','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','topic', 'https://zoom.us/', 'passcode1');
 
 insert into ticket values (5,15,'https://zoom.us/','2021-03-04', '2020-01-04','Description5','editorId','end_time','identifier','issuerId','reject_comment','start_time','UNDER_REVIEW','topic', 'https://zoom.us/', 'passcode1');
 insert into ticket values (6,16,'https://zoom.us/','2021-03-04', '2020-01-04','Description6','editorId','end_time','identifier','issuerId','reject_comment','start_time','UNDER_REVIEW','topic', 'https://zoom.us/', 'passcode1');
 
-insert into ticket values (7,17,'https://zoom.us/','2021-03-04', '2020-01-04','Description7','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','topic', 'https://zoom.us/', 'passcode1');
-insert into ticket values (8,18,'https://zoom.us/','2021-03-04', '2020-01-04','Description8','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','topic', 'https://zoom.us/', 'passcode1');
+insert into ticket values (7,17,'https://zoom.us/','2021-03-04', '2020-01-04','Description7','x75N8SSZFSTdjEt4H4HI7gfoC603','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','topic', 'https://zoom.us/', 'passcode1');
+insert into ticket values (8,18,'https://zoom.us/','2021-03-04', '2020-01-04','Description8','x75N8SSZFSTdjEt4H4HI7gfoC603','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','topic', 'https://zoom.us/', 'passcode1');
 
 insert into ticket values (9,19,'https://zoom.us/','2021-03-04', '2020-01-04','Description9','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','topic', 'https://zoom.us/', 'passcode1');
 insert into ticket values (10,20,'https://zoom.us/','2021-03-04', '2020-01-04','Description10','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','topic', 'https://zoom.us/', 'passcode1');
 
 --Insert some dummy notifications for testing
 --NOTIFICATION_ID  	NOTE  	RECEIVER_ID  	SEND_DATE  	SENDER_ID  	TICKET_ID  
-insert into notification values (1,'note1','receiverId','2021-03-20','senderId',1);
-insert into notification values (2,'note2','2','2021-03-20','3',2);
-insert into notification values (3,'note3','2','2021-03-20','3',3);
-insert into notification values (4,'note4','2','2021-03-20','3',4);
-insert into notification values (5,'note5','2','2021-03-20','3',5);
+insert into notification values (1,'note1','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','senderId',1);
+insert into notification values (2,'note2','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',2);
+insert into notification values (3,'note3','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',3);
+insert into notification values (4,'note4','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',4);
+insert into notification values (5,'note5','x75N8SSZFSTdjEt4H4HI7gfoC603','2021-03-20','3',5);
 insert into notification values (6,'note6','2','2021-03-20','3',6);
 insert into notification values (7,'note7','2','2021-03-20','3',7);
 insert into notification values (8,'note8','2','2021-03-20','3',8);
 insert into notification values (9,'note9','2','2021-03-20','3',9);
 insert into notification values (10,'note10','2','2021-03-20','3',10);
-
