@@ -167,4 +167,40 @@ public class VideoServiceTests {
         Assert.assertTrue(result.isEmpty());
         verify(repo).findVideosWithOffsetAndLimit(0,50);
     }
+    
+    @Test
+    public void shouldReturnAVideoByTitle(){
+        Tag tag1 = new Tag("Technology","Angular");
+        Tag tag2 = new Tag("Technology","Java");
+        List<Tag> tags1 = new ArrayList<>();
+        tags1.add(tag1);
+        tags1.add(tag2);
+        Video video1 = new Video("A description 1",new Date(),"", "", tags1,false);
+        video1.setTitle("Java-Angular");
+        when(repo.findByTitle("Java-Angular")).thenReturn(video1);
+        Video result = service.findByTitle("Java-Angular");
+        Assert.assertNotNull(result);
+    }
+
+    
+    @Test
+    public void shouldReturnTrueIfVideoUpdated(){
+        Tag tag1 = new Tag("Technology","Angular10");
+        Tag tag2 = new Tag("Technology","Java15");
+        List<Tag> tags1 = new ArrayList<>();
+        tags1.add(tag1);
+        tags1.add(tag2);
+        Video video1 = new Video("A description 1",new Date(),"", "", tags1,false); 
+        video1.setId(65);
+ 
+        int id = 65;
+        //when(video1.getId()).thenReturn(id);          
+        //Optional<Video> video = Optional.ofNullable(service.findById(id));
+        when(repo.save(video1)).thenReturn(video1);
+        //when(repo.findById(id).get()).thenReturn(video1);        
+        when(service.findById(id)).thenReturn(video1);
+        boolean result = service.updateVideoStatus(video1);       
+        Assert.assertTrue(result);
+    } 
+      
 }

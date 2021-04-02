@@ -60,6 +60,7 @@ class TicketControllerTest {
 	private Ticket mockTicket2;
 	private Ticket mockTicket3;
 	private List<Ticket> mockMyList;
+	private List<Notification> mockNotificationList;
 	private JSONObject json;
 	private Notification mockNotification;
 	private MediaType APPLICATION_JSON_VALUE;
@@ -130,12 +131,30 @@ class TicketControllerTest {
 		
 		mockNotification = new Notification(1, "1", "1", mockTicket1,
 				new Date(20210101), "test note" );
-		
+		mockNotificationList = new ArrayList<Notification>();
+		mockNotificationList.add(mockNotification);
 		mockUser = new User();		
-		mockUser.setUid("TYYTUREIOWPQ");		
-				
+		mockUser.setUid("TYYTUREIOWPQ");	
+					
     }
 
+    /*
+	@Test
+	void testfindNotifications() throws Exception{
+		//System.out.println(mockUser.getUid());
+		String uid = "TYYTUREIOWPQ";
+		Mockito.when(mockUser.getUid()).thenReturn(uid);
+		Mockito.when(notificationService.getNotified(uid)).thenReturn(mockNotificationList);
+		MvcResult result = mockMvc.perform(get("/ticket/notifications"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andReturn();
+		
+		Assert.assertNotNull(result.getResponse());
+		
+	}
+	*/
+	
 	@Test
 	//testFindAll()
 	void testFindAllSubmittedTickets() throws Exception{
@@ -165,7 +184,7 @@ class TicketControllerTest {
 	@Test
 	void testFindAllUderReview() throws Exception{
 		Mockito.when(ticketService.ticketsByStatus("UNDER_REVIEW")).thenReturn(mockMyList);
-		MvcResult result = mockMvc.perform(get("/ticket/underreview"))
+		MvcResult result = mockMvc.perform(get("/ticket/under-review"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andReturn();
@@ -177,7 +196,7 @@ class TicketControllerTest {
 	@Test
 	void testFindAllTicketsByEditor() throws Exception{
 		Mockito.when(ticketService.ticketsByEditor(mockUser)).thenReturn(mockMyList);		
-		MvcResult result = mockMvc.perform(get("/ticket/ticketsforeditor"))
+		MvcResult result = mockMvc.perform(get("/ticket/for-editor"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andReturn();		
@@ -200,7 +219,7 @@ class TicketControllerTest {
 	    
 	    
 		Mockito.when(ticketService.saveAll(mockMyList)).thenReturn(true);
-		MvcResult result = mockMvc.perform(post("/ticket/saveall")
+		MvcResult result = mockMvc.perform(post("/ticket/saved")
 			.contentType(APPLICATION_JSON_VALUE).content(requestJson))
 				.andReturn();
 		
@@ -221,7 +240,7 @@ class TicketControllerTest {
 		
 		Mockito.when(ticketService.update(mockTicket1)).thenReturn(true);
 		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
-		MvcResult result = mockMvc.perform(post("/ticket/update")
+		MvcResult result = mockMvc.perform(post("/ticket/updated")
 				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
 				.andReturn();
 		
@@ -243,7 +262,7 @@ class TicketControllerTest {
 		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
 		Mockito.when(ticketService.update(mockTicket1)).thenReturn(true);
 		
-		MvcResult result = mockMvc.perform(post("/ticket/reject")
+		MvcResult result = mockMvc.perform(post("/ticket/rejected")
 				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
 				.andReturn();
 		
@@ -266,7 +285,7 @@ class TicketControllerTest {
 		//mockTicket1.setTicketStatus("closed");
 		Mockito.when(ticketService.update(mockTicket2)).thenReturn(true);
 		
-		MvcResult result = mockMvc.perform(post("/ticket/accept")
+		MvcResult result = mockMvc.perform(post("/ticket/accepted")
 				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
 				.andReturn();
 		
@@ -289,7 +308,7 @@ class TicketControllerTest {
 		//mockTicket1.setTicketStatus("closed");
 		Mockito.when(ticketService.update(mockTicket3)).thenReturn(true);
 		
-		MvcResult result = mockMvc.perform(post("/ticket/deactivate")
+		MvcResult result = mockMvc.perform(post("/ticket/deactivated")
 				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
 				.andReturn();
 		

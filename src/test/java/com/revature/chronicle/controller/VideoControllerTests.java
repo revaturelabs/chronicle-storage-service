@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.chronicle.daos.TagRepo;
 import com.revature.chronicle.interceptors.AuthenticationInterceptor;
 import com.revature.chronicle.models.Tag;
+import com.revature.chronicle.models.Ticket;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.TagService;
@@ -18,9 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -203,4 +209,18 @@ public class VideoControllerTests {
 		Assert.assertNotNull(result.getResponse());
 	}
 
+	@Test
+	public void shouldGetVideoByTitle() throws Exception {
+		mockVideo.setTitle("Java-Angular");
+		Mockito.when(videoService.findByTitle("Java-Angular")).thenReturn(mockVideo);
+		MvcResult result = mockMvc.perform(get("/videos/title")
+				.with(httpBasic("user","user")))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		//Testing to ensure something is being returned
+		Assert.assertNotNull(result.getResponse());
+	}
+	
+	
 }
