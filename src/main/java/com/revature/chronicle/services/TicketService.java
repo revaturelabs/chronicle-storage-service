@@ -68,7 +68,10 @@ public class TicketService {
 		return tickets;
 	}
 	
-	//this method will create a new record in the notification table
+	// Find Tickets by editor id and status
+	public List<Ticket> ticketsByEditorAndStatus(User editor){
+		return this.ticketRepo.findAllByEditorIDAndStatus(editor.getUid());
+	}
 	
 	
 }

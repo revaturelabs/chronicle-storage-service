@@ -74,7 +74,7 @@ public class TicketController {
 		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
 			
 				 User user =  (User) req.getAttribute("user");
-				 List<Ticket> tickets = ticketService.ticketsByEditor(user);
+				 List<Ticket> tickets = ticketService.ticketsByEditorAndStatus(user);
 				 return new ResponseEntity<>(tickets, HttpStatus.OK);
 			}
 	

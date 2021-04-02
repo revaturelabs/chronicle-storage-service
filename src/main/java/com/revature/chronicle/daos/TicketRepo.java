@@ -3,6 +3,8 @@ package com.revature.chronicle.daos;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.revature.chronicle.models.Ticket;
@@ -15,5 +17,9 @@ public interface TicketRepo extends JpaRepository<Ticket, Integer>{
 	Ticket save(Ticket ticket);
 	
 	Ticket findByTicketID(int TicketID);
+	
+	// Find by Editor id and ticket status
+	@Query("SELECT * FROM Ticket WHERE editorID = :editorID AND ticketStatus = 'ACKNOWLEDGED' OR ticketStatus = 'IN_PROGRESS'")
+	List<Ticket> findAllByEditorIDAndStatus(@Param("editorID") String editorID);
 	
 	}
