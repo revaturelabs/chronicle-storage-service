@@ -19,7 +19,7 @@ public interface TicketRepo extends JpaRepository<Ticket, Integer>{
 	Ticket findByTicketID(int TicketID);
 	
 	// Find by Editor id and ticket status
-	@Query("SELECT * FROM Ticket WHERE editorID = :editorID AND ticketStatus = 'ACKNOWLEDGED' OR ticketStatus = 'IN_PROGRESS'")
+	@Query(value = "SELECT t FROM Ticket t WHERE t.editorID = :editorID AND t.ticketStatus = 'ACKNOWLEDGED' OR t.ticketStatus = 'IN_PROGRESS'")
 	List<Ticket> findAllByEditorIDAndStatus(@Param("editorID") String editorID);
 	
 	}
