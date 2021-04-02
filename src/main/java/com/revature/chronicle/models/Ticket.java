@@ -47,7 +47,7 @@ public class Ticket {
 	private String endTime;
 
 	@Column(name = "zoom_link", nullable = true)
-	private String zoomlink;
+	private String zoomLink;
 
 	@Column(name = "zoom_passcode", nullable = true)
 	private String zoomPasscode;
