@@ -188,4 +188,31 @@ public class VideoService {
             return false;
         }
     }
+    
+    
+    
+    //find a video by it's title 
+    public Video findByTitle(String title){
+       
+    	if(title != null) {
+    		return videoRepo.findByTitle(title);
+    	}else {
+    		return  null;
+    	}
+    }
+    
+    //update existed video
+    public boolean updateVideoStatus(Video video) {
+    	
+    	int id = video.getId();
+    	
+    	Video existedVideo = findById(id);
+    	
+    	//check if the video is existed, then update
+    	if(existedVideo != null) {
+    		 videoRepo.save(video);
+    		  return true;
+    	}
+    	return false;
+    }
 }

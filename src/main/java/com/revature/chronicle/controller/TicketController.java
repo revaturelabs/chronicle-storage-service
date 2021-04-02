@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.chronicle.models.Notification;
 import com.revature.chronicle.models.Ticket;
 import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NotificationService;
 import com.revature.chronicle.services.TicketService;
+import com.revature.chronicle.services.VideoService;
 
 @RestController(value="ticketController")
 @RequestMapping(path="/ticket")
@@ -30,6 +32,9 @@ public class TicketController {
 	
 	@Autowired
 	private NotificationService notificationService;
+	
+	@Autowired
+	private VideoService videoService;
 	
 	//this endpoint returns all notifications for the trainer
 	@GetMapping(path="notifications")
@@ -156,6 +161,15 @@ public class TicketController {
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
 			notificationService.createNotification(notification);
+			
+			//Make the clips public after the trainer accepted the clips 
+			
+			String title = ticket.getTopic();
+			Video clip = videoService.findByTitle(title);
+			
+			clip.setPrivate(false);
+			videoService.updateVideoStatus(clip);
+			
 			return this.ticketService.update(ticket);
 		}
 		
