@@ -132,6 +132,7 @@ public class TicketController {
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is available for you review");
 				break;
 			default: System.out.println("status is invalid");
+				break;
 			}
 			
 			notification.setTicket(ticket);
