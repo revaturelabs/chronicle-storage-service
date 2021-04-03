@@ -40,6 +40,7 @@ public class TicketController {
 	@GetMapping(path="notifications")
 	public ResponseEntity <List<Notification>> getNotifications(HttpServletRequest req){
 		 User user =  (User) req.getAttribute("user");
+		 System.out.println("user is: "+user.getUid());
 		 List<Notification> notifications = notificationService.getNotified(user.getUid());
 		 return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
@@ -73,7 +74,7 @@ public class TicketController {
 		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
 			
 				 User user =  (User) req.getAttribute("user");
-				 List<Ticket> tickets = ticketService.ticketsByEditor(user);
+				 List<Ticket> tickets = ticketService.ticketsByEditorAndStatus(user);
 				 return new ResponseEntity<>(tickets, HttpStatus.OK);
 			}
 	
@@ -111,10 +112,6 @@ public class TicketController {
 			// Set the Date object to the Senddate field in the notification table
 			notification.setSenddate(new Date(System.currentTimeMillis()));
 			
-			// Setting the note field for the notification object.
-			notification.setNote(ticket.getTicketStatus());
-			
-			
 			String status = ticket.getTicketStatus();
 			
 			switch(status) {
@@ -135,8 +132,10 @@ public class TicketController {
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is available for you review");
 				break;
 			default: System.out.println("status is invalid");
+				break;
 			}
 			
+			notification.setTicket(ticket);
 			this.notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
@@ -148,6 +147,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
@@ -160,6 +160,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			
 			//Make the clips public after the trainer accepted the clips 
@@ -181,6 +182,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
