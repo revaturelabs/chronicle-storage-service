@@ -207,7 +207,7 @@ public class VideoService {
     	
     	int id = video.getId();
     	
-    	Video existedVideo = findById(id);
+    	Video existedVideo = videoRepo.findById(id).get();
     	
     	//check if the video is existed, then update
     	if(existedVideo != null) {

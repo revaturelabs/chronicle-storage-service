@@ -4,7 +4,6 @@ import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.services.VideoService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -170,12 +169,8 @@ public class VideoServiceTests {
     
     @Test
     public void shouldReturnAVideoByTitle(){
-        Tag tag1 = new Tag("Technology","Angular");
-        Tag tag2 = new Tag("Technology","Java");
-        List<Tag> tags1 = new ArrayList<>();
-        tags1.add(tag1);
-        tags1.add(tag2);
-        Video video1 = new Video("A description 1",new Date(),"", "", tags1,false);
+    	
+        Video video1 = new Video("A description 1",new Date(),"", "", new ArrayList<>(),false);
         video1.setTitle("Java-Angular");
         when(repo.findByTitle("Java-Angular")).thenReturn(video1);
         Video result = service.findByTitle("Java-Angular");
@@ -185,20 +180,11 @@ public class VideoServiceTests {
     
     @Test
     public void shouldReturnTrueIfVideoUpdated(){
-        Tag tag1 = new Tag("Technology","Angular10");
-        Tag tag2 = new Tag("Technology","Java15");
-        List<Tag> tags1 = new ArrayList<>();
-        tags1.add(tag1);
-        tags1.add(tag2);
-        Video video1 = new Video("A description 1",new Date(),"", "", tags1,false); 
+     
+        Video video1 = new Video("A description 1",new Date(),"", "",new ArrayList<>(),false); 
         video1.setId(65);
- 
-        int id = 65;
-        //when(video1.getId()).thenReturn(id);          
-        //Optional<Video> video = Optional.ofNullable(service.findById(id));
-        when(repo.save(video1)).thenReturn(video1);
-        //when(repo.findById(id).get()).thenReturn(video1);        
-        when(service.findById(id)).thenReturn(video1);
+        when(repo.save(video1)).thenReturn(video1); 
+        when(repo.findById(65)).thenReturn(Optional.of(video1));
         boolean result = service.updateVideoStatus(video1);       
         Assert.assertTrue(result);
     } 

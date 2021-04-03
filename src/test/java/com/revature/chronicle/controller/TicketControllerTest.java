@@ -48,8 +48,10 @@ import com.revature.chronicle.interceptors.AuthenticationInterceptor;
 import com.revature.chronicle.models.Notification;
 import com.revature.chronicle.models.Ticket;
 import com.revature.chronicle.models.User;
+import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.NotificationService;
 import com.revature.chronicle.services.TicketService;
+import com.revature.chronicle.services.VideoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -76,6 +78,9 @@ class TicketControllerTest {
 	
 	@MockBean
 	private NotificationService notificationService;
+	
+	@MockBean
+	private VideoService videoService;
 
 	@Autowired
     private MockMvc mockMvc;
@@ -258,7 +263,6 @@ class TicketControllerTest {
 		ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 		requestJson=ow.writeValueAsString(json);
 		
-		//mockTicket1.setTicketStatus("IN_PROGRESS");
 		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
 		Mockito.when(ticketService.update(mockTicket1)).thenReturn(true);
 		
@@ -282,8 +286,11 @@ class TicketControllerTest {
 		requestJson=ow.writeValueAsString(json);
 		
 		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
-		//mockTicket1.setTicketStatus("closed");
+		
 		Mockito.when(ticketService.update(mockTicket2)).thenReturn(true);
+		
+		Mockito.when(videoService.findByTitle("")).thenReturn(new Video());
+		Mockito.when(videoService.updateVideoStatus(new Video())).thenReturn(true);
 		
 		MvcResult result = mockMvc.perform(post("/ticket/accepted")
 				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
@@ -305,7 +312,6 @@ class TicketControllerTest {
 		requestJson=ow.writeValueAsString(json);
 		
 		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
-		//mockTicket1.setTicketStatus("closed");
 		Mockito.when(ticketService.update(mockTicket3)).thenReturn(true);
 		
 		MvcResult result = mockMvc.perform(post("/ticket/deactivated")
