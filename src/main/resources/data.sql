@@ -31,20 +31,20 @@ insert into note_tag values (9, 4);
 --Insert some dummy tickets for testing 
 --TICKET_ID  	CLIP_ID  	CLIP_URL  	DATE_ACCEPTED  	DATE_ISSUED  	DESCRIPTION  	EDITOR_ID  	END_TIME  	IDENTIFIER  	ISSUER_ID  	REJECT_COMMENT  	START_TIME  	TICKET_STATUS  	TOPIC  	ZOOM_LINK  	ZOOM_PASSCODE
 
-insert into ticket values (1,11,'https://zoom.us/','2021-03-04', '2020-01-04','Description1','editorId','end_time','identifier','issuerId','reject_comment','start_time','PENDING','Angular and TypeScript Overview', 'https://zoom.us/', 'passcode1');
-insert into ticket values (2,12,'https://zoom.us/','2021-03-04', '2020-01-04','Description2','editorId','end_time','identifier','issuerId','reject_comment','start_time','PENDING','Spring Boot Overview and Setup', 'https://zoom.us/', 'passcode1');
+insert into ticket values (1,11,'https://zoom.us/','2021-03-04', '2020-01-04','Description1','editorId','end_time','identifier','issuerId','reject_comment','start_time','PENDING','Angular and TypeScript Overview', null, 'passcode1');
+insert into ticket values (2,12,'https://zoom.us/','2021-03-04', '2020-01-04','Description2','editorId','end_time','identifier','issuerId','reject_comment','start_time','PENDING','Spring Boot Overview and Setup', null, 'passcode1');
 
-insert into ticket values (3,13,'https://zoom.us/','2021-03-04', '2020-01-04','Description3','editorId','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','Angular and TypeScript Overview', 'https://zoom.us/', 'passcode1');
-insert into ticket values (4,14,'https://zoom.us/','2021-03-04', '2020-01-04','Description4','editorId','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','Spring Boot Overview and Setup', 'https://zoom.us/', 'passcode1');
+insert into ticket values (3,13,'https://zoom.us/','2021-03-04', '2020-01-04','Description3','editorId','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','Angular and TypeScript Overview', null, 'passcode1');
+insert into ticket values (4,14,'https://zoom.us/','2021-03-04', '2020-01-04','Description4','editorId','end_time','identifier','issuerId','reject_comment','start_time','IN_PROGRESS','Spring Boot Overview and Setup', null, 'passcode1');
 
 insert into ticket values (5,15,'https://zoom.us/','2021-03-04', '2020-01-04','Description5','editorId','end_time','identifier','issuerId','reject_comment','start_time','UNDER_REVIEW','Angular and TypeScript Overview', 'https://zoom.us/', 'passcode1');
 insert into ticket values (6,16,'https://zoom.us/','2021-03-04', '2020-01-04','Description6','editorId','end_time','identifier','issuerId','reject_comment','start_time','UNDER_REVIEW','Spring Boot Overview and Setup', 'https://zoom.us/', 'passcode1');
 
-insert into ticket values (7,17,'https://zoom.us/','2021-03-04', '2020-01-04','Description7','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Angular and TypeScript Overview', 'https://zoom.us/', 'passcode1');
-insert into ticket values (8,18,'https://zoom.us/','2021-03-04', '2020-01-04','Description8','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Spring Boot Overview and Setup', 'https://zoom.us/', 'passcode1');
+insert into ticket values (7,17,'https://zoom.us/','2021-03-04', '2020-01-04','Description7','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Angular and TypeScript Overview', null, 'passcode1');
+insert into ticket values (8,18,'https://zoom.us/','2021-03-04', '2020-01-04','Description8','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Spring Boot Overview and Setup', null, 'passcode1');
 
-insert into ticket values (9,19,'https://zoom.us/','2021-03-04', '2020-01-04','Description9','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Angular and TypeScript Overview', 'https://zoom.us/', 'passcode1');
-insert into ticket values (10,20,'https://zoom.us/','2021-03-04', '2020-01-04','Description10','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Spring Boot Overview and Setup', 'https://zoom.us/', 'passcode1');
+insert into ticket values (9,19,'https://zoom.us/','2021-03-04', '2020-01-04','Description9','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Angular and TypeScript Overview', null, 'passcode1');
+insert into ticket values (10,20,'https://zoom.us/','2021-03-04', '2020-01-04','Description10','editorId','end_time','identifier','issuerId','reject_comment','start_time','ACKNOWLEDGED','Spring Boot Overview and Setup', null, 'passcode1');
 
 --Insert some dummy notifications for testing
 --NOTIFICATION_ID  	NOTE  	RECEIVER_ID  	SEND_DATE  	SENDER_ID  	TICKET_ID  
