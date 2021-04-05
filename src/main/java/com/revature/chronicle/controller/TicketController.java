@@ -191,13 +191,14 @@ public class TicketController {
 			notificationService.createNotification(notification);
 			
 			//Make the clips public after the trainer accepted the clips 
-			
+	        //Update ticket's clipUrl and clipId			
 			String title = ticket.getTopic();
 			Video clip = videoService.findByTitle(title);
 			
-			clip.setPrivate(false);
-			videoService.updateVideoStatus(clip);
-			
+			if(clip != null) {
+				clip.setPrivate(false);
+				videoService.updateVideoStatus(clip);				
+			}			
 			return this.ticketService.update(ticket);
 		}
 		
