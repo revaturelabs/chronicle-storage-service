@@ -104,11 +104,16 @@ public class TicketController {
 	        Video targetVideo = videoService.findByTitle(title);
 	        
 	        //Update ticket's clipUrl and clipId
-	        String clipUrl = targetVideo.getUrl();
-	        int clipId = targetVideo.getId();
-	        ticket.setClipUrl(clipUrl);
-	        ticket.setClipID(clipId);
-	        this.ticketService.update(ticket);
+	        if (targetVideo != null) {
+	        	
+	        	String clipUrl = targetVideo.getUrl();
+	  	        int clipId = targetVideo.getId();
+	  	        ticket.setClipUrl(clipUrl);
+	  	        ticket.setClipID(clipId);
+	  	        this.ticketService.update(ticket);
+	  	        
+	        }
+	      
 	        
 	        
 	        return new ResponseEntity<>(ticket, HttpStatus.OK);
