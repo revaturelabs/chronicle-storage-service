@@ -326,7 +326,7 @@ class TicketControllerTest {
 		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
 		Mockito.when(ticketService.update(mockTicket3)).thenReturn(true);
 		mockVideo.setTitle("Java-Angular");
-		Mockito.when(videoService.findByTitle("Java-Angular")).thenReturn(mockVideo);
+		Mockito.when(videoService.findAllByTitle("Java-Angular")).thenReturn(new ArrayList<Video>());
 		Mockito.when(ticketService.update(mockTicket1)).thenReturn(true);
 		
 		MvcResult result = mockMvc.perform(get("/ticket/updated-clip-url")
