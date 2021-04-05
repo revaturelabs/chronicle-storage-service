@@ -81,7 +81,7 @@ public class FirebaseController {
 			//the following update the user with role or roles
 			ArrayList<String> rolesList = new ArrayList<>();
 			rolesList.add("ROLE_TRAINER");
-			rolesList.add("ROLE_EDITOR");
+			//rolesList.add("ROLE_EDITOR");
 			Map<String, Object> claims = new HashMap<>();
 			claims.put("role", rolesList);
 			//Update done with this line
@@ -94,15 +94,6 @@ public class FirebaseController {
 			//user email
 			String email = ur.getEmail(); 
 
-			Object roleObject = ur.getCustomClaims().get("role");
-			System.out.println(ur.getCustomClaims().get("role"));
-			
-			List<String> roles = (List)ur.getCustomClaims().get("role");
-			for(String r:roles) {
-				System.out.println(r);
-			}
-			
-			System.out.println(email);
 		}
 	}
 }
