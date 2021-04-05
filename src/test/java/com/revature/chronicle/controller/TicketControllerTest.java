@@ -3,6 +3,7 @@ package com.revature.chronicle.controller;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -90,6 +91,9 @@ class TicketControllerTest {
     
 	@MockBean
 	private User mockUser;
+	
+	@MockBean
+	private Video mockVideo;
     
     @BeforeEach
     void initTest() {
@@ -142,24 +146,9 @@ class TicketControllerTest {
 		mockUser.setUid("TYYTUREIOWPQ");	
 					
     }
+    
 
-    /*
-	@Test
-	void testfindNotifications() throws Exception{
-		//System.out.println(mockUser.getUid());
-		String uid = "TYYTUREIOWPQ";
-		Mockito.when(mockUser.getUid()).thenReturn(uid);
-		Mockito.when(notificationService.getNotified(uid)).thenReturn(mockNotificationList);
-		MvcResult result = mockMvc.perform(get("/ticket/notifications"))
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andReturn();
-		
-		Assert.assertNotNull(result.getResponse());
-		
-	}
-	*/
-	
+
 	@Test
 	//testFindAll()
 	void testFindAllSubmittedTickets() throws Exception{
@@ -318,6 +307,33 @@ class TicketControllerTest {
 				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
 				.andReturn();
 		
+		Assert.assertNotNull(result.getResponse());
+	}
+	
+	//Editor link the clip on the ticket
+	@Test
+	public void testUpdateClipUrl() throws Exception {
+		
+		APPLICATION_JSON_VALUE = 
+				new MediaType(MediaType.APPLICATION_JSON.getType(), 
+						MediaType.APPLICATION_JSON.getSubtype());
+		
+		mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+		requestJson=ow.writeValueAsString(json);
+		
+		Mockito.when(notificationService.createNotification(mockNotification)).thenReturn(mockNotification);
+		Mockito.when(ticketService.update(mockTicket3)).thenReturn(true);
+		mockVideo.setTitle("Java-Angular");
+		Mockito.when(videoService.findByTitle("Java-Angular")).thenReturn(mockVideo);
+		Mockito.when(ticketService.update(mockTicket1)).thenReturn(true);
+		
+		MvcResult result = mockMvc.perform(get("/ticket/updated-clip-url")
+				.contentType(APPLICATION_JSON_VALUE).content(requestJson))
+				.andReturn();
+
+		//Testing to ensure something is being returned
 		Assert.assertNotNull(result.getResponse());
 	}
 	
