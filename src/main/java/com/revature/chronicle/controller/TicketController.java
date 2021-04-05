@@ -98,7 +98,7 @@ public class TicketController {
 	     * @param Ticket 
 	     * @return Ticket object
 	     */
-	    @GetMapping(path = "updated-clip-url", produces = MediaType.APPLICATION_JSON_VALUE)
+	    @PostMapping(path = "updated-clip-url", produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<Ticket> updateClipUrl(@RequestBody Ticket ticket ) {
 	    	String title = ticket.getTopic();
 	        Video targetVideo = videoService.findByTitle(title);
