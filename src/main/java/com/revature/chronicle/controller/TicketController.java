@@ -101,8 +101,8 @@ public class TicketController {
 	    @PostMapping(path = "updated-clip-url", produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<Ticket> updateClipUrl(@RequestBody Ticket ticket ) {
 	    	String title = ticket.getTopic();
-	        Video targetVideo = videoService.findByTitle(title);
-	        
+	        List<Video> videos = videoService.findAllByTitle(title);
+	        Video targetVideo = videos.get(videos.size()-1);
 	        //Update ticket's clipUrl and clipId
 	        if (targetVideo != null) {
 	        	
