@@ -74,7 +74,6 @@ public class FirebaseController {
 	 */
 	@PutMapping(path="/register/{userId}")
 	public void setUser(HttpServletRequest req, @PathVariable(name="userId") String userId, HttpServletResponse resp) throws FirebaseAuthException {
-		System.out.println(userId);
 		Object rolesObject = FirebaseAuth.getInstance().getUser(userId).getCustomClaims().get("role");
 		if(Objects.isNull(rolesObject)) {
 			//Firebase already has the userID in it's user table
@@ -87,22 +86,6 @@ public class FirebaseController {
 			//Update done with this line
 			FirebaseAuth.getInstance().setCustomUserClaims(userId, claims);
 			
-			//the following code get all infomation fro userId
-			UserRecord ur = FirebaseAuth.getInstance().getUser(userId);
-			//The string of uid(UserId)
-			String uid = ur.getUid();
-			//user email
-			String email = ur.getEmail(); 
-
-			Object roleObject = ur.getCustomClaims().get("role");
-			System.out.println(ur.getCustomClaims().get("role"));
-			
-			List<String> roles = (List)ur.getCustomClaims().get("role");
-			for(String r:roles) {
-				System.out.println(r);
-			}
-			
-			System.out.println(email);
 		}
 	}
 }
