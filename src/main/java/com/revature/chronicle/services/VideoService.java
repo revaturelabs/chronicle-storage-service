@@ -195,7 +195,7 @@ public class VideoService {
     public Video findByTitle(String title){
        System.out.println(title);
     	if(title != null) {
-    		System.out.println(videoRepo.findByTitle(title));
+    		System.out.println("video service find by title: "+ videoRepo.findByTitle(title));
     		return videoRepo.findByTitle(title);
     	}else {
     		return  null;

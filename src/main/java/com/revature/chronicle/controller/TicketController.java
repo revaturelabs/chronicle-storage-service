@@ -40,7 +40,6 @@ public class TicketController {
 	@GetMapping(path="notifications")
 	public ResponseEntity <List<Notification>> getNotifications(HttpServletRequest req){
 		 User user =  (User) req.getAttribute("user");
-		 System.out.println("user is: "+user.getUid());
 		 List<Notification> notifications = notificationService.getNotified(user.getUid());
 		 return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
@@ -85,7 +84,6 @@ public class TicketController {
 		@PostMapping(path="saved", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public boolean saveAll(@RequestBody List<Ticket> tickets) {
 			Date dateIssued =new Date(System.currentTimeMillis());
-			System.out.println("save all method");
 			for(Ticket t: tickets) {
 				t.setDateIssued(dateIssued);
 			}
@@ -153,8 +151,8 @@ public class TicketController {
 			case "UNDER_REVIEW":
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is available for you review");
 				break;
-			default: System.out.println("status is invalid");
-				break;
+			default: return false;
+				
 			}
 			
 			notification.setTicket(ticket);
