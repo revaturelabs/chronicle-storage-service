@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.revature.chronicle.models.Tag;
-import com.revature.chronicle.models.Ticket;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.services.TagService;
@@ -131,19 +129,5 @@ public class VideoController {
 		  return null;
 	  }
     
-    /**
-     * returns a <code>Video</code> object in the response body, determined by the specified video'titile.
-     * The handler method is mapped to the URI 'videos/title' and returns media type of application-json. The
-     * target video is retrieved via the <code>VideoService</code> <code>findByTitle</code> method, passing in the Ticket object
-     * @param Ticket with target <code>Video</code>'s title
-     * @return target <code>Video</code> object
-     */
-    @GetMapping(path = "title", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Video> getVideoByTitle(@RequestBody Ticket ticket ) {
-    	String title = ticket.getTopic();
-        logger.info("Retrieving target video with title: " + title + " ...");
-        Video targetVideo = videoService.findByTitle(title);
-        return new ResponseEntity<>(targetVideo, HttpStatus.OK);
-    }
 
 }

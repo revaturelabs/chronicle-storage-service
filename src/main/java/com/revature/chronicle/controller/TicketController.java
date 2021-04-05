@@ -91,6 +91,28 @@ public class TicketController {
 			}
 			return this.ticketService.saveAll(tickets);
 		}
+		
+		
+		/**
+	     * returns a Ticket object in the response body, after update it's clipUrl and clipId
+	     * @param Ticket 
+	     * @return Ticket object
+	     */
+	    @PostMapping(path = "updated-clip-url", produces = MediaType.APPLICATION_JSON_VALUE)
+	    public ResponseEntity<Ticket> updateClipUrl(@RequestBody Ticket ticket ) {
+	    	String title = ticket.getTopic();
+	        Video targetVideo = videoService.findByTitle(title);
+	        
+	        //Update ticket's clipUrl and clipId
+	        String clipUrl = targetVideo.getUrl();
+	        int clipId = targetVideo.getId();
+	        ticket.setClipUrl(clipUrl);
+	        ticket.setClipID(clipId);
+	        this.ticketService.update(ticket);
+	        
+	        
+	        return new ResponseEntity<>(ticket, HttpStatus.OK);
+	    }
 	
 		
 		
