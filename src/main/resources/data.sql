@@ -37,20 +37,20 @@ insert into note_tag values (9, 4);
 --Insert some dummy tickets for testing 
 --TICKET_ID  	CLIP_ID  	CLIP_URL  	DATE_ACCEPTED   DATE_ISSUED  	DESCRIPTION  	EDITOR_ID  	END_TIME  	IDENTIFIER  	ISSUER_ID  	REJECT_COMMENT  	START_TIME  	TICKET_STATUS  	TOPIC  	ZOOM_LINK  	ZOOM_PASSCODE
 
-insert into ticket values (1, 0, null, null, '2021-01-04','1 out of 10', null,'00:20:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'00:10:00','PENDING','JAVA Primitives', 'https://zoom.us/', 'passcode1');
-insert into ticket values (2, 0, null, null, '2021-01-04','2 out of 10', null,'00:30:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'00:20:00','PENDING','JAVA Method', 'https://zoom.us/', 'passcode1');
+insert into ticket values (1, 0, null, null, '2021-01-04','1 out of 10', null,'00:20:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','00:10:00','PENDING','JAVA Primitives', 'https://zoom.us/', 'passcode1');
+insert into ticket values (2, 0, null, null, '2021-01-04','2 out of 10', null,'00:30:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','00:20:00','PENDING','JAVA Method', 'https://zoom.us/', 'passcode1');
 
-insert into ticket values (3, 0, null,'2021-01-06', '2021-01-04','3 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','00:40:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'00:30:00','IN_PROGRESS','JAVA Interface', 'https://zoom.us/', 'passcode1');
+insert into ticket values (3, 0, null,'2021-01-06', '2021-01-04','3 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','00:40:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','00:30:00','IN_PROGRESS','JAVA Interface', 'https://zoom.us/', 'passcode1');
 insert into ticket values (4,14,'https://zoom.us/','2021-01-06', '2020-01-04','4 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','00:50:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1','Missing content','00:40:00','IN_PROGRESS','JAVA Access Modifier', 'https://zoom.us/', 'passcode1');
 
-insert into ticket values (5,15,'https://zoom.us/','2021-01-06', '2020-01-04','5 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:00:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'00:50:00','UNDER_REVIEW','JAVA Inheritance', 'https://zoom.us/', 'passcode1');
-insert into ticket values (6,16,'https://zoom.us/','2021-01-06', '2020-01-04','6 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:50:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1',null,'01:40:00','UNDER_REVIEW','JAVA Collection', 'https://zoom.us/', 'passcode1');
+insert into ticket values (5,15,'https://zoom.us/','2021-01-06', '2020-01-04','5 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:00:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','00:50:00','UNDER_REVIEW','JAVA Inheritance', 'https://zoom.us/', 'passcode1');
+insert into ticket values (6,16,'https://zoom.us/','2021-01-06', '2020-01-04','6 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:50:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1','','01:40:00','UNDER_REVIEW','JAVA Collection', 'https://zoom.us/', 'passcode1');
 
-insert into ticket values (7, 0, null,'2021-01-06', '2021-01-04','7 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:10:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'01:00:00','ACKNOWLEDGED','JAVA Flow Control', 'https://zoom.us/', 'passcode1');
-insert into ticket values (8, 0, null,'2021-01-06', '2021-01-04','8 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:20:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'01:10:00','ACKNOWLEDGED','JAVA Constructots', 'https://zoom.us/', 'passcode1');
+insert into ticket values (7, 0, null,'2021-01-06', '2021-01-04','7 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:10:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','01:00:00','ACKNOWLEDGED','JAVA Flow Control', 'https://zoom.us/', 'passcode1');
+insert into ticket values (8, 0, null,'2021-01-06', '2021-01-04','8 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:20:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','01:10:00','ACKNOWLEDGED','JAVA Constructots', 'https://zoom.us/', 'passcode1');
 
-insert into ticket values (9, 0, null,'2021-01-06', '2021-01-04','9 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:30:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'01:20:00','ACKNOWLEDGED','JAVA String', 'https://zoom.us/', 'passcode1');
-insert into ticket values (10, 0, null,'2021-01-06', '2021-01-04','10 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:40:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', null,'01:30:00','ACKNOWLEDGED','JAVA Annotation', 'https://zoom.us/', 'passcode1');
+insert into ticket values (9, 0, null,'2021-01-06', '2021-01-04','9 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:30:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','01:20:00','ACKNOWLEDGED','JAVA String', 'https://zoom.us/', 'passcode1');
+insert into ticket values (10, 0, null,'2021-01-06', '2021-01-04','10 out of 10','x75N8SSZFSTdjEt4H4HI7gfoC603','01:40:00','CR JAN-25','wO8BNFonKvfks1BPjEEqrTLdkhx1', '','01:30:00','ACKNOWLEDGED','JAVA Annotation', 'https://zoom.us/', 'passcode1');
 
 
 --Insert some dummy notifications for testing
