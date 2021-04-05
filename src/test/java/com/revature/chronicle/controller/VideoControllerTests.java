@@ -209,18 +209,4 @@ public class VideoControllerTests {
 		Assert.assertNotNull(result.getResponse());
 	}
 
-	@Test
-	public void shouldGetVideoByTitle() throws Exception {
-		mockVideo.setTitle("Java-Angular");
-		Mockito.when(videoService.findByTitle("Java-Angular")).thenReturn(mockVideo);
-		MvcResult result = mockMvc.perform(get("/videos/title")
-				.with(httpBasic("user","user")))
-				.andExpect(status().isOk())
-				.andReturn();
-
-		//Testing to ensure something is being returned
-		Assert.assertNotNull(result.getResponse());
-	}
-	
-	
 }
