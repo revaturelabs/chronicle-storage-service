@@ -99,14 +99,19 @@ public class TicketController {
 	    @PostMapping(path = "updated-clip-url", produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<Ticket> updateClipUrl(@RequestBody Ticket ticket ) {
 	    	String title = ticket.getTopic();
-	        Video targetVideo = videoService.findByTitle(title);
-	        
+	        List<Video> videos = videoService.findAllByTitle(title);
+	        Video targetVideo = videos.get(videos.size()-1);
 	        //Update ticket's clipUrl and clipId
-	        String clipUrl = targetVideo.getUrl();
-	        int clipId = targetVideo.getId();
-	        ticket.setClipUrl(clipUrl);
-	        ticket.setClipID(clipId);
-	        this.ticketService.update(ticket);
+	        if (targetVideo != null) {
+	        	
+	        	String clipUrl = targetVideo.getUrl();
+	  	        int clipId = targetVideo.getId();
+	  	        ticket.setClipUrl(clipUrl);
+	  	        ticket.setClipID(clipId);
+	  	        this.ticketService.update(ticket);
+	  	        
+	        }
+	      
 	        
 	        
 	        return new ResponseEntity<>(ticket, HttpStatus.OK);
@@ -184,13 +189,14 @@ public class TicketController {
 			notificationService.createNotification(notification);
 			
 			//Make the clips public after the trainer accepted the clips 
-			
+	        //Update ticket's clipUrl and clipId			
 			String title = ticket.getTopic();
 			Video clip = videoService.findByTitle(title);
 			
-			clip.setPrivate(false);
-			videoService.updateVideoStatus(clip);
-			
+			if(clip != null) {
+				clip.setPrivate(false);
+				videoService.updateVideoStatus(clip);				
+			}			
 			return this.ticketService.update(ticket);
 		}
 		
