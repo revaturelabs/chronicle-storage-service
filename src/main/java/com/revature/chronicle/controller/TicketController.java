@@ -73,7 +73,7 @@ public class TicketController {
 		public ResponseEntity <List<Ticket>> findAllTicketsByEditor(HttpServletRequest req){
 			
 				 User user =  (User) req.getAttribute("user");
-				 List<Ticket> tickets = ticketService.ticketsByEditor(user);
+				 List<Ticket> tickets = ticketService.ticketsByEditorAndStatus(user);
 				 return new ResponseEntity<>(tickets, HttpStatus.OK);
 			}
 	
@@ -84,12 +84,38 @@ public class TicketController {
 		@PostMapping(path="saved", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public boolean saveAll(@RequestBody List<Ticket> tickets) {
 			Date dateIssued =new Date(System.currentTimeMillis());
-			System.out.println("save all method");
 			for(Ticket t: tickets) {
 				t.setDateIssued(dateIssued);
 			}
 			return this.ticketService.saveAll(tickets);
 		}
+		
+		
+		/**
+	     * returns a Ticket object in the response body, after update it's clipUrl and clipId
+	     * @param Ticket 
+	     * @return Ticket object
+	     */
+	    @PostMapping(path = "updated-clip-url", produces = MediaType.APPLICATION_JSON_VALUE)
+	    public ResponseEntity<Ticket> updateClipUrl(@RequestBody Ticket ticket ) {
+	    	String title = ticket.getTopic();
+	        List<Video> videos = videoService.findAllByTitle(title);
+	        Video targetVideo = videos.get(videos.size()-1);
+	        //Update ticket's clipUrl and clipId
+	        if (targetVideo != null) {
+	        	
+	        	String clipUrl = targetVideo.getUrl();
+	  	        int clipId = targetVideo.getId();
+	  	        ticket.setClipUrl(clipUrl);
+	  	        ticket.setClipID(clipId);
+	  	        this.ticketService.update(ticket);
+	  	        
+	        }
+	      
+	        
+	        
+	        return new ResponseEntity<>(ticket, HttpStatus.OK);
+	    }
 	
 		
 		
@@ -111,10 +137,6 @@ public class TicketController {
 			// Set the Date object to the Senddate field in the notification table
 			notification.setSenddate(new Date(System.currentTimeMillis()));
 			
-			// Setting the note field for the notification object.
-			notification.setNote(ticket.getTicketStatus());
-			
-			
 			String status = ticket.getTicketStatus();
 			
 			switch(status) {
@@ -134,9 +156,11 @@ public class TicketController {
 			case "UNDER_REVIEW":
 				notification.setNote("Ticket number "+ ticket.getTicketID()+ " is available for you review");
 				break;
-			default: System.out.println("status is invalid");
+			default: return false;
+				
 			}
 			
+			notification.setTicket(ticket);
 			this.notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
@@ -148,6 +172,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
@@ -160,16 +185,18 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			
 			//Make the clips public after the trainer accepted the clips 
-			
+	        //Update ticket's clipUrl and clipId			
 			String title = ticket.getTopic();
 			Video clip = videoService.findByTitle(title);
 			
-			clip.setPrivate(false);
-			videoService.updateVideoStatus(clip);
-			
+			if(clip != null) {
+				clip.setPrivate(false);
+				videoService.updateVideoStatus(clip);				
+			}			
 			return this.ticketService.update(ticket);
 		}
 		
@@ -181,6 +208,7 @@ public class TicketController {
 			notification.setReceiverId(ticket.getEditorID());
 			notification.setSenderId(ticket.getIssuerID());
 			notification.setSenddate(new Date(System.currentTimeMillis()));
+			notification.setTicket(ticket);
 			notificationService.createNotification(notification);
 			return this.ticketService.update(ticket);
 		}
