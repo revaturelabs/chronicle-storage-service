@@ -1,3 +1,4 @@
+bin/
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -8,6 +9,7 @@ target/*
 FirebaseInitializer.java
 
 ### STS ###
+.class
 .apt_generated
 .classpath
 .factorypath
@@ -46,6 +48,6 @@ aws.properties
 /secrets/firebase-service-credentials.json
 /secrets/firebase-client-config.dms
 pom.xml
-lombok.jar
+
 
 george.txt

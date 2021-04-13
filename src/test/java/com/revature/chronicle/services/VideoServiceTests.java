@@ -4,7 +4,6 @@ import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Video;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
-import com.revature.chronicle.services.VideoService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -167,4 +166,27 @@ public class VideoServiceTests {
         Assert.assertTrue(result.isEmpty());
         verify(repo).findVideosWithOffsetAndLimit(0,50);
     }
+    
+    @Test
+    public void shouldReturnAVideoByTitle(){
+    	
+        Video video1 = new Video("A description 1",new Date(),"", "", new ArrayList<>(),false);
+        video1.setTitle("Java-Angular");
+        when(repo.findByTitle("Java-Angular")).thenReturn(video1);
+        Video result = service.findByTitle("Java-Angular");
+        Assert.assertNotNull(result);
+    }
+
+    
+    @Test
+    public void shouldReturnTrueIfVideoUpdated(){
+     
+        Video video1 = new Video("A description 1",new Date(),"", "",new ArrayList<>(),false); 
+        video1.setId(65);
+        when(repo.save(video1)).thenReturn(video1); 
+        when(repo.findById(65)).thenReturn(Optional.of(video1));
+        boolean result = service.updateVideoStatus(video1);       
+        Assert.assertTrue(result);
+    } 
+      
 }
