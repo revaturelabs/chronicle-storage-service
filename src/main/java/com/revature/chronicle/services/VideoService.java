@@ -4,6 +4,8 @@ import com.revature.chronicle.daos.VideoRepo;
 import com.revature.chronicle.models.Tag;
 import com.revature.chronicle.models.User;
 import com.revature.chronicle.models.Video;
+import com.revature.chronicle.util.VideoComparator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,5 +189,41 @@ public class VideoService {
             logger.warn(e.getMessage());
             return false;
         }
+    }
+    
+    
+    
+    //find a video by it's title 
+    public Video findByTitle(String title){
+    	if(title != null) {
+    		return videoRepo.findByTitle(title);
+    	}else {
+    		return  null;
+    	}
+    }
+    
+    
+    //find all videos that have same title 
+    public List<Video> findAllByTitle(String title){
+    	
+    	List<Video> videos = videoRepo.findAll();
+    	videos.removeIf(v -> !(v.getTitle().equals(title)));
+    	videos.sort(new VideoComparator());  //Sort videos by its id
+    	return videos;
+    }
+    
+    //update existed video
+    public boolean updateVideoStatus(Video video) {
+    	
+    	int id = video.getId();
+    	
+    	Video existedVideo = videoRepo.findById(id).get();
+    	
+    	//check if the video is existed, then update
+    	if(existedVideo != null) {
+    		 videoRepo.save(video);
+    		  return true;
+    	}
+    	return false;
     }
 }
